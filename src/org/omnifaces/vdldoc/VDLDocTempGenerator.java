@@ -65,7 +65,7 @@ import org.xml.sax.SAXException;
  *
  * @author Bauke Scholtz
  */
-public class VDLDocGenerator {
+public class VDLDocTempGenerator {
 
 	// Constants ------------------------------------------------------------------------------------------------------
 
@@ -112,7 +112,7 @@ public class VDLDocGenerator {
 	/**
 	 * Creates a new VDLDocGenerator.
 	 */
-	public VDLDocGenerator() {
+	public VDLDocTempGenerator() {
 		//
 	}
 
@@ -487,7 +487,7 @@ public class VDLDocGenerator {
 	 * @return An InputStream for the given resource.
 	 */
 	private static InputStream getResourceAsStream(String resource) {
-		return VDLDocGenerator.class.getResourceAsStream(resource);
+		return VDLDocTempGenerator.class.getResourceAsStream(resource);
 	}
 
 	/**
