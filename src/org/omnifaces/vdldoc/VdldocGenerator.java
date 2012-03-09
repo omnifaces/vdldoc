@@ -264,7 +264,7 @@ public class VdldocGenerator {
 
 				if (id == null || id.trim().isEmpty()) {
 					id = taglib.getName().substring(0, taglib.getName().indexOf('.'));
-					taglibNode.setAttribute("id", taglib.getName().substring(0, taglib.getName().indexOf('.')));
+					taglibNode.setAttribute("id", id);
 					print(String.format(WARNING_ID_MISSING, taglib.getName(), id));
 				}
 
