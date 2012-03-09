@@ -89,9 +89,9 @@ public class VdldocGenerator {
 	private static final String ERROR_TAGLIB_MISSING =
 		"%s does not have <facelet-taglib> as root.";
 	private static final String ERROR_DUPLICATE_TAGLIB =
-		"Two tag libraries exist with the same display-name '%s'.  This is not supported.";
-	private static final String WARN_PREFIX_MISSING =
-		"WARNING: %s is missing <display-name> element. Using '%s'... ";
+		"Two tag libraries exist with the same display-name '%s'. This is not supported.";
+	private static final String ERROR_DISPLAYNAME_MISSING =
+		"%s is missing <display-name> element. This must be present as it will be used as taglib prefix.";
 
 	// Properties -----------------------------------------------------------------------------------------------------
 
@@ -112,9 +112,6 @@ public class VdldocGenerator {
 
 	/** The summary VDL document, used as input into XSLT. */
 	private Document summary;
-
-	/** Helps uniquely generate subsitutute prefixes in the case of missing display-names. */
-	private int substitutePrefix = 1;
 
 	// Constructors ---------------------------------------------------------------------------------------------------
 
@@ -264,13 +261,8 @@ public class VdldocGenerator {
 				}
 
 				// Check if root has a display name attribute and add it if necessary.
-				if (doc.getDocumentElement().getElementsByTagNameNS( "*", "display-name" ).getLength() == 0) {
-					String prefix = "prefix" + substitutePrefix;
-					substitutePrefix++;
-					Element displayName = doc.createElementNS(NS_JAVAEE, "display-name");
-					displayName.appendChild(doc.createTextNode(prefix));
-					doc.appendChild(displayName);
-					print(String.format(WARN_PREFIX_MISSING, taglib.getName(), prefix));
+				if (taglibNode.getElementsByTagNameNS( "*", "display-name" ).getLength() == 0) {
+					throw new IllegalArgumentException(String.format(ERROR_DISPLAYNAME_MISSING, taglib.getName()));
 				}
 
 				rootElement.appendChild(taglibNode);
