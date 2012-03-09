@@ -260,7 +260,6 @@ public class VdldocGenerator {
 					throw new IllegalArgumentException(String.format(ERROR_TAGLIB_MISSING, taglib.getName()));
 				}
 
-				// Check if root has a display name attribute and add it if necessary.
 				if (taglibNode.getElementsByTagNameNS( "*", "display-name" ).getLength() == 0) {
 					throw new IllegalArgumentException(String.format(ERROR_DISPLAYNAME_MISSING, taglib.getName()));
 				}
