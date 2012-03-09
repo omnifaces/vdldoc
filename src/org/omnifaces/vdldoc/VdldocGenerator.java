@@ -30,9 +30,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,7 +41,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -73,18 +72,28 @@ public class VdldocGenerator {
 	private static final String RESOURCE_PATH = "/org/omnifaces/vdldoc/resources";
 
 	/** The default browser window title for the VDL documentation. */
-    private static final String DEFAULT_WINDOW_TITLE = "VDL Documentation Generator - Generated Documentation";
+	private static final String DEFAULT_WINDOW_TITLE = "VDL Documentation Generator - Generated Documentation";
 
 	/** The default title for the VDL documentation index page. */
-    private static final String DEFAULT_DOC_TITLE = DEFAULT_WINDOW_TITLE;
+	private static final String DEFAULT_DOC_TITLE = DEFAULT_WINDOW_TITLE;
 
-    /** The XML namespace for Java EE */
-    private static final String NS_JAVAEE = "http://java.sun.com/xml/ns/javaee";
+	/** The XML namespace for Java EE */
+	private static final String NS_JAVAEE = "http://java.sun.com/xml/ns/javaee";
 
-    /** If true, outputs the input to the transform before generation. */
-    private static final boolean DEBUG_INPUT_DOCUMENT = false;
+	/** If true, outputs the input to the transform before generation. For internal use only. */
+	private static final boolean DEBUG_INPUT_DOCUMENT = false;
 
-    // Properties -----------------------------------------------------------------------------------------------------
+	/** Error messages */
+	private static final String ERROR_JAVAEE_MISSING =
+		"%s does not have xmlns=\"" + NS_JAVAEE + "\"";
+	private static final String ERROR_TAGLIB_MISSING =
+		"%s does not have <facelet-taglib> as root.";
+	private static final String ERROR_DUPLICATE_TAGLIB =
+		"Two tag libraries exist with the same display-name '%s'.  This is not supported.";
+	private static final String WARN_PREFIX_MISSING =
+		"WARNING: %s is missing <display-name> element. Using '%s'... ";
+
+	// Properties -----------------------------------------------------------------------------------------------------
 
 	/** The set of tag libraries we are parsing. */
 	private List<File> taglibs = new ArrayList<File>();
@@ -102,15 +111,15 @@ public class VdldocGenerator {
 	private boolean quiet;
 
 	/** The summary VDL document, used as input into XSLT. */
-	private Document allTaglibs;
+	private Document summary;
 
-	/** Helps uniquely generate subsitutute prefixes in the case of missing or duplicate display-names. */
+	/** Helps uniquely generate subsitutute prefixes in the case of missing display-names. */
 	private int substitutePrefix = 1;
 
 	// Constructors ---------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creates a new VDLDocGenerator.
+	 * Creates a new VdldocGenerator.
 	 */
 	public VdldocGenerator() {
 		//
@@ -127,8 +136,7 @@ public class VdldocGenerator {
 	}
 
 	/**
-	 * Sets the output directory for generated files. If not specified,
-	 * defaults to "."
+	 * Sets the output directory for generated files. If not specified, defaults to "."
 	 * @param dir The base directory for generated files.
 	 */
 	public void setOutputDirectory(File dir) {
@@ -136,7 +144,7 @@ public class VdldocGenerator {
 	}
 
 	/**
-	 * Sets the browser window title for the documentation
+	 * Sets the browser window title for the documentation.
 	 * @param title The browser window title
 	 */
 	public void setWindowTitle(String title) {
@@ -152,7 +160,7 @@ public class VdldocGenerator {
 	}
 
 	/**
-	 * Sets quiet mode (produce no stdout during generation)
+	 * Sets quiet mode (produce no stdout during generation).
 	 * @param quiet True if no output is to be produced, false otherwise.
 	 */
 	public void setQuiet(boolean quiet) {
@@ -160,16 +168,15 @@ public class VdldocGenerator {
 	}
 
 	/**
-	 * Commences documentation generation.
+	 * Generate documentation.
 	 */
 	public void generate() throws IllegalArgumentException {
 		try {
-			this.outputDirectory.mkdirs();
-			copyStaticFiles();
 			createSummaryDoc();
+			copyStaticFiles();
 			generateOverview();
 			generateTaglibDetail();
-			outputSuccessMessage();
+			println("VDL documentation generation is finished!");
 		}
 		catch (IOException e) {
 			throw new IllegalArgumentException(e);
@@ -180,35 +187,19 @@ public class VdldocGenerator {
 		catch (ParserConfigurationException e) {
 			throw new IllegalArgumentException(e);
 		}
-		catch (TransformerConfigurationException e) {
-			throw new IllegalArgumentException(e);
-		}
 		catch (TransformerException e) {
 			throw new IllegalArgumentException(e);
 		}
 	}
 
-	// Private actions ------------------------------------------------------------------------------------------------
-
-	/**
-	 * Copies all static files to target directory.
-	 */
-	private void copyStaticFiles() throws IOException {
-		copyResourceToFile(new File(this.outputDirectory, "stylesheet.css"), RESOURCE_PATH + "/stylesheet.css");
-		File outputResourceDirectory = new File(this.outputDirectory, "resources");
-		outputResourceDirectory.mkdirs();
-		copyResourceToFile(new File(outputResourceDirectory, "background.gif"), RESOURCE_PATH + "/background.gif");
-		copyResourceToFile(new File(outputResourceDirectory, "tab.gif"), RESOURCE_PATH + "/tab.gif");
-		copyResourceToFile(new File(outputResourceDirectory, "titlebar_end.gif"), RESOURCE_PATH + "/titlebar_end.gif");
-		copyResourceToFile(new File(outputResourceDirectory, "titlebar.gif"), RESOURCE_PATH + "/titlebar.gif");
-	}
+	// Internal actions -----------------------------------------------------------------------------------------------
 
 	/**
 	 * Creates a summary document, comprising all input taglibs. This document is later used as input into XSLT to
-	 * generate all non-static output pages. Stores the result as a DOM tree in the summaryTLD attribute.
+	 * generate all non-static output pages. Stores the result as a DOM tree in the <code>allTaglibs</code> property.
 	 */
-	private void createSummaryDoc() throws IOException, SAXException, ParserConfigurationException,
-		TransformerConfigurationException, TransformerException
+	private void createSummaryDoc()
+		throws IOException, SAXException, ParserConfigurationException, TransformerException
 	{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setValidating(false);
@@ -216,104 +207,117 @@ public class VdldocGenerator {
 		factory.setExpandEntityReferences(false);
 		DocumentBuilder documentBuilder = factory.newDocumentBuilder();
 		documentBuilder.setEntityResolver(new EntityResolver() {
-
 			@Override
 			public InputSource resolveEntity(String publicId, String systemId) {
 				return new InputSource(new CharArrayReader(new char[0]));
 			}
 		});
 
-		allTaglibs = documentBuilder.newDocument();
+		summary = documentBuilder.newDocument();
 
-		// Create root <tlds> element:
-		Element rootElement = allTaglibs.createElementNS(NS_JAVAEE, "facelet-taglibs");
-		allTaglibs.appendChild(rootElement);
+		// Create root <facelet-taglibs> element:
+		Element rootElement = summary.createElementNS(NS_JAVAEE, "facelet-taglibs");
+		summary.appendChild(rootElement);
 
 		// JDK 1.4 does not add xmlns for some reason - add it manually:
 		rootElement.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns", NS_JAVAEE);
 
-		// Create configuration element:
-		Element configElement = allTaglibs.createElementNS(NS_JAVAEE, "config");
+		// Create configuration element <config>:
+		Element configElement = summary.createElementNS(NS_JAVAEE, "config");
 		rootElement.appendChild(configElement);
 
-		Element windowTitle = allTaglibs.createElementNS(NS_JAVAEE, "window-title");
-		windowTitle.appendChild(allTaglibs.createTextNode(this.windowTitle));
+		Element windowTitle = summary.createElementNS(NS_JAVAEE, "window-title");
+		windowTitle.appendChild(summary.createTextNode(this.windowTitle));
 		configElement.appendChild(windowTitle);
 
-		Element docTitle = allTaglibs.createElementNS(NS_JAVAEE, "doc-title");
-		docTitle.appendChild(allTaglibs.createTextNode(this.docTitle));
+		Element docTitle = summary.createElementNS(NS_JAVAEE, "doc-title");
+		docTitle.appendChild(summary.createTextNode(this.docTitle));
 		configElement.appendChild(docTitle);
 
-		// Append each <facelet-taglib> element from each taglib:
-		println("Loading and translating " + taglibs.size() + " Tag Librar" + ((taglibs.size() == 1) ? "y" : "ies") + "...");
+		// Append each <facelet-taglib> element from each taglib to root:
+		print("Parsing " + taglibs.size() + " taglib files... ");
 
 		for (File taglib : taglibs) {
-	        FileInputStream in = new FileInputStream(taglib);
-	        Document doc;
+			FileInputStream in = new FileInputStream(taglib);
+			Document doc;
 
-	        try {
-	            doc = documentBuilder.parse(new InputSource(in));
-	        }
-	        finally {
-	            in.close();
-	        }
+			try {
+				doc = documentBuilder.parse(new InputSource(in));
+			}
+			finally {
+				try { in.close(); } catch (IOException ignore) { /**/ }
+			}
 
 			// If this tag library has no tags and no functions, omit it.
 			int numTags = doc.getDocumentElement().getElementsByTagNameNS("*", "tag").getLength()
 						+ doc.getDocumentElement().getElementsByTagNameNS("*", "function").getLength();
 
 			if (numTags > 0) {
-				Element taglibNode = (Element) allTaglibs.importNode(doc.getDocumentElement(), true);
+				Element taglibNode = (Element) summary.importNode(doc.getDocumentElement(), true);
 
 				if (!taglibNode.getNamespaceURI().equals(NS_JAVAEE)) {
-					throw new IllegalArgumentException("Error: " + taglib.getAbsolutePath() + " does not have xmlns=\"" + NS_JAVAEE + "\"");
+					throw new IllegalArgumentException(String.format(ERROR_JAVAEE_MISSING, taglib.getName()));
 				}
 
 				if (!taglibNode.getLocalName().equals("facelet-taglib")) {
-					throw new IllegalArgumentException("Error: " + taglib.getAbsolutePath() + " does not have <facelet-taglib> as root.");
+					throw new IllegalArgumentException(String.format(ERROR_TAGLIB_MISSING, taglib.getName()));
+				}
+
+				// Check if root has a display name attribute and add it if necessary.
+				if (doc.getDocumentElement().getElementsByTagNameNS( "*", "display-name" ).getLength() == 0) {
+					String prefix = "prefix" + substitutePrefix;
+					substitutePrefix++;
+					Element displayName = doc.createElementNS(NS_JAVAEE, "display-name");
+					displayName.appendChild(doc.createTextNode(prefix));
+					doc.appendChild(displayName);
+					print(String.format(WARN_PREFIX_MISSING, taglib.getName(), prefix));
 				}
 
 				rootElement.appendChild(taglibNode);
-
-				// Check if root has a display name attribute and add it if necessary.
-				checkOrAddDisplayName(taglib, doc);
 			}
 		}
+
+		println("OK!");
 
 		// If debug enabled, output the resulting document, as a test:
 		if (DEBUG_INPUT_DOCUMENT) {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			transformer.transform(new DOMSource(allTaglibs), new StreamResult(System.out));
+			transformer.transform(new DOMSource(summary), new StreamResult(System.out));
 		}
 	}
 
 	/**
-	 * Check to see if there's a <display-name> which is to be used as tag prefix. If not, then autogenerate one anyway
-	 * and give a warning.
-	 * @param tagLibrary The tag library being populated
-	 * @param doc The root element of the TLD DOM being populated.
+	 * Copies all static files to target directory.
 	 */
-	private void checkOrAddDisplayName(File taglib, Document doc) {
-        if (doc.getDocumentElement().getElementsByTagNameNS( "*", "display-name" ).getLength() == 0) {
-			String prefix = "prefix" + substitutePrefix;
-			substitutePrefix++;
-			Element displayName = doc.createElementNS(NS_JAVAEE, "display-name");
-			displayName.appendChild(doc.createTextNode(prefix));
-			doc.appendChild(displayName);
-			println("WARNING: " + taglib.getAbsolutePath() + " is missing a <display-name> element.  Using '" + prefix + "'.");
-        }
+	private void copyStaticFiles() throws IOException {
+		print("Copying static files... ");
+
+		outputDirectory.mkdirs();
+		copyResourceToFile("stylesheet.css", outputDirectory);
+		File outputResourceDirectory = new File(outputDirectory, "resources");
+		outputResourceDirectory.mkdirs();
+		copyResourceToFile("background.gif", outputResourceDirectory);
+		copyResourceToFile("tab.gif", outputResourceDirectory);
+		copyResourceToFile("titlebar_end.gif", outputResourceDirectory);
+		copyResourceToFile("titlebar.gif", outputResourceDirectory);
+
+		println("OK!");
 	}
 
 	/**
 	 * Generates all overview files, summarizing all TLDs.
 	 */
 	private void generateOverview() throws TransformerException {
-		generatePage(new File(this.outputDirectory, "index.html"), RESOURCE_PATH + "/index.html.xsl");
-		generatePage(new File(this.outputDirectory, "help-doc.html"), RESOURCE_PATH + "/help-doc.html.xsl");
-		generatePage(new File(this.outputDirectory, "overview-frame.html"), RESOURCE_PATH + "/overview-frame.html.xsl");
-		generatePage(new File(this.outputDirectory, "alltags-frame.html"), RESOURCE_PATH + "/alltags-frame.html.xsl");
-		generatePage(new File(this.outputDirectory, "alltags-noframe.html"), RESOURCE_PATH + "/alltags-noframe.html.xsl");
-		generatePage(new File(this.outputDirectory, "overview-summary.html"), RESOURCE_PATH + "/overview-summary.html.xsl");
+		print("Generating overview pages... ");
+
+		generatePage(new File(outputDirectory, "index.html"), "index.html.xsl");
+		generatePage(new File(outputDirectory, "help-doc.html"), "help-doc.html.xsl");
+		generatePage(new File(outputDirectory, "overview-frame.html"), "overview-frame.html.xsl");
+		generatePage(new File(outputDirectory, "alltags-frame.html"), "alltags-frame.html.xsl");
+		generatePage(new File(outputDirectory, "alltags-noframe.html"), "alltags-noframe.html.xsl");
+		generatePage(new File(outputDirectory, "overview-summary.html"), "overview-summary.html.xsl");
+
+		println("OK!");
 	}
 
 	/**
@@ -321,7 +325,7 @@ public class VdldocGenerator {
 	 */
 	private void generateTaglibDetail() throws IllegalArgumentException, TransformerException {
 		Set<String> displayNames = new HashSet<String>();
-		Element root = allTaglibs.getDocumentElement();
+		Element root = summary.getDocumentElement();
 		NodeList taglibs = root.getElementsByTagNameNS("*", "facelet-taglib");
 		int size = taglibs.getLength();
 
@@ -330,15 +334,15 @@ public class VdldocGenerator {
 			String displayName = findElementValue(taglib, "display-name");
 
 			if (!displayNames.add(displayName)) {
-				throw new IllegalArgumentException("Two tag libraries exist with the same display-name '" + displayName + "'.  This is not yet supported.");
+				throw new IllegalArgumentException(String.format(ERROR_DUPLICATE_TAGLIB, displayName));
 			}
 
-			println("Generating docs for " + displayName + "...");
-			File outDir = new File(this.outputDirectory, displayName);
-			outDir.mkdir();
+			print("Generating docs for taglib '" + displayName + "'... ");
+			File outputDirectory = new File(this.outputDirectory, displayName);
+			outputDirectory.mkdir();
 
 			// Generate information for each TLD:
-			generateTLDDetail(outDir, displayName);
+			generateTaglibDetail(outputDirectory, displayName);
 
 			// Generate information for each tag:
 			NodeList tags = taglib.getElementsByTagNameNS("*", "tag");
@@ -347,7 +351,7 @@ public class VdldocGenerator {
 			for (int j = 0; j < numTags; j++) {
 				Element tag = (Element) tags.item(j);
 				String tagName = findElementValue(tag, "tag-name");
-				generateTagDetail(outDir, displayName, tagName);
+				generateTagDetail(outputDirectory, displayName, tagName);
 			}
 
 			// Generate information for each function:
@@ -357,50 +361,97 @@ public class VdldocGenerator {
 			for (int j = 0; j < numFunctions; j++) {
 				Element function = (Element) functions.item(j);
 				String functionName = findElementValue(function, "function-name");
-				generateFunctionDetail(outDir, displayName, functionName);
+				generateFunctionDetail(outputDirectory, displayName, functionName);
 			}
+
+			println("OK!");
 		}
 	}
 
 	/**
 	 * Generates the detail content for the tag library with the given display-name.
-	 * Files will be placed in outdir.
+	 * Files will be placed in given output directory.
+	 * @param outputDirectory The output directory.
+	 * @param displayName The display name of the tag library.
 	 */
-	private void generateTLDDetail(File outDir, String displayName) throws TransformerException {
+	private void generateTaglibDetail(File outputDirectory, String displayName) throws TransformerException {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("displayName", displayName);
 
-		generatePage(new File(outDir, "tld-frame.html"), RESOURCE_PATH + "/tld-frame.html.xsl", parameters);
-		generatePage(new File(outDir, "tld-summary.html"), RESOURCE_PATH + "/tld-summary.html.xsl", parameters);
+		generatePage(new File(outputDirectory, "tld-frame.html"), "tld-frame.html.xsl", parameters);
+		generatePage(new File(outputDirectory, "tld-summary.html"), "tld-summary.html.xsl", parameters);
 	}
 
 	/**
 	 * Generates the detail content for the tag with the given name in the tag library with the given display-name.
-	 * Files will be placed in outdir.
+	 * Files will be placed in given output directory.
+	 * @param outputDirectory The output directory.
+	 * @param displayName The display name of the tag library.
+	 * @param tagName The name of the tag.
 	 */
-	private void generateTagDetail(File outDir, String displayName, String tagName) throws TransformerException {
+	private void generateTagDetail(File outputDirectory, String displayName, String tagName)
+		throws TransformerException
+	{
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("displayName", displayName);
 		parameters.put("tagName", tagName);
 
-		generatePage(new File(outDir, tagName + ".html"), RESOURCE_PATH + "/tag.html.xsl", parameters);
+		generatePage(new File(outputDirectory, tagName + ".html"), "tag.html.xsl", parameters);
 	}
 
 	/**
 	 * Generates the detail content for the function with the given name in the tag library with the given display-name.
-	 * Files will be placed in outdir.
+	 * Files will be placed in given output directory.
+	 * @param outputDirectory The output directory.
+	 * @param displayName The display name of the tag library.
+	 * @param functionName The name of the function.
 	 */
-	private void generateFunctionDetail(File outDir, String displayName, String functionName) throws TransformerException {
+	private void generateFunctionDetail(File outputDirectory, String displayName, String functionName)
+		throws TransformerException
+	{
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("displayName", displayName);
 		parameters.put("functionName", functionName);
 
-		generatePage(new File(outDir, functionName + ".fn.html"), RESOURCE_PATH + "/function.html.xsl", parameters);
+		generatePage(new File(outputDirectory, functionName + ".fn.html"), "function.html.xsl", parameters);
 	}
+
+	/**
+	 * Generates the given page dynamically, by running the summary document through the given XSLT transform. Assumes
+	 * no parameters.
+	 * @param outputFile The output file.
+	 * @param inputXSL The file name of the input XSL.
+	 */
+	private void generatePage(File outputFile, String inputXSL) throws TransformerException {
+		generatePage(outputFile, inputXSL, Collections.<String, String>emptyMap());
+	}
+
+	/**
+	 * Generates the given page dynamically, by running the summary document through the given XSLT transform.
+	 * @param outputFile The output file.
+	 * @param inputXSL The file name of the input XSL.
+	 * @param params The XSL parameters.
+	 */
+	private void generatePage(File outputFile, String inputXSL, Map<String, String> params)
+		throws TransformerException
+	{
+		InputStream xsl = getResourceAsStream(inputXSL);
+		Transformer transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(xsl));
+
+		for (Map.Entry<String, String> entry : params.entrySet()) {
+			transformer.setParameter(entry.getKey(), entry.getValue());
+		}
+
+		transformer.transform(new DOMSource(summary), new StreamResult(outputFile));
+	}
+
+	// Helpers --------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Searches through the given element and returns the value of the body of the element. Returns null if the element
 	 * was not found.
+	 * @param parent The parent DOM element to search in.
+	 * @param tagName The tag name of the DOM element to return the body for.
 	 */
 	private static String findElementValue(Element parent, String tagName) {
 		String result = null;
@@ -419,53 +470,18 @@ public class VdldocGenerator {
 	}
 
 	/**
-	 * Generates the given page dynamically, by running the summary document through the given XSLT transform. Assumes
-	 * no parameters.
-	 * @param outFile The target file
-	 * @param inputXSL The stylesheet to use for the transformation
+	 * Copy the given resource file to the given directory. The classloader that loaded VdldocGenerator will be used to
+	 * find the resource.
+	 * @param resourceName The file name of the resource file.
+	 * @param outputDirectory The output directory.
 	 */
-	private void generatePage(File outFile, String inputXSL) throws TransformerException {
-		generatePage(outFile, inputXSL, null);
-	}
-
-	/**
-	 * Generates the given page dynamically, by running the summary document through the given XSLT transform.
-	 * @param outFile The target file.
-	 * @param inputXSL The stylesheet to use for the transformation.
-	 * @param parameters String key and Object value pairs to pass to the transformation.
-	 */
-	private void generatePage(File outFile, String inputXSL, Map<String, String> parameters) throws TransformerException {
-		InputStream xsl = getResourceAsStream(inputXSL);
-		Transformer transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(xsl));
-
-		if (parameters != null) {
-			Iterator<String> params = parameters.keySet().iterator();
-
-			while (params.hasNext()) {
-				String key = params.next();
-				Object value = parameters.get(key);
-				transformer.setParameter(key, value);
-			}
-		}
-
-		transformer.transform(new DOMSource(allTaglibs), new StreamResult(outFile));
-	}
-
-	/**
-	 * Copy the given resource to the given output file. The classloader
-	 * that loaded TLDDocGenerator will be used to find the resource.
-	 * If xsltDirectory is not null, the files are copied from that
-	 * directory instead.
-	 * @param outputFile The destination file
-	 * @param resource The resource to copy, starting with '/'
-	 */
-	private static void copyResourceToFile(File outputFile, String resource) throws IOException {
+	private static void copyResourceToFile(String resourceName, File outputDirectory) throws IOException {
 		InputStream in = null;
 		OutputStream out = null;
 
 		try {
-			in = getResourceAsStream(resource);
-			out = new FileOutputStream(outputFile);
+			in = getResourceAsStream(resourceName);
+			out = new FileOutputStream(new File(outputDirectory, resourceName));
 			byte[] buffer = new byte[1024];
 
 			for (int length = 0; (length = in.read(buffer)) != -1;) {
@@ -479,31 +495,34 @@ public class VdldocGenerator {
 	}
 
 	/**
-	 * If xsltDirectory is null, obtains an InputStream of the given
-	 * resource from RESOURCE_PATH, using the class loader that loaded
-	 * TLDDocGenerator. Otherwise, finds the file in xsltDirectory and
-	 * defaults to the default stylesheet if it has not been overridden.
-	 * @param resource, must start with RESOURCE_PATH.
-	 * @return An InputStream for the given resource.
+	 * Obtains an input stream of the given resource file using the class loader that loaded VdldocGenerator.
+	 * @param resourceName The name of the resource file.
+	 * @return An input stream of the resource file with the given name.
 	 */
-	private static InputStream getResourceAsStream(String resource) {
-		return VdldocGenerator.class.getResourceAsStream(resource);
+	private static InputStream getResourceAsStream(String resourceName) {
+		return VdldocGenerator.class.getResourceAsStream(RESOURCE_PATH + "/" + resourceName);
+	}
+
+	// "Logging" ------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Prints the given message to stdout, only if !quiet.
+	 * @param message The message to be printed.
+	 */
+	private void print(String message) {
+		if (!quiet) {
+			System.out.print(message);
+		}
 	}
 
 	/**
-	 * Outputs the given message to stdout, only if !quiet
+	 * Prints the given message with newline to stdout, only if !quiet.
+	 * @param message The message to be printed.
 	 */
 	private void println(String message) {
 		if (!quiet) {
 			System.out.println(message);
 		}
-	}
-
-	/**
-	 * Displays a "success" message.
-	 */
-	private void outputSuccessMessage() {
-		println("\nDocumentation generated.");
 	}
 
 }
