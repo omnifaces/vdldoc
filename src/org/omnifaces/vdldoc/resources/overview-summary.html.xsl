@@ -145,8 +145,8 @@
 
 			<td class="colFirst">
 				<a>
-					<xsl:attribute name="href"><xsl:value-of select="javaee:display-name" />/tld-summary.html</xsl:attribute>
-					<xsl:value-of select="javaee:display-name" />
+					<xsl:attribute name="href"><xsl:value-of select="@id" />/tld-summary.html</xsl:attribute>
+					<xsl:value-of select="@id" />
 				</a>
 			</td>
 			<td class="colLast">

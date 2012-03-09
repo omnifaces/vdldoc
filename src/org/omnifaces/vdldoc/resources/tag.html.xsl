@@ -38,7 +38,7 @@
 		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
 		doctype-system="http://www.w3.org/TR/html4/loose.dtd" />
 
-	<xsl:param name="displayName">
+	<xsl:param name="id">
 		default
 	</xsl:param>
 	<xsl:param name="tagName">
@@ -51,7 +51,7 @@
 	</xsl:template>
 
 	<xsl:template match="javaee:facelet-taglib">
-		<xsl:if test="javaee:display-name = $displayName">
+		<xsl:if test="@id = $id">
 			<xsl:apply-templates select="javaee:tag" />
 		</xsl:if>
 	</xsl:template>
@@ -94,7 +94,7 @@
 						<ul class="navList">
 							<li>
 								<a target="_top">
-									<xsl:attribute name="href">../index.html?<xsl:value-of select="$displayName" />/<xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
+									<xsl:attribute name="href">../index.html?<xsl:value-of select="$id" />/<xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
 									Frames
 								</a>
 							</li>
@@ -117,7 +117,7 @@
 
 					<div class="header">
 						<h1 title="Library" class="title">
-							<xsl:value-of select="$displayName" />
+							<xsl:value-of select="$id" />
 						</h1>
 						<h2>
 							Tag <xsl:value-of select="javaee:tag-name" />
@@ -220,7 +220,7 @@
 						<ul class="navList">
 							<li>
 								<a target="_bottom">
-									<xsl:attribute name="href">../index.html?<xsl:value-of select="$displayName" />/<xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
+									<xsl:attribute name="href">../index.html?<xsl:value-of select="$id" />/<xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
 									Frames
 								</a>
 							</li>

@@ -39,7 +39,7 @@
 		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
 		doctype-system="http://www.w3.org/TR/html4/loose.dtd" />
 
-	<xsl:param name="displayName">
+	<xsl:param name="id">
 		default
 	</xsl:param>
 
@@ -48,9 +48,9 @@
 	</xsl:template>
 
 	<xsl:template match="javaee:facelet-taglib">
-		<xsl:if test="javaee:display-name = $displayName">
+		<xsl:if test="@id = $id">
 			<xsl:variable name="title">
-				<xsl:value-of select="$displayName" />
+				<xsl:value-of select="$id" />
 				<xsl:if test="normalize-space(javaee:description)">
 					(<xsl:value-of select="javaee:description" disable-output-escaping="yes" />)
 				</xsl:if>
@@ -67,7 +67,7 @@
 				<body>
 					<h1 class="bar">
 						<a href="tld-summary.html" target="tagFrame">
-							<xsl:value-of select="$displayName" />
+							<xsl:value-of select="$id" />
 						</a>
 					</h1>
 					<div class="indexContainer">
@@ -94,7 +94,7 @@
 			<a>
 				<xsl:attribute name="href"><xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
 				<xsl:attribute name="target">tagFrame</xsl:attribute>
-				<xsl:value-of select="../javaee:display-name" />:<xsl:value-of select="javaee:tag-name" />
+				<xsl:value-of select="../@id" />:<xsl:value-of select="javaee:tag-name" />
 			</a>
 		</li>
 	</xsl:template>
@@ -104,7 +104,7 @@
 			<a>
 				<xsl:attribute name="href"><xsl:value-of select="javaee:function-name" />.fn.html</xsl:attribute>
 				<xsl:attribute name="target">tagFrame</xsl:attribute>
-				<i><xsl:value-of select="../javaee:display-name" />:<xsl:value-of select="javaee:function-name" />()</i>
+				<i><xsl:value-of select="../@id" />:<xsl:value-of select="javaee:function-name" />()</i>
 			</a>
 		</li>
 	</xsl:template>

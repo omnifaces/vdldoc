@@ -88,10 +88,10 @@ public class VdldocGenerator {
 		"%s does not have xmlns=\"" + NS_JAVAEE + "\"";
 	private static final String ERROR_TAGLIB_MISSING =
 		"%s does not have <facelet-taglib> as root.";
-	private static final String ERROR_DUPLICATE_TAGLIB =
-		"Two tag libraries exist with the same display-name '%s'. This is not supported.";
-	private static final String ERROR_DISPLAYNAME_MISSING =
-		"%s is missing <display-name> element. This must be present as it will be used as taglib prefix.";
+	private static final String WARNING_ID_MISSING =
+		"WARNING: %s does not have <facelet-taglib id> attribute. Defaulting to base filename '%s'... ";
+	private static final String ERROR_DUPLICATE_ID =
+		"Two tag libraries exist with the same <facelet-taglib id> attribute '%s'. This is not supported.";
 
 	// Properties -----------------------------------------------------------------------------------------------------
 
@@ -260,8 +260,12 @@ public class VdldocGenerator {
 					throw new IllegalArgumentException(String.format(ERROR_TAGLIB_MISSING, taglib.getName()));
 				}
 
-				if (taglibNode.getElementsByTagNameNS( "*", "display-name" ).getLength() == 0) {
-					throw new IllegalArgumentException(String.format(ERROR_DISPLAYNAME_MISSING, taglib.getName()));
+				String id = taglibNode.getAttribute("id");
+
+				if (id == null || id.trim().isEmpty()) {
+					id = taglib.getName().substring(0, taglib.getName().indexOf('.'));
+					taglibNode.setAttribute("id", taglib.getName().substring(0, taglib.getName().indexOf('.')));
+					print(String.format(WARNING_ID_MISSING, taglib.getName(), id));
 				}
 
 				rootElement.appendChild(taglibNode);
@@ -315,25 +319,25 @@ public class VdldocGenerator {
 	 * Generates all the detail folders for each taglib.
 	 */
 	private void generateTaglibDetail() throws IllegalArgumentException, TransformerException {
-		Set<String> displayNames = new HashSet<String>();
+		Set<String> ids = new HashSet<String>();
 		Element root = summary.getDocumentElement();
 		NodeList taglibs = root.getElementsByTagNameNS("*", "facelet-taglib");
 		int size = taglibs.getLength();
 
 		for (int i = 0; i < size; i++) {
 			Element taglib = (Element) taglibs.item(i);
-			String displayName = findElementValue(taglib, "display-name");
+			String id = taglib.getAttribute("id");
 
-			if (!displayNames.add(displayName)) {
-				throw new IllegalArgumentException(String.format(ERROR_DUPLICATE_TAGLIB, displayName));
+			if (!ids.add(id)) {
+				throw new IllegalArgumentException(String.format(ERROR_DUPLICATE_ID, id));
 			}
 
-			print("Generating docs for taglib '" + displayName + "'... ");
-			File outputDirectory = new File(this.outputDirectory, displayName);
+			print("Generating docs for taglib '" + id + "'... ");
+			File outputDirectory = new File(this.outputDirectory, id);
 			outputDirectory.mkdir();
 
 			// Generate information for each TLD:
-			generateTaglibDetail(outputDirectory, displayName);
+			generateTaglibDetail(outputDirectory, id);
 
 			// Generate information for each tag:
 			NodeList tags = taglib.getElementsByTagNameNS("*", "tag");
@@ -342,7 +346,7 @@ public class VdldocGenerator {
 			for (int j = 0; j < numTags; j++) {
 				Element tag = (Element) tags.item(j);
 				String tagName = findElementValue(tag, "tag-name");
-				generateTagDetail(outputDirectory, displayName, tagName);
+				generateTagDetail(outputDirectory, id, tagName);
 			}
 
 			// Generate information for each function:
@@ -352,7 +356,7 @@ public class VdldocGenerator {
 			for (int j = 0; j < numFunctions; j++) {
 				Element function = (Element) functions.item(j);
 				String functionName = findElementValue(function, "function-name");
-				generateFunctionDetail(outputDirectory, displayName, functionName);
+				generateFunctionDetail(outputDirectory, id, functionName);
 			}
 
 			println("OK!");
@@ -363,11 +367,11 @@ public class VdldocGenerator {
 	 * Generates the detail content for the tag library with the given display-name.
 	 * Files will be placed in given output directory.
 	 * @param outputDirectory The output directory.
-	 * @param displayName The display name of the tag library.
+	 * @param id The ID of the tag library.
 	 */
-	private void generateTaglibDetail(File outputDirectory, String displayName) throws TransformerException {
+	private void generateTaglibDetail(File outputDirectory, String id) throws TransformerException {
 		Map<String, String> parameters = new HashMap<String, String>();
-		parameters.put("displayName", displayName);
+		parameters.put("id", id);
 
 		generatePage(new File(outputDirectory, "tld-frame.html"), "tld-frame.html.xsl", parameters);
 		generatePage(new File(outputDirectory, "tld-summary.html"), "tld-summary.html.xsl", parameters);
@@ -377,14 +381,14 @@ public class VdldocGenerator {
 	 * Generates the detail content for the tag with the given name in the tag library with the given display-name.
 	 * Files will be placed in given output directory.
 	 * @param outputDirectory The output directory.
-	 * @param displayName The display name of the tag library.
+	 * @param id The ID of the tag library.
 	 * @param tagName The name of the tag.
 	 */
-	private void generateTagDetail(File outputDirectory, String displayName, String tagName)
+	private void generateTagDetail(File outputDirectory, String id, String tagName)
 		throws TransformerException
 	{
 		Map<String, String> parameters = new HashMap<String, String>();
-		parameters.put("displayName", displayName);
+		parameters.put("id", id);
 		parameters.put("tagName", tagName);
 
 		generatePage(new File(outputDirectory, tagName + ".html"), "tag.html.xsl", parameters);
@@ -394,14 +398,14 @@ public class VdldocGenerator {
 	 * Generates the detail content for the function with the given name in the tag library with the given display-name.
 	 * Files will be placed in given output directory.
 	 * @param outputDirectory The output directory.
-	 * @param displayName The display name of the tag library.
+	 * @param id The ID of the tag library.
 	 * @param functionName The name of the function.
 	 */
-	private void generateFunctionDetail(File outputDirectory, String displayName, String functionName)
+	private void generateFunctionDetail(File outputDirectory, String id, String functionName)
 		throws TransformerException
 	{
 		Map<String, String> parameters = new HashMap<String, String>();
-		parameters.put("displayName", displayName);
+		parameters.put("id", id);
 		parameters.put("functionName", functionName);
 
 		generatePage(new File(outputDirectory, functionName + ".fn.html"), "function.html.xsl", parameters);

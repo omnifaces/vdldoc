@@ -64,9 +64,9 @@
 	<xsl:template match="javaee:facelet-taglib">
 		<li>
 			<a>
-				<xsl:attribute name="href"><xsl:value-of select="javaee:display-name" />/tld-frame.html</xsl:attribute>
+				<xsl:attribute name="href"><xsl:value-of select="@id" />/tld-frame.html</xsl:attribute>
 				<xsl:attribute name="target">tldFrame</xsl:attribute>
-				<xsl:value-of select="javaee:display-name" />
+				<xsl:value-of select="@id" />
 			</a>
 		</li>
 	</xsl:template>

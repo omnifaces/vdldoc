@@ -50,7 +50,7 @@
 				<div class="indexContainer">
 					<ul>
 						<xsl:apply-templates select="javaee:facelet-taglibs/javaee:facelet-taglib/javaee:tag|javaee:facelet-taglibs/javaee:facelet-taglib/javaee:function">
-							<xsl:sort select="../javaee:display-name" />
+							<xsl:sort select="../@id" />
 							<xsl:sort select="javaee:tag-name" />
 							<xsl:sort select="javaee:function-name" />
 						</xsl:apply-templates>
@@ -63,9 +63,9 @@
 	<xsl:template match="javaee:tag">
 		<li>
 			<a>
-				<xsl:attribute name="href"><xsl:value-of select="../javaee:display-name" />/<xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
+				<xsl:attribute name="href"><xsl:value-of select="../@id" />/<xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
 				<xsl:attribute name="target">tagFrame</xsl:attribute>
-				<xsl:value-of select="../javaee:display-name" />:<xsl:value-of select="javaee:tag-name" />
+				<xsl:value-of select="../@id" />:<xsl:value-of select="javaee:tag-name" />
 			</a>
 		</li>
 	</xsl:template>
@@ -73,9 +73,9 @@
 	<xsl:template match="javaee:function">
 		<li>
 			<a>
-				<xsl:attribute name="href"><xsl:value-of select="../javaee:display-name" />/<xsl:value-of select="javaee:function-name" />.fn.html</xsl:attribute>
+				<xsl:attribute name="href"><xsl:value-of select="../@id" />/<xsl:value-of select="javaee:function-name" />.fn.html</xsl:attribute>
 				<xsl:attribute name="target">tagFrame</xsl:attribute>
-				<i><xsl:value-of select="../javaee:display-name" />:<xsl:value-of select="javaee:function-name" />()</i>
+				<i><xsl:value-of select="../@id" />:<xsl:value-of select="javaee:function-name" />()</i>
 			</a>
 		</li>
 	</xsl:template>

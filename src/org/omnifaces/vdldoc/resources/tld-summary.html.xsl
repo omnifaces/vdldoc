@@ -39,7 +39,7 @@
 		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
 		doctype-system="http://www.w3.org/TR/html4/loose.dtd" />
 
-	<xsl:param name="displayName">
+	<xsl:param name="id">
 		default
 	</xsl:param>
 
@@ -48,9 +48,9 @@
 	</xsl:template>
 
 	<xsl:template match="javaee:facelet-taglib">
-		<xsl:if test="javaee:display-name = $displayName">
+		<xsl:if test="@id = $id">
 			<xsl:variable name="title">
-				<xsl:value-of select="$displayName" /> (<xsl:value-of select="/javaee:facelet-taglibs/javaee:config/javaee:window-title" />)
+				<xsl:value-of select="$id" /> (<xsl:value-of select="/javaee:facelet-taglibs/javaee:config/javaee:window-title" />)
 			</xsl:variable>
 
 			<html lang="en">
@@ -84,7 +84,7 @@
 						<ul class="navList">
 							<li>
 								<a target="_top">
-									<xsl:attribute name="href">../index.html?<xsl:value-of select="$displayName" />/tld-summary.html</xsl:attribute>
+									<xsl:attribute name="href">../index.html?<xsl:value-of select="$id" />/tld-summary.html</xsl:attribute>
 									Frames
 								</a>
 							</li>
@@ -102,7 +102,7 @@
 
 					<div class="header">
 						<h1 title="Library" class="title">
-							<xsl:value-of select="$displayName" />
+							<xsl:value-of select="$id" />
 						</h1>
 					</div>
 
@@ -115,7 +115,7 @@
 											<dt>XML Declaration Syntax:</dt>
 											<dd>
 												<code>
-													&lt;anyxmlelement xmlns:<xsl:value-of select="javaee:display-name" />="<xsl:value-of select="javaee:namespace" />"/&gt;
+													&lt;anyxmlelement xmlns:<xsl:value-of select="@id" />="<xsl:value-of select="javaee:namespace" />"/&gt;
 												</code>
 											</dd>
 										</dl>
@@ -154,8 +154,8 @@
 										</thead>
 										<tbody>
 											<tr class="rowColor">
-												<td class="colFirst">Display Name</td>
-												<td class="colLast"><code><xsl:value-of select="javaee:display-name" /></code></td>
+												<td class="colFirst">ID (tag prefix)</td>
+												<td class="colLast"><code><xsl:value-of select="@id" /></code></td>
 											</tr>
 											<tr class="altColor">
 												<td class="colFirst">URI</td>
@@ -243,7 +243,7 @@
 						<ul class="navList">
 							<li>
 								<a target="_top">
-									<xsl:attribute name="href">../index.html?<xsl:value-of select="$displayName" />/tld-summary.html</xsl:attribute>
+									<xsl:attribute name="href">../index.html?<xsl:value-of select="$id" />/tld-summary.html</xsl:attribute>
 									Frames
 								</a>
 							</li>
