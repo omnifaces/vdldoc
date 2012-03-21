@@ -29,11 +29,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -84,10 +83,16 @@ public class VdldocGenerator {
 	private static final boolean DEBUG_INPUT_DOCUMENT = false;
 
 	/** Error messages */
+	private static final String ERROR_INVALID_TAGLIB =
+		"%s is not a .taglib.xml file.";
+	private static final String ERROR_INVALID_FACES_CONFIG =
+		"%s is not a faces-config.xml file.";
 	private static final String ERROR_JAVAEE_MISSING =
 		"%s does not have xmlns=\"" + NS_JAVAEE + "\"";
 	private static final String ERROR_TAGLIB_MISSING =
 		"%s does not have <facelet-taglib> as root.";
+	private static final String WARNING_NO_TAGS =
+		"WARNING: %s does not have any <tag>s or <function>s. Skipping!";
 	private static final String WARNING_ID_MISSING =
 		"WARNING: %s does not have <facelet-taglib id> attribute. Defaulting to base filename '%s'... ";
 	private static final String ERROR_DUPLICATE_ID =
@@ -95,8 +100,11 @@ public class VdldocGenerator {
 
 	// Properties -----------------------------------------------------------------------------------------------------
 
-	/** The set of tag libraries we are parsing. */
-	private List<File> taglibs = new ArrayList<File>();
+	/** The set of tag library files we are parsing. */
+	private Set<File> taglibs = new LinkedHashSet<File>();
+
+	/** The faces config file we are parsing. */
+	private File facesConfig;
 
 	/** The output directory for generated files. */
 	private File outputDirectory = new File("vdldoc");
@@ -111,7 +119,7 @@ public class VdldocGenerator {
 	private boolean quiet;
 
 	/** The summary VDL document, used as input into XSLT. */
-	private Document summary;
+	private Document summaryDocument;
 
 	// Constructors ---------------------------------------------------------------------------------------------------
 
@@ -127,13 +135,34 @@ public class VdldocGenerator {
 	/**
 	 * Adds the given individual taglib file.
 	 * @param taglib The taglib file to add.
+	 * @throws IllegalArgumentException When the file does not exist, or is not a file, or does not have the extension
+	 * <tt>.taglib.xml</tt>.
 	 */
 	public void addTaglib(File taglib) {
+		if (!taglib.exists() || !taglib.isFile() || !taglib.getName().toLowerCase().endsWith(".taglib.xml")) {
+			throw new IllegalArgumentException(String.format(ERROR_INVALID_TAGLIB, taglib.getAbsolutePath()));
+		}
+
 		taglibs.add(taglib);
 	}
 
 	/**
-	 * Sets the output directory for generated files. If not specified, defaults to "."
+	 * Set the given individual faces config file.
+	 * @param facesConfig The faces config file to set.
+	 * @throws IllegalStateException When the faces config file is already been set.
+	 * @throws IllegalArgumentException When the file does not exist, or is not a file, or does not have the name
+	 * <tt>faces-config.xml</tt>.
+	 */
+	public void setFacesConfig(File facesConfig) {
+		if (!facesConfig.exists() || !facesConfig.isFile() || !facesConfig.getName().equals("faces-config.xml")) {
+			throw new IllegalArgumentException(String.format(ERROR_INVALID_FACES_CONFIG, facesConfig.getAbsolutePath()));
+		}
+
+		this.facesConfig = facesConfig;
+	}
+
+	/**
+	 * Sets the output directory for generated files. If not specified, defaults to "./vdldoc"
 	 * @param dir The base directory for generated files.
 	 */
 	public void setOutputDirectory(File dir) {
@@ -198,59 +227,48 @@ public class VdldocGenerator {
 	private void createSummaryDoc()
 		throws IOException, SAXException, ParserConfigurationException, TransformerException
 	{
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		factory.setValidating(false);
-		factory.setNamespaceAware(true);
-		factory.setExpandEntityReferences(false);
-		DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-		documentBuilder.setEntityResolver(new EntityResolver() {
-			@Override
-			public InputSource resolveEntity(String publicId, String systemId) {
-				return new InputSource(new CharArrayReader(new char[0]));
-			}
-		});
+		DocumentBuilder builder = createDocumentBuilder();
+		summaryDocument = builder.newDocument();
 
-		summary = documentBuilder.newDocument();
-
-		// Create root <facelet-taglibs> element:
-		Element rootElement = summary.createElementNS(NS_JAVAEE, "facelet-taglibs");
-		summary.appendChild(rootElement);
-
-		// JDK 1.4 does not add xmlns for some reason - add it manually:
-		rootElement.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns", NS_JAVAEE);
+		// Create root <vdldoc> root element:
+		Element vdldocElement = summaryDocument.createElementNS(NS_JAVAEE, "vdldoc");
+		summaryDocument.appendChild(vdldocElement);
 
 		// Create configuration element <config>:
-		Element configElement = summary.createElementNS(NS_JAVAEE, "config");
-		rootElement.appendChild(configElement);
+		Element configElement = summaryDocument.createElementNS(NS_JAVAEE, "config");
+		vdldocElement.appendChild(configElement);
 
-		Element windowTitle = summary.createElementNS(NS_JAVAEE, "window-title");
-		windowTitle.appendChild(summary.createTextNode(this.windowTitle));
+		Element windowTitle = summaryDocument.createElementNS(NS_JAVAEE, "window-title");
+		windowTitle.appendChild(summaryDocument.createTextNode(this.windowTitle));
 		configElement.appendChild(windowTitle);
 
-		Element docTitle = summary.createElementNS(NS_JAVAEE, "doc-title");
-		docTitle.appendChild(summary.createTextNode(this.docTitle));
+		Element docTitle = summaryDocument.createElementNS(NS_JAVAEE, "doc-title");
+		docTitle.appendChild(summaryDocument.createTextNode(this.docTitle));
 		configElement.appendChild(docTitle);
 
-		// Append each <facelet-taglib> element from each taglib to root:
-		print("Parsing " + taglibs.size() + " taglib files... ");
+		// Append <faces-config> element from faces config file to root:
+		if (facesConfig != null) {
+			print("Parsing faces-config.xml file... ");
 
+			Document doc = parse(builder, facesConfig);
+			Node facesConfigNode = summaryDocument.importNode(doc.getDocumentElement(), true);
+			vdldocElement.appendChild(facesConfigNode);
+
+			println("OK!");
+		}
+
+		// Append each <facelet-taglib> element from each taglib file to root:
 		for (File taglib : taglibs) {
-			FileInputStream in = new FileInputStream(taglib);
-			Document doc;
+			print("Parsing " + taglib.getName() + " file... ");
 
-			try {
-				doc = documentBuilder.parse(new InputSource(in));
-			}
-			finally {
-				try { in.close(); } catch (IOException ignore) { /**/ }
-			}
+			Document doc = parse(builder, taglib);
 
-			// If this tag library has no tags and no functions, omit it.
+			// If this tag library has no tags or functions, skip it.
 			int numTags = doc.getDocumentElement().getElementsByTagNameNS("*", "tag").getLength()
 						+ doc.getDocumentElement().getElementsByTagNameNS("*", "function").getLength();
 
 			if (numTags > 0) {
-				Element taglibNode = (Element) summary.importNode(doc.getDocumentElement(), true);
+				Element taglibNode = (Element) summaryDocument.importNode(doc.getDocumentElement(), true);
 
 				if (!taglibNode.getNamespaceURI().equals(NS_JAVAEE)) {
 					throw new IllegalArgumentException(String.format(ERROR_JAVAEE_MISSING, taglib.getName()));
@@ -268,16 +286,19 @@ public class VdldocGenerator {
 					print(String.format(WARNING_ID_MISSING, taglib.getName(), id));
 				}
 
-				rootElement.appendChild(taglibNode);
+				vdldocElement.appendChild(taglibNode);
+
+				println("OK!");
+			}
+			else {
+				println(String.format(WARNING_NO_TAGS, taglib.getName()));
 			}
 		}
-
-		println("OK!");
 
 		// If debug enabled, output the resulting document, as a test:
 		if (DEBUG_INPUT_DOCUMENT) {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			transformer.transform(new DOMSource(summary), new StreamResult(System.out));
+			transformer.transform(new DOMSource(summaryDocument), new StreamResult(System.out));
 		}
 	}
 
@@ -320,7 +341,7 @@ public class VdldocGenerator {
 	 */
 	private void generateTaglibDetail() throws IllegalArgumentException, TransformerException {
 		Set<String> ids = new HashSet<String>();
-		Element root = summary.getDocumentElement();
+		Element root = summaryDocument.getDocumentElement();
 		NodeList taglibs = root.getElementsByTagNameNS("*", "facelet-taglib");
 		int size = taglibs.getLength();
 
@@ -437,10 +458,48 @@ public class VdldocGenerator {
 			transformer.setParameter(entry.getKey(), entry.getValue());
 		}
 
-		transformer.transform(new DOMSource(summary), new StreamResult(outputFile));
+		transformer.transform(new DOMSource(summaryDocument), new StreamResult(outputFile));
 	}
 
 	// Helpers --------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Create the document builder.
+	 * @return The document builder.
+	 * @throws ParserConfigurationException
+	 */
+	private static DocumentBuilder createDocumentBuilder() throws ParserConfigurationException {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setValidating(false);
+		factory.setNamespaceAware(true);
+		factory.setExpandEntityReferences(false);
+		DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+		documentBuilder.setEntityResolver(new EntityResolver() {
+			@Override
+			public InputSource resolveEntity(String publicId, String systemId) {
+				return new InputSource(new CharArrayReader(new char[0]));
+			}
+		});
+
+		return documentBuilder;
+	}
+
+	/**
+	 * Parse the given file into a document.
+	 * @param builder The involved document builder.
+	 * @param file The file to be parsed.
+	 * @return The document.
+	 */
+	private static Document parse(DocumentBuilder builder, File file) throws SAXException, IOException {
+		FileInputStream in = new FileInputStream(file);
+
+		try {
+			return builder.parse(new InputSource(in));
+		}
+		finally {
+			try { in.close(); } catch (IOException ignore) { /**/ }
+		}
+	}
 
 	/**
 	 * Searches through the given element and returns the value of the body of the element. Returns null if the element

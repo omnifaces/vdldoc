@@ -48,6 +48,7 @@ public class Main {
 		+ "                          VDL Documentation Generator - Generated Documentation\n"
 		+ "   -doctitle <html-code>  Documentation title for the VDL index page.          \n"
 		+ "                          This defaults to the same as window title.           \n"
+		+ "   -facesconfig <path>    Path to the faces-config.xml file.                   \n"
 		+ "   -q                     Quiet Mode, i.e. disable logging.                    \n"
 		+ "                                                                               \n"
 		+ " taglib1 [taglib2 [taglib3 ...]]: Space separated paths to .taglib.xml files.  \n"
@@ -81,18 +82,15 @@ public class Main {
 				else if (arg.equals("-doctitle")) {
 					generator.setDocTitle(iter.next());
 				}
+				else if (arg.equals("-facesconfig")) {
+					generator.setFacesConfig(new File(iter.next()));
+				}
 				else if (arg.equals("-q")) {
 					generator.setQuiet(true);
 				}
 				else {
-					File file = new File(arg);
-					if (file.exists() && file.isFile() && file.getName().toLowerCase().endsWith(".taglib.xml")) {
-						generator.addTaglib(file);
-						atLeastOneTaglib = true;
-					}
-					else {
-						showUsage("File not found: " + arg);
-					}
+					generator.addTaglib(new File(arg));
+					atLeastOneTaglib = true;
 				}
 			}
 

@@ -47,7 +47,7 @@
 
 	<!-- template rule matching source root element -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="javaee:facelet-taglibs/javaee:facelet-taglib" />
+		<xsl:apply-templates select="javaee:vdldoc/javaee:facelet-taglib" />
 	</xsl:template>
 
 	<xsl:template match="javaee:facelet-taglib">
@@ -59,7 +59,7 @@
 	<xsl:template match="javaee:tag">
 		<xsl:if test="javaee:tag-name = $tagName">
 			<xsl:variable name="title">
-				<xsl:value-of select="javaee:tag-name" /> (<xsl:value-of select="/javaee:facelet-taglibs/javaee:config/javaee:window-title" />)
+				<xsl:value-of select="javaee:tag-name" /> (<xsl:value-of select="/javaee:vdldoc/javaee:config/javaee:window-title" />)
 			</xsl:variable>
 
 			<html lang="en">
@@ -322,19 +322,6 @@
 								</td>
 							</tr>
 							<tr class="altColor">
-								<td class="colFirst">Display Name</td>
-								<td class="colLast">
-									<xsl:choose>
-										<xsl:when test="normalize-space(javaee:display-name)">
-											<code><xsl:value-of select="javaee:display-name" /></code>
-										</xsl:when>
-										<xsl:otherwise>
-											<i>None</i>
-										</xsl:otherwise>
-									</xsl:choose>
-								</td>
-							</tr>
-							<tr class="rowColor">
 								<td class="colFirst">Handler Class</td>
 								<td class="colLast">
 									<xsl:choose>
@@ -348,7 +335,7 @@
 								</td>
 							</tr>
 							<xsl:if test="normalize-space(javaee:component-type)">
-								<tr class="altColor">
+								<tr class="rowColor">
 									<td class="colFirst">Renderer Type</td>
 									<td class="colLast">
 										<xsl:choose>
@@ -365,8 +352,8 @@
 							<tr>
 								<xsl:attribute name="class">
 									<xsl:choose>
-										<xsl:when test="normalize-space(javaee:component-type)">rowColor</xsl:when>
-										<xsl:otherwise>altColor</xsl:otherwise>
+										<xsl:when test="normalize-space(javaee:component-type)">altColor</xsl:when>
+										<xsl:otherwise>rowColor</xsl:otherwise>
 									</xsl:choose>
 								</xsl:attribute>
 								<td class="colFirst">Description</td>

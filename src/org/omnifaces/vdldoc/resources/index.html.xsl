@@ -42,7 +42,7 @@
 		<html lang="en">
 			<head>
 				<title>
-					<xsl:value-of select="/javaee:facelet-taglibs/javaee:config/javaee:window-title" />
+					<xsl:value-of select="/javaee:vdldoc/javaee:config/javaee:window-title" />
 				</title>
 				<script type="text/javascript">
 					targetPage = "" + window.location.search;

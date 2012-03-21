@@ -46,7 +46,7 @@
 	</xsl:param>
 
 	<xsl:template match="/">
-		<xsl:apply-templates select="javaee:facelet-taglibs/javaee:facelet-taglib" />
+		<xsl:apply-templates select="javaee:vdldoc/javaee:facelet-taglib" />
 	</xsl:template>
 
 	<xsl:template match="javaee:facelet-taglib">
@@ -58,7 +58,7 @@
 	<xsl:template match="javaee:function">
 		<xsl:if test="javaee:function-name = $functionName">
 			<xsl:variable name="title">
-				<xsl:value-of select="javaee:function-name" /> (<xsl:value-of select="/javaee:facelet-taglibs/javaee:config/javaee:window-title" />)
+				<xsl:value-of select="javaee:function-name" /> (<xsl:value-of select="/javaee:vdldoc/javaee:config/javaee:window-title" />)
 			</xsl:variable>
 
 			<html lang="en">

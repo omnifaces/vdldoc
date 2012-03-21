@@ -44,13 +44,13 @@
 	</xsl:param>
 
 	<xsl:template match="/">
-		<xsl:apply-templates select="javaee:facelet-taglibs/javaee:facelet-taglib" />
+		<xsl:apply-templates select="javaee:vdldoc/javaee:facelet-taglib" />
 	</xsl:template>
 
 	<xsl:template match="javaee:facelet-taglib">
 		<xsl:if test="@id = $id">
 			<xsl:variable name="title">
-				<xsl:value-of select="$id" /> (<xsl:value-of select="/javaee:facelet-taglibs/javaee:config/javaee:window-title" />)
+				<xsl:value-of select="$id" /> (<xsl:value-of select="/javaee:vdldoc/javaee:config/javaee:window-title" />)
 			</xsl:variable>
 
 			<html lang="en">

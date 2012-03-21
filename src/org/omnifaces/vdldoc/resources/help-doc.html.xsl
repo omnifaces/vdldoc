@@ -42,7 +42,7 @@
 		<html lang="en">
 			<head>
 				<title>
-					API Help (<xsl:value-of select="/javaee:facelet-taglibs/javaee:config/javaee:window-title" />)
+					API Help (<xsl:value-of select="/javaee:vdldoc/javaee:config/javaee:window-title" />)
 				</title>
 				<link rel="stylesheet" type="text/css" href="stylesheet.css" title="Style" />
 			</head>
@@ -92,8 +92,8 @@
 						<li class="blockList">
 							<h2>Overview</h2>
 							<p>The <a href="overview-summary.html">Overview</a> page is the front page of
-							this TLD document and provides a list of all tag libraries with a summary for
-							each.</p>
+							this VDL documentation and provides a list of all tag libraries with a summary
+							for each.</p>
 						</li>
 						<li class="blockList">
 							<h2>Library</h2>
@@ -107,10 +107,9 @@
 						<li class="blockList">
 							<h2>Tags</h2>
 							<p>A tag library can have zero or more tags. Each tag has its own page that
-							describes the tag, its display name, its unique action name, the class that
-							implements the tag, the TagExtraInfo class, the body content type, scripting
-							variable information, attributes, whether the tag supports dynamic
-							attributes, and an optional example use of the tag.</p>
+							describes the tag and depending on the tag type, information about the UI
+							component, behaviour, converter and/or validator, along with all attributes
+							in detail.</p>
 						</li>
 						<li class="blockList">
 							<h2>Functions</h2>

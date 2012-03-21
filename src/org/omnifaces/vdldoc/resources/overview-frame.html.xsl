@@ -42,7 +42,7 @@
 		<html lang="en">
 			<head>
 				<title>
-					Overview (<xsl:value-of select="/javaee:facelet-taglibs/javaee:config/javaee:window-title" />)
+					Overview (<xsl:value-of select="/javaee:vdldoc/javaee:config/javaee:window-title" />)
 				</title>
 				<link rel="stylesheet" type="text/css" href="stylesheet.css" title="Style" />
 			</head>
@@ -53,7 +53,7 @@
 				<div class="indexContainer">
 					<h2 title="Tag Libraries">Tag Libraries</h2>
 					<ul title="Tag Libraries">
-						<xsl:apply-templates select="javaee:facelet-taglibs/javaee:facelet-taglib" />
+						<xsl:apply-templates select="javaee:vdldoc/javaee:facelet-taglib" />
 					</ul>
 				</div>
 				<p>&#160;</p>

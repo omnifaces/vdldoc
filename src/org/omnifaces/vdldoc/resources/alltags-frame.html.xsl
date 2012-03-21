@@ -49,7 +49,7 @@
 				<h1 class="bar">All Tags / Functions</h1>
 				<div class="indexContainer">
 					<ul>
-						<xsl:apply-templates select="javaee:facelet-taglibs/javaee:facelet-taglib/javaee:tag|javaee:facelet-taglibs/javaee:facelet-taglib/javaee:function">
+						<xsl:apply-templates select="javaee:vdldoc/javaee:facelet-taglib/javaee:tag|javaee:vdldoc/javaee:facelet-taglib/javaee:function">
 							<xsl:sort select="../@id" />
 							<xsl:sort select="javaee:tag-name" />
 							<xsl:sort select="javaee:function-name" />
@@ -62,9 +62,8 @@
 
 	<xsl:template match="javaee:tag">
 		<li>
-			<a>
+			<a target="tagFrame">
 				<xsl:attribute name="href"><xsl:value-of select="../@id" />/<xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
-				<xsl:attribute name="target">tagFrame</xsl:attribute>
 				<xsl:value-of select="../@id" />:<xsl:value-of select="javaee:tag-name" />
 			</a>
 		</li>
@@ -72,9 +71,8 @@
 
 	<xsl:template match="javaee:function">
 		<li>
-			<a>
+			<a target="tagFrame">
 				<xsl:attribute name="href"><xsl:value-of select="../@id" />/<xsl:value-of select="javaee:function-name" />.fn.html</xsl:attribute>
-				<xsl:attribute name="target">tagFrame</xsl:attribute>
 				<i><xsl:value-of select="../@id" />:<xsl:value-of select="javaee:function-name" />()</i>
 			</a>
 		</li>
