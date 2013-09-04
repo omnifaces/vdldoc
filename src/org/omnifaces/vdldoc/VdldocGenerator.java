@@ -24,6 +24,7 @@ package org.omnifaces.vdldoc;
 
 import java.io.CharArrayReader;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,11 +35,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -87,14 +91,22 @@ public class VdldocGenerator {
 		"%s is not a .taglib.xml file.";
 	private static final String ERROR_INVALID_FACES_CONFIG =
 		"%s is not a faces-config.xml file.";
+	private static final String ERROR_INVALID_ATTRIBUTES_FILE =
+		"%s is not a valid attributes file.";
 	private static final String ERROR_JAVAEE_MISSING =
 		"%s does not have xmlns=\"" + NS_JAVAEE + "\"";
 	private static final String ERROR_TAGLIB_MISSING =
 		"%s does not have <facelet-taglib> as root.";
+	private static final String ERROR_INVALID_COMPOSITELIB =
+		"%s can not have more than one <composite-library-name>.";
 	private static final String WARNING_NO_TAGS =
 		"WARNING: %s does not have any <tag>s or <function>s. Skipping!";
 	private static final String WARNING_ID_MISSING =
 		"WARNING: %s does not have <facelet-taglib id> attribute. Defaulting to base filename '%s'... ";
+	private static final String WARNING_UNSUPPORTED_ATTRIBUTE =
+		"WARNING: '%s' is not a supported composite attribute. Skipping!";
+	private static final String WARNING_INVALID_ATTRIBUTE =
+		"WARNING: '%s' is not in format 'name.attribute=value'. Skipping!";
 	private static final String ERROR_DUPLICATE_ID =
 		"Two tag libraries exist with the same <facelet-taglib id> attribute '%s'. This is not supported.";
 
@@ -115,11 +127,17 @@ public class VdldocGenerator {
 	/** The title for the VDL index page. */
 	private String docTitle = DEFAULT_DOC_TITLE;
 
+	/** The properties file for implied attributes of composite components. */
+	private File attributesFile;
+
 	/** True if no stdout is to be produced during generation. */
 	private boolean quiet;
 
 	/** The summary VDL document, used as input into XSLT. */
 	private Document summaryDocument;
+
+	/** The mapping of implied attributes of composite components. */
+	private HashMap<String, ImpliedAttribute> compositeAttributeMap;
 
 	// Constructors ---------------------------------------------------------------------------------------------------
 
@@ -162,27 +180,40 @@ public class VdldocGenerator {
 	}
 
 	/**
-	 * Sets the output directory for generated files. If not specified, defaults to "./vdldoc"
-	 * @param dir The base directory for generated files.
+	 * Sets the given properties file for implied attributes of composite components.
+	 * If not specified, defaults to "cc-attributes.properties".
+	 * @param attributesFile The attributes file to set.
 	 */
-	public void setOutputDirectory(File dir) {
-		this.outputDirectory = dir;
+	public void setAttributes(File attributesFile) {
+		if (!attributesFile.exists() || !attributesFile.isFile()) {
+			throw new IllegalArgumentException(ERROR_INVALID_ATTRIBUTES_FILE);
+		}
+
+		this.attributesFile = attributesFile;
+	}
+
+	/**
+	 * Sets the output directory for generated files. If not specified, defaults to "./vdldoc"
+	 * @param outputDirectory The base directory for generated files.
+	 */
+	public void setOutputDirectory(File outputDirectory) {
+		this.outputDirectory = outputDirectory;
 	}
 
 	/**
 	 * Sets the browser window title for the documentation.
-	 * @param title The browser window title
+	 * @param windowTitle The browser window title
 	 */
-	public void setWindowTitle(String title) {
-		this.windowTitle = title;
+	public void setWindowTitle(String windowTitle) {
+		this.windowTitle = windowTitle;
 	}
 
 	/**
 	 * Sets the title for the VDL documentation index page.
-	 * @param title The title for the VDL documentation index page.
+	 * @param docTitle The title for the VDL documentation index page.
 	 */
-	public void setDocTitle(String title) {
-		this.docTitle = title;
+	public void setDocTitle(String docTitle) {
+		this.docTitle = docTitle;
 	}
 
 	/**
@@ -198,6 +229,7 @@ public class VdldocGenerator {
 	 */
 	public void generate() throws IllegalArgumentException {
 		try {
+			loadCompositeAttributeMap();
 			createSummaryDoc();
 			copyStaticFiles();
 			generateOverview();
@@ -219,6 +251,89 @@ public class VdldocGenerator {
 	}
 
 	// Internal actions -----------------------------------------------------------------------------------------------
+
+	/**
+	 * Loads the composite component attribute map.
+	 */
+	private void loadCompositeAttributeMap() throws IOException {
+		compositeAttributeMap = new HashMap<String, ImpliedAttribute>();
+		Properties properties = new Properties();
+
+		if (attributesFile == null) { // use the default
+			properties.load(getResourceAsStream("cc-attributes.properties"));
+		}
+		else { // use the specified file
+			print(String.format("Parsing %s file... ", attributesFile.getName()));
+			FileInputStream input = new FileInputStream(attributesFile);
+
+			try {
+				properties.load(input);
+			}
+			finally {
+				try { input.close(); } catch (IOException ignore) { /**/ }
+			}
+		}
+
+		parseCompositeAttributeMap(properties, attributesFile != null);
+	}
+
+	/**
+	 * Parses the composite component attribute properties file.
+	 */
+	private void parseCompositeAttributeMap(Properties properties, boolean log) {
+		boolean warned = false;
+
+		for (String key : properties.stringPropertyNames()) {
+			String value = properties.getProperty(key);
+			String name = "";
+			String attributeName = "";
+			String[] tokens = key.split("\\.");
+
+			if (tokens.length == 2) {
+				name = tokens[0];
+				attributeName = tokens[1];
+				ImpliedAttribute attribute = compositeAttributeMap.get(name);
+
+				if (attribute == null) { // create a new one
+					attribute = new ImpliedAttribute();
+					attribute.setDisplayName(name);
+					attribute.setDescription(name);
+					attribute.setRequired("false");
+					attribute.setType("java.lang.String");
+				}
+
+				if ("displayName".equals(attributeName)) {
+					attribute.setDisplayName(value);
+				}
+				else if ("description".equals(attributeName)) {
+					attribute.setDescription(value);
+				}
+				else if ("required".equals(attributeName)) {
+					attribute.setRequired(value);
+				}
+				else if ("type".equals(attributeName)) {
+					attribute.setType(value);
+				}
+				else if (log) {
+					warned = true;
+					println("");
+					print(String.format(WARNING_UNSUPPORTED_ATTRIBUTE, key));
+				}
+
+				compositeAttributeMap.put(name, attribute);
+			}
+
+			else if (log) {
+				warned = true;
+				println("");
+				print(String.format(WARNING_INVALID_ATTRIBUTE, key));
+			}
+		}
+
+		if (log) {
+			println(warned ? "" : "OK!");
+		}
+	}
 
 	/**
 	 * Creates a summary document, comprising all input taglibs. This document is later used as input into XSLT to
@@ -261,14 +376,16 @@ public class VdldocGenerator {
 		for (File taglib : taglibs) {
 			print("Parsing " + taglib.getName() + " file... ");
 
-			Document doc = parse(builder, taglib);
+			Document document = parse(builder, taglib);
+			Element element = document.getDocumentElement();
+			NodeList compositeNodes = element.getElementsByTagNameNS("*", "composite-library-name");
+			NodeList tagNodes = element.getElementsByTagNameNS("*", "tag");
+			NodeList functionNodes = element.getElementsByTagNameNS("*", "function");
+			int numTags = compositeNodes.getLength() + functionNodes.getLength() + tagNodes.getLength();
 
-			// If this tag library has no tags or functions, skip it.
-			int numTags = doc.getDocumentElement().getElementsByTagNameNS("*", "tag").getLength()
-						+ doc.getDocumentElement().getElementsByTagNameNS("*", "function").getLength();
-
+			// If this tag library has no composite libraries, tags or functions, skip it.
 			if (numTags > 0) {
-				Element taglibNode = (Element) summaryDocument.importNode(doc.getDocumentElement(), true);
+				Element taglibNode = (Element) summaryDocument.importNode(element, true);
 
 				if (!taglibNode.getNamespaceURI().equals(NS_JAVAEE)) {
 					throw new IllegalArgumentException(String.format(ERROR_JAVAEE_MISSING, taglib.getName()));
@@ -288,6 +405,35 @@ public class VdldocGenerator {
 
 				vdldocElement.appendChild(taglibNode);
 
+				if (compositeNodes.getLength() > 0) {
+					if (compositeNodes.getLength() > 1) {
+						throw new IllegalArgumentException(String.format(ERROR_INVALID_COMPOSITELIB, taglib.getName()));
+					}
+
+					String compositeLibraryName = compositeNodes.item(0).getTextContent();
+					File parentFolder = taglib.getParentFile(); // This is WEB-INF in WAR and META-INF in JAR.
+
+					if (parentFolder.getName().equals("WEB-INF")) {
+						parentFolder = parentFolder.getParentFile();
+					}
+
+					File resourcesFolder = new File(parentFolder, "resources");
+					File compositeLibraryFolder = new File(resourcesFolder, compositeLibraryName);
+					File[] compositeComponentFiles = compositeLibraryFolder.listFiles(new FileFilter() {
+						@Override
+						public boolean accept(File pathname) {
+							return (pathname != null) && (pathname.getName().endsWith(".xhtml"));
+						}
+					});
+
+					if (compositeComponentFiles != null) {
+						for (File compositeComponentFile : compositeComponentFiles) {
+							parseCompositeComponentFile(NS_JAVAEE, taglibNode, compositeComponentFile);
+							vdldocElement.appendChild(taglibNode);
+						}
+					}
+				}
+
 				println("OK!");
 			}
 			else {
@@ -300,6 +446,23 @@ public class VdldocGenerator {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.transform(new DOMSource(summaryDocument), new StreamResult(System.out));
 		}
+	}
+
+	/**
+	 * Parse composite component file.
+	 */
+	private void parseCompositeComponentFile(String namespaceURI, Node taglibNode, File inputFile)
+		throws ParserConfigurationException, SAXException, IOException
+	{
+		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+		saxParserFactory.setValidating(false);
+		saxParserFactory.setNamespaceAware(true);
+		SAXParser saxParser = saxParserFactory.newSAXParser();
+
+		String inputFileName = inputFile.getName();
+		String componentName = inputFileName.substring(0, inputFileName.lastIndexOf(".xhtml"));
+		saxParser.parse(inputFile, new CompositeComponentHandler(
+			componentName, summaryDocument, namespaceURI, taglibNode, compositeAttributeMap));
 	}
 
 	/**
@@ -543,8 +706,12 @@ public class VdldocGenerator {
 			}
 		}
 		finally {
-			if (out != null) try { out.close(); } catch (IOException ignore) { /**/ }
-			if (in != null ) try { in.close(); } catch (IOException ignore) { /**/ }
+			if (out != null) {
+				try { out.close(); } catch (IOException ignore) { /**/ }
+			}
+			if (in != null ) {
+				try { in.close(); } catch (IOException ignore) { /**/ }
+			}
 		}
 	}
 

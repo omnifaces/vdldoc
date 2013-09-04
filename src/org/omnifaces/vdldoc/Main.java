@@ -49,6 +49,9 @@ public class Main {
 		+ "   -doctitle <html-code>  Documentation title for the VDL index page.          \n"
 		+ "                          This defaults to the same as window title.           \n"
 		+ "   -facesconfig <path>    Path to the faces-config.xml file.                   \n"
+		+ "   -attr <path>           Path to properties file containing descriptions for  \n"
+		+ "                          implied attributes of composite components, such as  \n"
+		+ "                          'id', 'rendered', etc.                               \n"
 		+ "   -q                     Quiet Mode, i.e. disable logging.                    \n"
 		+ "                                                                               \n"
 		+ " taglib1 [taglib2 [taglib3 ...]]: Space separated paths to .taglib.xml files.  \n"
@@ -84,6 +87,9 @@ public class Main {
 				}
 				else if (arg.equals("-facesconfig")) {
 					generator.setFacesConfig(new File(iter.next()));
+				}
+				else if (arg.equals("-attr")) {
+					generator.setAttributes(new File(iter.next()));
 				}
 				else if (arg.equals("-q")) {
 					generator.setQuiet(true);
