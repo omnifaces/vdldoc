@@ -1,15 +1,24 @@
-/**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+/*
+ * Copyright (c) 2013, OmniFaces
+ * All rights reserved.
  *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+ * following conditions are met:
  *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
+ *     * Redistributions of source code must retain the above copyright notice, this list of conditions and the
+ *       following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+ *       following disclaimer in the documentation and/or other materials provided with the distribution.
+ *     * Neither the name of OmniFaces nor the names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+ * OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.omnifaces.vdldoc;
 
@@ -26,9 +35,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-
 /**
- * @author  Neil Griffin
+ * @author Neil Griffin
  */
 public class CompositeComponentHandler extends DefaultHandler {
 
@@ -59,7 +67,7 @@ public class CompositeComponentHandler extends DefaultHandler {
 	private boolean valueHolder;
 	private Node tagNode;
 	private Node taglibNode;
-	
+
 	private HashMap<String,ImpliedAttribute> attributeMap;
 
 	public CompositeComponentHandler(String componentName, Document document, String namespaceURI, Node taglibNode, HashMap<String,ImpliedAttribute> properties) {
@@ -67,7 +75,7 @@ public class CompositeComponentHandler extends DefaultHandler {
 		this.document = document;
 		this.namespaceURI = namespaceURI;
 		this.taglibNode = taglibNode;
-		this.attributeMap = properties;
+		attributeMap = properties;
 	}
 
 	@Override
@@ -77,10 +85,10 @@ public class CompositeComponentHandler extends DefaultHandler {
 
 			if (qName.equals(CC_INTERFACE)) {
 				parsingInterface = false;
-				
+
 				if (valueHolder) {
 					if (valueGiven) {
-						System.out.println("INFO: valueHolder = " + valueHolder + ", but valueGiven = " + valueGiven + 
+						System.out.println("INFO: valueHolder = " + valueHolder + ", but valueGiven = " + valueGiven +
 							". Since the xhtml declares a value attribute, we are not adding the implied value attribute for this composite component to the Vdldoc."
 						);
 					} else {
@@ -124,8 +132,8 @@ public class CompositeComponentHandler extends DefaultHandler {
 				componentTypeElement.setTextContent(FACELET_COMPOSITE_COMPONENT);
 				componentElement.appendChild(componentTypeElement);
 				tagNode.appendChild(componentElement);
-				
-				for (Map.Entry<String, ImpliedAttribute> entry : this.attributeMap.entrySet()) {
+
+				for (Map.Entry<String, ImpliedAttribute> entry : attributeMap.entrySet()) {
 				    String name = entry.getKey();
 				    ImpliedAttribute attribute = entry.getValue();
 				    addImpliedAttribute(
@@ -137,7 +145,7 @@ public class CompositeComponentHandler extends DefaultHandler {
 				    	attribute.getType()
 				    );
 				}
-				
+
 			}
 			else if (elementName.equals(CC_ATTRIBUTE)) {
 
@@ -168,7 +176,7 @@ public class CompositeComponentHandler extends DefaultHandler {
 					String name = attributes.getValue(NAME);
 					nameElement.setTextContent(name);
 					attributeNode.appendChild(nameElement);
-					
+
 					if ("value".equals(name)) {
 						valueGiven = true;
 					}
@@ -194,7 +202,7 @@ public class CompositeComponentHandler extends DefaultHandler {
 					Element typeElement = document.createElementNS(namespaceURI, TYPE);
 					typeElement.setTextContent(type);
 					attributeNode.appendChild(typeElement);
-					
+
 				}
 			} else if (elementName.equals(CC_VALUE_HOLDER)) {
 				if (parsingInterface) {
@@ -207,26 +215,26 @@ public class CompositeComponentHandler extends DefaultHandler {
 			}
 		}
 	}
-	
+
 	public void addImpliedAttribute(Node node, String name, String displayName, String description, String required, String type) {
 		// append default attributes
 		Node attributeNode = node.appendChild(document.createElementNS(namespaceURI, ATTRIBUTE));
-		
+
 		// name
 		Element nameElement = document.createElementNS(namespaceURI, NAME);
 		nameElement.setTextContent(name);
 		attributeNode.appendChild(nameElement);
-		
+
 		// display name
 		Element displayNameElement = document.createElementNS(namespaceURI, DISPLAY_NAME);
 		displayNameElement.setTextContent(displayName);
 		attributeNode.appendChild(displayNameElement);
-		
+
 		// description
 		Element descriptionElement = document.createElementNS(namespaceURI, DESCRIPTION);
 		descriptionElement.setTextContent(description);
 		attributeNode.appendChild(descriptionElement);
-		
+
 		// required
 		Element requiredElement = document.createElementNS(namespaceURI, REQUIRED);
 		requiredElement.setTextContent(required);
@@ -237,5 +245,5 @@ public class CompositeComponentHandler extends DefaultHandler {
 		typeElement.setTextContent(type);
 		attributeNode.appendChild(typeElement);
 	}
-	
+
 }
