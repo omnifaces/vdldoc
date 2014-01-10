@@ -71,10 +71,10 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/classes/META-INF</outputDirectory>
+							<outputDirectory>${basedir}/target/classes/org/omnifaces/vdldoc/resources</outputDirectory>
 							<resources>          
 								<resource>
-									<directory>${basedir}/src/META-INF</directory>
+									<directory>${basedir}/src/org/omnifaces/vdldoc/resources</directory>
 								</resource>
 							</resources>              
 						</configuration>            
