@@ -97,6 +97,9 @@
 						<manifest>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>src/</classpathPrefix>
+							<mainClass>org.omnifaces.vdldoc.Main</mainClass>
 						</manifest>
 						<manifestEntries>
 							<URL>${project.url}</URL>
