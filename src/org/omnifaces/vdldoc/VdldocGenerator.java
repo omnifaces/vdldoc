@@ -381,7 +381,8 @@ public class VdldocGenerator {
 			NodeList compositeNodes = element.getElementsByTagNameNS("*", "composite-library-name");
 			NodeList tagNodes = element.getElementsByTagNameNS("*", "tag");
 			NodeList functionNodes = element.getElementsByTagNameNS("*", "function");
-			int numTags = compositeNodes.getLength() + functionNodes.getLength() + tagNodes.getLength();
+			NodeList taglibExtensionNodes = element.getElementsByTagNameNS("*", "el-variable");
+			int numTags = compositeNodes.getLength() + functionNodes.getLength() + tagNodes.getLength() + taglibExtensionNodes.getLength();
 
 			// If this tag library has no composite libraries, tags or functions, skip it.
 			if (numTags > 0) {
@@ -542,6 +543,15 @@ public class VdldocGenerator {
 				String functionName = findElementValue(function, "function-name");
 				generateFunctionDetail(outputDirectory, id, functionName);
 			}
+			
+			NodeList elVariables = taglib.getElementsByTagNameNS("*", "el-variable");
+			int numELVariables = elVariables.getLength();
+			
+			for (int j = 0; j < numELVariables; j++) {
+				Element elVariable = (Element) elVariables.item(j);
+				String elVariableName = findElementValue(elVariable, "el-variable-name");
+				generateELVariableDetail(outputDirectory, id, elVariableName);
+			}
 
 			println("OK!");
 		}
@@ -593,6 +603,16 @@ public class VdldocGenerator {
 		parameters.put("functionName", functionName);
 
 		generatePage(new File(outputDirectory, functionName + ".fn.html"), "function.html.xsl", parameters);
+	}
+	
+	private void generateELVariableDetail(File outputDirectory, String id, String elVariableName)
+			throws TransformerException
+	{
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("id", id);
+		parameters.put("elVariableName", elVariableName);
+
+		generatePage(new File(outputDirectory, elVariableName + ".el.html"), "elvariable.html.xsl", parameters);
 	}
 
 	/**

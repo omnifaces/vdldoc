@@ -37,36 +37,48 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * @author Neil Griffin
+ * @author Vernon Singleton
+ * @author Kyle Stiemann
  */
 public class CompositeComponentHandler extends DefaultHandler {
 
 	// Private Constants
 	private static final String ATTRIBUTE = "attribute";
-	private static final String CC_EDITABLE_VALUE_HOLDER = "cc:editableValueHolder";
-	private static final String CC_VALUE_HOLDER = "cc:valueHolder";
 	private static final String CC_ATTRIBUTE = "cc:attribute";
+	private static final String CC_EDITABLE_VALUE_HOLDER = "cc:editableValueHolder";
+	private static final String CC_EXTENSION = "cc:extension";
 	private static final String CC_INTERFACE = "cc:interface";
+	private static final String CC_VALUE_HOLDER = "cc:valueHolder";
 	private static final String COMPONENT = "component";
 	private static final String COMPONENT_TYPE = "component-type";
+	private static final String DEPRECATED = "deprecated";
+	private static final String DEPRECATION ="deprecation";
 	private static final String DESCRIPTION = "description";
 	private static final String DISPLAY_NAME = "displayName";
+	private static final String EXAMPLE_URL = "example-url";
 	private static final String FACELET_COMPOSITE_COMPONENT = "Facelet Composite Component";
 	private static final String NAME = "name";
 	private static final String REQUIRED = "required";
 	private static final String SHORT_DESCRIPTION = "shortDescription";
 	private static final String TAG = "tag";
+	private static final String TAG_EXTENSION = "tag-extension";
 	private static final String TAG_NAME = "tag-name";
 	private static final String TYPE = "type";
+	private static final String VALUE = "value";
+	private static final String VDLDOC_DEPRECATED = "vdldoc:deprecated";
+	private static final String VDLDOC_EXAMPLE_URL = "vdldoc:exampleURL";
+	private static final String VDLDOC_NAMESPACE = "http://vdldoc.org/vdldoc";
+	private static final String VDLDOC_SINCE = "vdldoc:since";
 
 	// Private Data Members
 	private String componentName;
 	private Document document;
 	private String namespaceURI;
-	private boolean parsingInterface;
 	private boolean valueGiven;
 	private boolean valueHolder;
 	private Node tagNode;
 	private Node taglibNode;
+	private Node tagExtensionNode;
 
 	private HashMap<String,ImpliedAttribute> attributeMap;
 
@@ -84,8 +96,6 @@ public class CompositeComponentHandler extends DefaultHandler {
 		if (qName != null) {
 
 			if (qName.equals(CC_INTERFACE)) {
-				parsingInterface = false;
-
 				if (valueHolder) {
 					if (valueGiven) {
 						System.out.println("INFO: valueHolder = " + valueHolder + ", but valueGiven = " + valueGiven +
@@ -95,6 +105,11 @@ public class CompositeComponentHandler extends DefaultHandler {
 						addImpliedAttribute(tagNode, "value", "value", "The current value of this component.", "false", "java.lang.Object");
 					}
 				}
+
+				tagNode = null;
+
+			} else if (qName.equals(CC_EXTENSION)) {
+				tagExtensionNode = null;
 			}
 		}
 	}
@@ -111,7 +126,6 @@ public class CompositeComponentHandler extends DefaultHandler {
 		if (elementName != null) {
 
 			if (elementName.equals(CC_INTERFACE)) {
-				parsingInterface = true;
 				valueGiven = false;
 				Element tagElement = document.createElementNS(namespaceURI, TAG);
 				tagNode = taglibNode.appendChild(tagElement);
@@ -149,7 +163,7 @@ public class CompositeComponentHandler extends DefaultHandler {
 			}
 			else if (elementName.equals(CC_ATTRIBUTE)) {
 
-				if (parsingInterface) {
+				if (tagNode != null) {
 
 					Node attributeNode = tagNode.appendChild(document.createElementNS(namespaceURI, ATTRIBUTE));
 
@@ -204,12 +218,67 @@ public class CompositeComponentHandler extends DefaultHandler {
 					attributeNode.appendChild(typeElement);
 
 				}
+			} else if (elementName.equals(CC_EXTENSION)) {
+				if (tagNode != null) {
+					tagExtensionNode = tagNode.appendChild(document.createElementNS(namespaceURI, TAG_EXTENSION));
+				}
+			} else if (elementName.equals(VDLDOC_SINCE)) {
+				
+				if (tagExtensionNode != null) {
+
+					String since = attributes.getValue(VALUE);
+					
+					if (since != null) {
+
+						Element sinceElement = document.createElementNS(VDLDOC_NAMESPACE, VDLDOC_SINCE);
+						sinceElement.setTextContent(since);
+						tagExtensionNode.appendChild(sinceElement);
+					}
+				} 
+			} else if (elementName.equals(VDLDOC_EXAMPLE_URL)) {
+				
+				if (tagExtensionNode != null) {
+				
+					String exampleURL = attributes.getValue(VALUE);
+					
+					if (exampleURL != null) {
+						
+						Element exampleURLElement = document.createElementNS(VDLDOC_NAMESPACE, EXAMPLE_URL);
+						exampleURLElement.setTextContent(exampleURL);
+						tagExtensionNode.appendChild(exampleURLElement);
+					}	
+				}
+			} else if (elementName.equals(VDLDOC_DEPRECATED)) {
+				
+				if (tagExtensionNode != null) {
+
+					String deprecatedValue = attributes.getValue(VALUE);
+					
+					if (deprecatedValue != null) {
+						
+						Boolean deprecated = Boolean.parseBoolean(deprecatedValue);
+						Element deprecationElement = document.createElementNS(VDLDOC_NAMESPACE, DEPRECATION);
+						Element deprecatedElement = document.createElementNS(VDLDOC_NAMESPACE, DEPRECATED);
+						deprecatedElement.setTextContent(deprecated.toString());
+						deprecationElement.appendChild(deprecatedElement);
+
+						String descriptionValue = attributes.getValue(SHORT_DESCRIPTION);
+	
+						if (descriptionValue != null) {
+							Element descriptionElement = document.createElementNS(VDLDOC_NAMESPACE, DESCRIPTION);
+							descriptionElement.setTextContent(descriptionValue);
+							deprecationElement.appendChild(descriptionElement);
+						}
+					
+						tagExtensionNode.appendChild(deprecationElement);
+					}
+				} 
 			} else if (elementName.equals(CC_VALUE_HOLDER)) {
-				if (parsingInterface) {
+				if (tagNode != null) {
 					valueHolder = true;
 				}
 			} else if (elementName.equals(CC_EDITABLE_VALUE_HOLDER)) {
-				if (parsingInterface) {
+				if (tagNode != null) {
 					valueHolder = true;
 				}
 			}

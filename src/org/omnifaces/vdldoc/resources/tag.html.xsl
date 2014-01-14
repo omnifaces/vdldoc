@@ -32,6 +32,7 @@
 	xmlns:javaee="http://java.sun.com/xml/ns/javaee"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fo="http://www.w3.org/1999/XSL/Format"
+	xmlns:vdldoc="http://vdldoc.org/vdldoc"
 	version="2.0"
 >
 	<xsl:output method="html" indent="yes"
@@ -120,7 +121,18 @@
 							<xsl:value-of select="$id" />
 						</h1>
 						<h2>
-							Tag <xsl:value-of select="javaee:tag-name" />
+							<xsl:choose>
+								<xsl:when test="javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+									Tag
+									<del>
+										<xsl:value-of select="javaee:tag-name" />
+									</del>
+								</xsl:when>
+								<xsl:otherwise>
+									Tag
+									<xsl:value-of select="javaee:tag-name" />
+								</xsl:otherwise>
+							</xsl:choose>
 						</h2>
 					</div>
 
@@ -135,9 +147,15 @@
 										<dd>
 											<xsl:choose>
 												<xsl:when test="normalize-space(javaee:description)">
+													<xsl:if test="javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+														<b>Deprecated. </b> <xsl:value-of select="javaee:tag-extension/vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
+													</xsl:if>
 													<xsl:value-of select="javaee:description" disable-output-escaping="yes" />
 												</xsl:when>
 												<xsl:otherwise>
+													<xsl:if test="javaee:tag-extension/javaee:deprecation/javaee:deprecated = 'true'">
+														<b>Deprecated. </b> <xsl:value-of select="javaee:tag-extension/vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
+													</xsl:if>
 													<i>No Description</i>
 												</xsl:otherwise>
 											</xsl:choose>
@@ -146,6 +164,39 @@
 								</li>
 							</ul>
 						</div>
+
+						<xsl:if test="normalize-space(javaee:tag-extension/vdldoc:since)">
+							<div class="since">
+								<ul class="blockList">
+									<li class="blockList">
+										<dl>
+											<dt>Since:</dt>
+											<dd>
+												<xsl:value-of select="javaee:tag-extension/vdldoc:since" disable-output-escaping="yes" />
+											</dd>
+										</dl>
+									</li>
+								</ul>
+							</div>
+						</xsl:if>
+
+						<xsl:if test="normalize-space(javaee:tag-extension/vdldoc:example-url)">
+							<div class="example-url">
+								<ul class="blockList">
+									<li class="blockList">
+										<dl>
+											<dt>Example usage of this component can be found at:</dt>
+											<br />
+											<dd>
+												<a href="{javaee:tag-extension/vdldoc:example-url}" target="_blank">
+													<xsl:value-of select="javaee:tag-extension/vdldoc:example-url" disable-output-escaping="yes" />
+												</a>
+											</dd>
+										</dl>
+									</li>
+								</ul>
+							</div>
+						</xsl:if>
 
 						<!-- Component Information -->
 						<xsl:if test="normalize-space(javaee:component)">
@@ -385,9 +436,20 @@
 			</xsl:attribute>
 
 			<td class="colFirst">
-				<code>
-					<xsl:apply-templates select="javaee:name" />
-				</code>
+				<xsl:choose>
+					<xsl:when test="../javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+						<del>
+							<code>
+								<xsl:apply-templates select="javaee:name" />
+							</code>
+						</del>
+					</xsl:when>
+					<xsl:otherwise>
+						<code>
+							<xsl:apply-templates select="javaee:name" />
+						</code>
+					</xsl:otherwise>
+				</xsl:choose>
 			</td>
 			<td class="colOne">
 				<code>

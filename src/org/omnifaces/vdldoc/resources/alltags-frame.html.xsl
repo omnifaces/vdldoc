@@ -33,6 +33,7 @@
 	xmlns:javaee="http://java.sun.com/xml/ns/javaee"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fo="http://www.w3.org/1999/XSL/Format"
+	xmlns:vdldoc="http://vdldoc.org/vdldoc"
 	version="2.0"
 >
 	<xsl:output method="html" indent="yes"
@@ -49,10 +50,11 @@
 				<h1 class="bar">All Tags / Functions</h1>
 				<div class="indexContainer">
 					<ul>
-						<xsl:apply-templates select="javaee:vdldoc/javaee:facelet-taglib/javaee:tag|javaee:vdldoc/javaee:facelet-taglib/javaee:function">
+						<xsl:apply-templates select="javaee:vdldoc/javaee:facelet-taglib/javaee:tag|javaee:vdldoc/javaee:facelet-taglib/javaee:function|javaee:vdldoc/javaee:facelet-taglib/javaee:taglib-extension/vdldoc:el-variable">
 							<xsl:sort select="../@id" />
 							<xsl:sort select="javaee:tag-name" />
 							<xsl:sort select="javaee:function-name" />
+							<xsl:sort select="vdldoc:el-variable-name" />
 						</xsl:apply-templates>
 					</ul>
 				</div>
@@ -64,7 +66,16 @@
 		<li>
 			<a target="tagFrame">
 				<xsl:attribute name="href"><xsl:value-of select="../@id" />/<xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
-				<xsl:value-of select="../@id" />:<xsl:value-of select="javaee:tag-name" />
+				<xsl:choose>
+					<xsl:when test="javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+						<del>
+							<xsl:value-of select="../@id" />:<xsl:value-of select="javaee:tag-name" />
+						</del>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="../@id" />:<xsl:value-of select="javaee:tag-name" />
+					</xsl:otherwise>
+				</xsl:choose>
 			</a>
 		</li>
 	</xsl:template>
@@ -74,6 +85,24 @@
 			<a target="tagFrame">
 				<xsl:attribute name="href"><xsl:value-of select="../@id" />/<xsl:value-of select="javaee:function-name" />.fn.html</xsl:attribute>
 				<i><xsl:value-of select="../@id" />:<xsl:value-of select="javaee:function-name" />()</i>
+			</a>
+		</li>
+	</xsl:template>
+	
+	<xsl:template match="vdldoc:el-variable">
+		<li>
+			<a target="tagFrame">
+				<xsl:attribute name="href"><xsl:value-of select="../../@id" />/<xsl:value-of select="vdldoc:el-variable-name" />.el.html</xsl:attribute>
+				<xsl:choose>
+					<xsl:when test="vdldoc:deprecation/vdldoc:deprecated = 'true'">
+						<del>
+							<xsl:value-of select="vdldoc:el-variable-name" />
+						</del>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="vdldoc:el-variable-name" />
+					</xsl:otherwise>
+				</xsl:choose>
 			</a>
 		</li>
 	</xsl:template>

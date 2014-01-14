@@ -33,6 +33,7 @@
 	xmlns:javaee="http://java.sun.com/xml/ns/javaee"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fo="http://www.w3.org/1999/XSL/Format"
+	xmlns:vdldoc="http://vdldoc.org/vdldoc"
 	version="2.0"
 >
 	<xsl:output method="html" indent="yes"
@@ -83,6 +84,12 @@
 								<xsl:apply-templates select="javaee:function" />
 							</ul>
 						</xsl:if>
+						<xsl:if test="count(javaee:taglib-extension/vdldoc:el-variable) > 0">
+							<h2 title="EL Variable">EL Variable</h2>
+							<ul title="EL Variable">
+								<xsl:apply-templates select="javaee:taglib-extension/vdldoc:el-variable" />
+							</ul>
+						</xsl:if>
 					</div>
 				</body>
 			</html>
@@ -94,7 +101,16 @@
 			<a>
 				<xsl:attribute name="href"><xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
 				<xsl:attribute name="target">tagFrame</xsl:attribute>
-				<xsl:value-of select="../@id" />:<xsl:value-of select="javaee:tag-name" />
+				<xsl:choose>
+					<xsl:when test="javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+						<del>
+							<xsl:value-of select="../@id" />:<xsl:value-of select="javaee:tag-name" />
+						</del>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="../@id" />:<xsl:value-of select="javaee:tag-name" />
+					</xsl:otherwise>
+				</xsl:choose>
 			</a>
 		</li>
 	</xsl:template>
@@ -105,6 +121,25 @@
 				<xsl:attribute name="href"><xsl:value-of select="javaee:function-name" />.fn.html</xsl:attribute>
 				<xsl:attribute name="target">tagFrame</xsl:attribute>
 				<i><xsl:value-of select="../@id" />:<xsl:value-of select="javaee:function-name" />()</i>
+			</a>
+		</li>
+	</xsl:template>
+	
+	<xsl:template match="javaee:taglib-extension/vdldoc:el-variable">
+		<li>
+			<a>
+				<xsl:attribute name="href"><xsl:value-of select="vdldoc:el-variable-name" />.el.html</xsl:attribute>
+				<xsl:attribute name="target">tagFrame</xsl:attribute>
+				<xsl:choose>
+					<xsl:when test="vdldoc:deprecation/vdldoc:deprecated = 'true'">
+						<del>
+							<xsl:value-of select="vdldoc:el-variable-name" />
+						</del>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="vdldoc:el-variable-name" />
+					</xsl:otherwise>
+				</xsl:choose>
 			</a>
 		</li>
 	</xsl:template>

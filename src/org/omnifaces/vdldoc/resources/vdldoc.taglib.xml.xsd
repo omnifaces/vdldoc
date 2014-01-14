@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://vdldoc.org/vdldoc">
+	<xs:element name="deprecation">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element type="xs:string" name="deprecated"/>
+				<xs:element type="xs:string" name="description"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="example-url" type="xs:anyURI"/>
+	<xs:element name="since" type="xs:string"/>
+	<xs:element name="el-variable">
+		<xs:complexType>
+			<xs:sequence>
+			<xs:element type="xs:string" name="el-variable-name"/>
+			<xs:element type="xs:string" name="description"/>
+			<xs:element type="xs:string" name="type"/>
+			<xs:element name="deprecation">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element type="xs:string" name="deprecated"/>
+						<xs:element type="xs:string" name="description"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element type="xs:anyURI" name="example-url"/>
+			<xs:element type="xs:string" name="since"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
