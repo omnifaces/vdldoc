@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://vdldoc.org/vdldoc">
-	<xs:element name="deprecation" maxOccurs="1" minOccurs="0">
+	<xs:element name="deprecation">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element name="deprecated" type="xs:string" maxOccurs="1" minOccurs="0" />
@@ -8,9 +8,9 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="example-url" type="xs:anyURI" maxOccurs="1" minOccurs="0" />
-	<xs:element name="since" type="xs:string" maxOccurs="1" minOccurs="0" />
-	<xs:element name="el-variable" maxOccurs="1" minOccurs="0">
+	<xs:element name="example-url" type="xs:anyURI" />
+	<xs:element name="since" type="xs:string" />
+	<xs:element name="el-variable">
 		<xs:complexType>
 			<xs:sequence>
 			<xs:element name="el-variable-name" type="xs:string" maxOccurs="1" minOccurs="0" />
