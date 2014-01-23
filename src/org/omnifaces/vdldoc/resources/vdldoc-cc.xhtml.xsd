@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://vdldoc.org/vdldoc" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-   <xs:element name="deprecated" minOccurs="0">
+   <xs:element name="deprecated" maxOccurs="1" minOccurs="0">
     <xs:complexType>
       <xs:simpleContent>
         <xs:extension base="xs:string">
@@ -10,7 +10,7 @@
       </xs:simpleContent>
     </xs:complexType>
   </xs:element>
-  <xs:element name="exampleURL" minOccurs="0">
+  <xs:element name="exampleURL" maxOccurs="1" minOccurs="0">
     <xs:complexType>
       <xs:simpleContent>
         <xs:extension base="xs:string">
@@ -19,7 +19,7 @@
       </xs:simpleContent>
     </xs:complexType>
   </xs:element>
-   <xs:element name="since" minOccurs="0">
+   <xs:element name="since" maxOccurs="1" minOccurs="0">
     <xs:complexType>
       <xs:simpleContent>
         <xs:extension base="xs:string">
