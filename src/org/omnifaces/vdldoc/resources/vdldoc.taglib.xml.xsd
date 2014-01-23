@@ -1,31 +1,31 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://vdldoc.org/vdldoc">
-	<xs:element name="deprecation">
+	<xs:element name="deprecation" minOccurs="0">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element type="xs:string" name="deprecated"/>
-				<xs:element type="xs:string" name="description"/>
+				<xs:element name="deprecated" type="xs:string" minOccurs="0" />
+				<xs:element name="description" type="xs:string" minOccurs="0" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="example-url" type="xs:anyURI"/>
-	<xs:element name="since" type="xs:string"/>
-	<xs:element name="el-variable">
+	<xs:element name="example-url" type="xs:anyURI" minOccurs="0" />
+	<xs:element name="since" type="xs:string" minOccurs="0" />
+	<xs:element name="el-variable" minOccurs="0">
 		<xs:complexType>
 			<xs:sequence>
-			<xs:element type="xs:string" name="el-variable-name"/>
-			<xs:element type="xs:string" name="description"/>
-			<xs:element type="xs:string" name="type"/>
-			<xs:element name="deprecation">
+			<xs:element name="el-variable-name" type="xs:string" minOccurs="0" />
+			<xs:element name="description" type="xs:string" minOccurs="0" />
+			<xs:element name="type" type="xs:string" minOccurs="0" />
+			<xs:element name="deprecation" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element type="xs:string" name="deprecated"/>
-						<xs:element type="xs:string" name="description"/>
+						<xs:element type="xs:string" name="deprecated" minOccurs="0" />
+						<xs:element type="xs:string" name="description" minOccurs="0" />
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element type="xs:anyURI" name="example-url"/>
-			<xs:element type="xs:string" name="since"/>
+			<xs:element name="example-url" type="xs:anyURI" minOccurs="0" />
+			<xs:element name="since" type="xs:string" minOccurs="0" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

@@ -1,29 +1,29 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://vdldoc.org/vdldoc" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-   <xs:element name="deprecated">
+   <xs:element name="deprecated" minOccurs="0">
     <xs:complexType>
       <xs:simpleContent>
         <xs:extension base="xs:string">
-          <xs:attribute type="xs:string" name="value"/>
-          <xs:attribute type="xs:string" name="shortDescription"/>
+          <xs:attribute name="value" type="xs:string" />
+          <xs:attribute name="shortDescription" type="xs:string" />
         </xs:extension>
       </xs:simpleContent>
     </xs:complexType>
   </xs:element>
-  <xs:element name="exampleURL">
+  <xs:element name="exampleURL" minOccurs="0">
     <xs:complexType>
       <xs:simpleContent>
         <xs:extension base="xs:string">
-          <xs:attribute type="xs:anyURI" name="value"/>
+          <xs:attribute name="value" type="xs:anyURI"/>
         </xs:extension>
       </xs:simpleContent>
     </xs:complexType>
   </xs:element>
-   <xs:element name="since">
+   <xs:element name="since" minOccurs="0">
     <xs:complexType>
       <xs:simpleContent>
         <xs:extension base="xs:string">
-          <xs:attribute type="xs:string" name="value"/>
+          <xs:attribute name="value" type="xs:string"/>
         </xs:extension>
       </xs:simpleContent>
     </xs:complexType>
