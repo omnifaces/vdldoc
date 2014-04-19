@@ -436,6 +436,9 @@
 			</xsl:attribute>
 
 			<td class="colFirst">
+				<xsl:attribute name="id">
+					<xsl:value-of select="javaee:name" />
+				</xsl:attribute>
 				<xsl:choose>
 					<xsl:when test="../javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
 						<del>
