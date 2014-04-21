@@ -428,6 +428,9 @@
 
 	<xsl:template match="javaee:attribute">
 		<tr>
+			<xsl:attribute name="id">
+				<xsl:value-of select="javaee:name" />
+			</xsl:attribute>
 			<xsl:attribute name="class">
 				<xsl:choose>
 					<xsl:when test="position() mod 2 = 0">altColor</xsl:when>
@@ -436,21 +439,28 @@
 			</xsl:attribute>
 
 			<td class="colFirst">
-				<xsl:attribute name="id">
-					<xsl:value-of select="javaee:name" />
-				</xsl:attribute>
 				<xsl:choose>
 					<xsl:when test="../javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
-						<del>
+						<a>
+							<xsl:attribute name="href">
+								<xsl:text>#</xsl:text><xsl:value-of select="javaee:name" />
+							</xsl:attribute>
+							<del>
+								<code>
+									<xsl:apply-templates select="javaee:name" />
+								</code>
+							</del>
+						</a>
+					</xsl:when>
+					<xsl:otherwise>
+						<a>
+							<xsl:attribute name="href">
+								<xsl:text>#</xsl:text><xsl:value-of select="javaee:name" />
+							</xsl:attribute>
 							<code>
 								<xsl:apply-templates select="javaee:name" />
 							</code>
-						</del>
-					</xsl:when>
-					<xsl:otherwise>
-						<code>
-							<xsl:apply-templates select="javaee:name" />
-						</code>
+						</a>
 					</xsl:otherwise>
 				</xsl:choose>
 			</td>
