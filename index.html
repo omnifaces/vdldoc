@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Vdldoc : Facelets .taglib.xml documentation generator" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Vdldoc</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/omnifaces/vdldoc">View on GitHub</a>
+
+          <h1 id="project_title">Vdldoc</h1>
+          <h2 id="project_tagline">Facelets .taglib.xml documentation generator</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/omnifaces/vdldoc/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/omnifaces/vdldoc/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>Vdldoc is a forked and rewritten version of old JSP TLDdoc Generator as
+previously available at
+<a href="http://taglibrarydoc.dev.java.net">http://taglibrarydoc.dev.java.net</a>
+(which is nowhere available right now). Vdldoc has near-complete support
+for Facelet <code>*.taglib.xml</code> files. The generated documentation has Java
+7 javadoc look'n'feel.</p>
+
+<p>As a preview, you can check the following online examples:</p>
+
+<ul>
+<li>  <a href="https://github.com/omnifaces/omnifaces">OmniFaces</a> <a href="http://wiki.omnifaces.googlecode.com/hg/vdldoc/index.html">VDL
+documentation</a>
+</li>
+<li>  <a href="http://primefaces.org">PrimeFaces</a> <a href="http://www.primefaces.org/docs/vdl/4.0/">4.0 VDL
+documentation</a>
+</li>
+<li>  <a href="http://jboss.org/richfaces">RichFaces</a> <a href="http://docs.jboss.org/richfaces/5.0.X/5.0.0.Alpha1/vdldoc/">5.0.0 Alpha1 VDL
+documentation</a>
+</li>
+</ul><h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Just drop the <a href="https://code.google.com/p/vdldoc/downloads/detail?name=vdldoc-1.1.jar">Vdldoc 1.1 JAR
+file</a>
+into the classpath. If you are using Maven, you can include the following
+dependency in your <code>pom.xml</code>:</p>
+
+<div class="highlight highlight-xml"><pre><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.omnifaces<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>vdldoc<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.1<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</pre></div>
+
+<p><strong>Note:</strong> Version 1.0 is not available in Maven. Also note that John
+Yeary created a <a href="http://code.bluelotussoftware.com/vdldoc-maven-plugin">Vdldoc Maven
+Plugin</a> around
+Vdldoc 1.0 which enables you to automatically generate new VDL
+documentation during a Maven build. For usage details, see <a href="https://plus.google.com/u/0/112146428878473069965/posts/16vXoZonXjk">this Google+
+post</a>.</p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Much like old TLDdoc usage, once the jar is in runtime classpath, run it
+as follows:</p>
+
+<div class="highlight highlight-java"><pre><span class="n">VdldocGenerator</span> <span class="n">generator</span> <span class="o">=</span> <span class="k">new</span> <span class="n">VdldocGenerator</span><span class="o">();</span>
+<span class="n">generator</span><span class="o">.</span><span class="na">setWindowTitle</span><span class="o">(</span><span class="s">"Browser window title"</span><span class="o">);</span> <span class="c1">// Else default will be used.</span>
+<span class="n">generator</span><span class="o">.</span><span class="na">setDocTitle</span><span class="o">(</span><span class="s">"Documentation title"</span><span class="o">);</span> <span class="c1">// Else default will be used.</span>
+<span class="n">generator</span><span class="o">.</span><span class="na">setOutputDirectory</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"/path/to/vdldoc"</span><span class="o">));</span> <span class="c1">// Else ./vdldoc will be used.</span>
+<span class="n">generator</span><span class="o">.</span><span class="na">setFacesConfig</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"/path/to/faces-config.xml"</span><span class="o">));</span> <span class="c1">// Optional.</span>
+<span class="n">generator</span><span class="o">.</span><span class="na">addTaglib</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"/path/to/foo.taglib.xml"</span><span class="o">));</span>
+<span class="n">generator</span><span class="o">.</span><span class="na">addTaglib</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"/path/to/bar.taglib.xml"</span><span class="o">));</span>
+<span class="c1">// ...</span>
+<span class="n">generator</span><span class="o">.</span><span class="na">generate</span><span class="o">();</span>
+</pre></div>
+
+<p>The <code>&lt;facelet-taglib id&gt;</code> will be used as the taglib prefix. Make sure
+that you have supplied one. E.g.</p>
+
+<div class="highlight highlight-xml"><pre><span class="nt">&lt;facelet-taglib</span> <span class="na">id=</span><span class="s">"o"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;description&gt;</span>OmniFaces UI components.<span class="nt">&lt;/description&gt;</span>
+    <span class="nt">&lt;namespace&gt;</span>http://omnifaces.org/ui<span class="nt">&lt;/namespace&gt;</span>
+    ...
+<span class="nt">&lt;/facelet-taglib&gt;</span>
+</pre></div>
+
+<p>Otherwise it will default to the base filename without the <code>.taglib.xml</code>
+extension.</p>
+
+<p><strong>Note:</strong> MyFaces has a <a href="https://issues.apache.org/jira/browse/MYFACES-3537">known parsing
+issue</a> when using
+<code>&lt;description&gt;</code> in the <code>&lt;facelet-taglib&gt;</code> as demonstrated above. This
+has been fixed for MyFaces 2.0.14 and 2.1.8. This problem is completely
+unrelated to Vdldoc.</p>
+
+<h2>
+<a name="cli" class="anchor" href="#cli"><span class="octicon octicon-link"></span></a>CLI</h2>
+
+<p>The <code>vdldoc.jar</code> can be also run in the command line like so: </p>
+
+<div class="highlight highlight-sh"><pre>java -jar vdldoc-1.1.jar foo.taglib.xml bar.taglib.xml
+</pre></div>
+
+<p>The files will by default be generated into a new <code>/vdldoc</code> folder in
+the working directory. The usage options are laid out below:</p>
+
+<pre><code>------------------------------------------------------------------------------
+                        VDL Documentation Generator
+Usage:
+               vdldoc [options] taglib1 [taglib2 [taglib3 ...]]
+options:
+  -help                  Displays this help message.
+  -d &lt;directory&gt;         Destination directory for output files.
+                         This defaults to new dir called 'vdldoc'.
+  -windowtitle &lt;text&gt;    Browser window title. This defaults to
+                         VDL Documentation Generator - Generated Documentation
+  -doctitle &lt;html-code&gt;  Documentation title for the VDL index page.
+                         This defaults to the same as window title.
+  -facesconfig &lt;path&gt;    Path to the faces-config.xml file.
+  -attr &lt;path&gt;           Path to properties file containing descriptions for
+                         implied attributes of composite components, such as
+                         'id', 'rendered', etc.
+  -q                     Quiet Mode, i.e. disable logging.
+taglib1 [taglib2 [taglib3 ...]]: Space separated paths to .taglib.xml files.
+    NOTE: if an argument or file path contains by itself spaces, quote it.
+------------------------------------------------------------------------------
+</code></pre>
+
+<h3>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h3>
+
+<p>Vdldoc has BSD license, because the original TLDDoc was also BSD. Note
+that we would personally like it to be Apache 2.0 license instead, but
+we don't know how to relicense it without any potential law trouble. So
+we decided to keep it BSD.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Vdldoc maintained by <a href="https://github.com/omnifaces">omnifaces</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-29559297-7");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
