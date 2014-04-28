@@ -10,10 +10,10 @@
 	<name>Vdldoc</name>
 	<version>1.1</version>
 	<description>Facelets .taglib.xml documentation generator</description>
-	<url>https://code.google.com/p/vdldoc</url>
+	<url>http://vdldoc.omnifaces.org</url>
 	<organization>
 		<name>OmniFaces</name>
-		<url>http://code.google.com/p/omnifaces</url>
+		<url>http://omnifaces.org</url>
 	</organization>
 	<inceptionYear>2012</inceptionYear>
 
@@ -26,9 +26,9 @@
 	</licenses>
 
 	<scm>
-		<url>https://code.google.com/p/vdldoc/source/browse</url>
-		<connection>scm:hg:https://code.google.com/p/vdldoc</connection>
-		<developerConnection>scm:hg:https://code.google.com/p/vdldoc</developerConnection>
+		<url>https://github.com/omnifaces/omnifaces</url>
+		<connection>scm:git:git://github.com/omnifaces/omnifaces.git</connection>
+		<developerConnection>scm:git:git@github.com:omnifaces/omnifaces.git</developerConnection>
 	</scm>
 
 	<properties>
