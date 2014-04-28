@@ -26,9 +26,9 @@
 	</licenses>
 
 	<scm>
-		<url>https://github.com/omnifaces/omnifaces</url>
-		<connection>scm:git:git://github.com/omnifaces/omnifaces.git</connection>
-		<developerConnection>scm:git:git@github.com:omnifaces/omnifaces.git</developerConnection>
+		<url>https://github.com/omnifaces/vdldoc</url>
+		<connection>scm:git:git://github.com/omnifaces/vdldoc.git</connection>
+		<developerConnection>scm:git:git@github.com:omnifaces/vdldoc.git</developerConnection>
 	</scm>
 
 	<properties>
