@@ -1,1 +1,1 @@
-[Vdldoc homepage is available at omnifaces.github.io/vdldoc](http://omnifaces.github.io/vdldoc/).
+[Vdldoc homepage is available at **vdldoc.omnifaces.org**](http://vdldoc.omnifaces.org).
