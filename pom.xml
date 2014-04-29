@@ -43,6 +43,11 @@
 			<name>Bauke Scholtz</name>
 			<email>balusc@gmail.com</email>
 		</developer>
+		<developer>
+			<id>stiemannkj1</id>
+			<name>Kyle Stiemann</name>
+			<email>stiemannkj1@gmail.com</email>
+		</developer>
 	</developers>
 
 	<!-- Build part provided by mellowaredev (http://code.google.com/u/mellowaredev) -->
