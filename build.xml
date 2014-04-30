@@ -65,7 +65,7 @@
 				<attribute name="Implementation-Vendor" value="Vdldoc" />
 				<attribute name="Implementation-Title" value="Vdldoc" />
 				<attribute name="Implementation-Version" value="${VERSION}" />
-				<attribute name="Implementation-URL" value="http://omnifaces.org" />
+				<attribute name="Implementation-URL" value="http://vdldoc.omnifaces.org" />
 				<attribute name="Built-Date" value="${TODAY}" />
 			</manifest>
 		</jar>
