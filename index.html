@@ -20,6 +20,11 @@
 
           <h1 id="project_title">Vdldoc</h1>
           <h2 id="project_tagline">Facelets .taglib.xml documentation generator</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/omnifaces/vdldoc/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/omnifaces/vdldoc/tarball/master">Download this project as a tar.gz file</a>
+            </section>
         </header>
     </div>
 
@@ -39,7 +44,7 @@ for Facelet <code>*.taglib.xml</code> files. The generated documentation has Jav
 <p>As a preview, you can check the following online examples:</p>
 
 <ul>
-<li>  <a href="http://omnifaces.org">OmniFaces</a> <a href="http://docs.omnifaces.org/vdldoc">VDL
+<li>  <a href="http://omnifaces.org">OmniFaces</a> <a href="http://omnifaces.org/docs/vdldoc/">VDL
 documentation</a>
 </li>
 <li>  <a href="http://primefaces.org">PrimeFaces</a> <a href="http://www.primefaces.org/docs/vdl/4.0/">4.0 VDL
@@ -51,24 +56,16 @@ documentation</a>
 </ul><h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
-<p>Just drop the <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.1/">Vdldoc 1.1 JAR
-file</a>
+<p>Just drop the <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/">Vdldoc 1.2 JAR file</a> file
 into the classpath. If you are using Maven, you can include the following
 dependency in your <code>pom.xml</code>:</p>
 
 <div class="highlight highlight-xml"><pre><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.omnifaces<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>vdldoc<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.1<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.2<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
-
-<p><strong>Note:</strong> Version 1.0 is not available in Maven. Also note that John
-Yeary created a <a href="http://code.bluelotussoftware.com/vdldoc-maven-plugin">Vdldoc Maven
-Plugin</a> around
-Vdldoc 1.0 which enables you to automatically generate new VDL
-documentation during a Maven build. For usage details, see <a href="https://plus.google.com/u/0/112146428878473069965/posts/16vXoZonXjk">this Google+
-post</a>.</p>
 
 <h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
@@ -81,6 +78,7 @@ as follows:</p>
 <span class="n">generator</span><span class="o">.</span><span class="na">setDocTitle</span><span class="o">(</span><span class="s">"Documentation title"</span><span class="o">);</span> <span class="c1">// Else default will be used.</span>
 <span class="n">generator</span><span class="o">.</span><span class="na">setOutputDirectory</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"/path/to/vdldoc"</span><span class="o">));</span> <span class="c1">// Else ./vdldoc will be used.</span>
 <span class="n">generator</span><span class="o">.</span><span class="na">setFacesConfig</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"/path/to/faces-config.xml"</span><span class="o">));</span> <span class="c1">// Optional.</span>
+<span class="n">generator</span><span class="o">.</span><span class="na">setAttributes</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"/path/to/cc-attributes.properties"</span><span class="o">));</span> <span class="c1">// Optional.</span>
 <span class="n">generator</span><span class="o">.</span><span class="na">addTaglib</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"/path/to/foo.taglib.xml"</span><span class="o">));</span>
 <span class="n">generator</span><span class="o">.</span><span class="na">addTaglib</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"/path/to/bar.taglib.xml"</span><span class="o">));</span>
 <span class="c1">// ...</span>
@@ -105,6 +103,20 @@ issue</a> when using
 <code>&lt;description&gt;</code> in the <code>&lt;facelet-taglib&gt;</code> as demonstrated above. This
 has been fixed for MyFaces 2.0.14 and 2.1.8. This problem is completely
 unrelated to Vdldoc.</p>
+
+<p>As to the <code>cc-attributes.properties</code> file (the file name is by the way fully free to your choice, as long as it's a valid Java <code>.properties</code> file), this is specifically for implied composite component attributes which are not definied via <code>&lt;cc:attribute&gt;</code>. If this is not specified, then the following default <code>.properties</code> will be used:</p>
+
+<div class="highlight highlight-ini"><pre><span class="c1"># id</span>
+<span class="na">id.displayName</span><span class="o">=</span><span class="s">id</span>
+<span class="na">id.description</span><span class="o">=</span><span class="s">The identifier of the component.</span>
+<span class="na">id.required</span><span class="o">=</span><span class="s">false</span>
+<span class="na">id.type</span><span class="o">=</span><span class="s">java.lang.String</span>
+<span class="c1"># rendered</span>
+<span class="na">rendered.displayName</span><span class="o">=</span><span class="s">rendered</span>
+<span class="na">rendered.description</span><span class="o">=</span><span class="s">Boolean flag indicating whether or not this component is to be rendered during the RENDER_RESPONSE phase of the JSF lifecycle.  The default value is true.</span>
+<span class="na">rendered.required</span><span class="o">=</span><span class="s">false</span>
+<span class="na">rendered.type</span><span class="o">=</span><span class="s">java.lang.Boolean</span>
+</pre></div>
 
 <h2>
 <a name="cli" class="anchor" href="#cli"><span class="octicon octicon-link"></span></a>CLI</h2>
