@@ -8,7 +8,7 @@
 	<artifactId>vdldoc</artifactId>
 	<packaging>jar</packaging>
 	<name>Vdldoc</name>
-	<version>1.1</version>
+	<version>1.2</version>
 	<description>Facelets .taglib.xml documentation generator</description>
 	<url>http://vdldoc.omnifaces.org</url>
 	<organization>
