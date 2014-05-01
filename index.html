@@ -20,6 +20,11 @@
 
           <h1 id="project_title">Vdldoc</h1>
           <h2 id="project_tagline">Facelets .taglib.xml documentation generator</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/omnifaces/vdldoc/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/omnifaces/vdldoc/tarball/master">Download this project as a tar.gz file</a>
+            </section>
         </header>
     </div>
 
@@ -63,6 +68,19 @@ dependency in your <code>pom.xml</code>:</p>
 </pre></div>
 
 <h2>
+<a name="download" class="anchor" href="#download"><span class="octicon octicon-link"></span></a>Download</h2>
+
+<ul>
+<li>
+<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2.jar">Vdldoc library</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2.jar">1.2</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.1/vdldoc-1.1.jar">1.1</a>
+</li>
+<li>
+<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2-sources.jar">Vdldoc sources</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2-sources.jar">1.2</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.1/vdldoc-1.1-sources.jar">1.1</a>
+</li>
+<li>
+<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2-javadoc.jar">Vdldoc javadoc</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2-javadoc.jar">1.2</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.1/vdldoc-1.1-javadoc.jar">1.1</a>
+</li>
+</ul><h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
 <p>Much like old TLDdoc usage, once the jar is in runtime classpath, run it
@@ -99,7 +117,7 @@ issue</a> when using
 has been fixed for MyFaces 2.0.14 and 2.1.8. This problem is completely
 unrelated to Vdldoc.</p>
 
-<p>As to the <code>cc-attributes.properties</code> file (the file name is by the way fully free to your choice, as long as it's a valid Java <code>.properties</code> file), this is specifically for implied composite component attributes which are not definied via <code>&lt;cc:attribute&gt;</code>. If this is not specified, then the following default <code>.properties</code> will be used:</p>
+<p>As to the <code>cc-attributes.properties</code> file (the file name is by the way fully free to your choice, as long as it's a valid Java <code>.properties</code> file), this is specifically for implied composite component attributes which are not definied via <code>&lt;cc:attribute&gt;</code>. Therein you can define the display name, description, required and type columns of the attributes in the following syntax:</p>
 
 <div class="highlight highlight-ini"><pre><span class="c1"># id</span>
 <span class="na">id.displayName</span><span class="o">=</span><span class="s">id</span>
@@ -112,6 +130,8 @@ unrelated to Vdldoc.</p>
 <span class="na">rendered.required</span><span class="o">=</span><span class="s">false</span>
 <span class="na">rendered.type</span><span class="o">=</span><span class="s">java.lang.Boolean</span>
 </pre></div>
+
+<p>If this file is not specified, then the above specified defaults will be used.</p>
 
 <h2>
 <a name="cli" class="anchor" href="#cli"><span class="octicon octicon-link"></span></a>CLI</h2>
