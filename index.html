@@ -2,9 +2,9 @@
 <html>
 
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Vdldoc : Facelets .taglib.xml documentation generator" />
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Vdldoc : Facelets .taglib.xml documentation generator">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -20,6 +20,11 @@
 
           <h1 id="project_title">Vdldoc</h1>
           <h2 id="project_tagline">Facelets .taglib.xml documentation generator</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/omnifaces/vdldoc/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/omnifaces/vdldoc/tarball/master">Download this project as a tar.gz file</a>
+            </section>
         </header>
     </div>
 
@@ -39,7 +44,7 @@ for Facelets <code>*.taglib.xml</code> files. The generated documentation has Ja
 <p>As a preview, you can check the following online examples:</p>
 
 <ul>
-<li>  <a href="http://omnifaces.org">OmniFaces</a> <a href="http://omnifaces.org/docs/vdldoc/">VDL
+<li>  <a href="http://omnifaces.org">OmniFaces</a> <a href="http://omnifaces.org/docs/vdldoc/1.8/">VDL
 documentation</a>
 </li>
 <li>  <a href="http://primefaces.org">PrimeFaces</a> <a href="http://www.primefaces.org/docs/vdl/5.0/core/">5.0 VDL
@@ -99,14 +104,14 @@ dependency in your <code>pom.xml</code>:</p>
 <p>Much like old TLDdoc usage, once the jar is in runtime classpath, run it
 as follows:</p>
 
-<div class="highlight highlight-java"><pre><span class="n">VdldocGenerator</span> <span class="n">generator</span> <span class="o">=</span> <span class="k">new</span> <span class="n">VdldocGenerator</span><span class="o">();</span>
+<div class="highlight highlight-java"><pre><span class="n">VdldocGenerator</span> <span class="n">generator</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">VdldocGenerator</span><span class="o">();</span>
 <span class="n">generator</span><span class="o">.</span><span class="na">setWindowTitle</span><span class="o">(</span><span class="s">"Browser window title"</span><span class="o">);</span> <span class="c1">// Else default will be used.</span>
 <span class="n">generator</span><span class="o">.</span><span class="na">setDocTitle</span><span class="o">(</span><span class="s">"Documentation title"</span><span class="o">);</span> <span class="c1">// Else default will be used.</span>
-<span class="n">generator</span><span class="o">.</span><span class="na">setOutputDirectory</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"/path/to/vdldoc"</span><span class="o">));</span> <span class="c1">// Else ./vdldoc will be used.</span>
-<span class="n">generator</span><span class="o">.</span><span class="na">setFacesConfig</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"/path/to/faces-config.xml"</span><span class="o">));</span> <span class="c1">// Optional.</span>
-<span class="n">generator</span><span class="o">.</span><span class="na">setAttributes</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"/path/to/cc-attributes.properties"</span><span class="o">));</span> <span class="c1">// Optional.</span>
-<span class="n">generator</span><span class="o">.</span><span class="na">addTaglib</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"/path/to/foo.taglib.xml"</span><span class="o">));</span>
-<span class="n">generator</span><span class="o">.</span><span class="na">addTaglib</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"/path/to/bar.taglib.xml"</span><span class="o">));</span>
+<span class="n">generator</span><span class="o">.</span><span class="na">setOutputDirectory</span><span class="o">(</span><span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="s">"/path/to/vdldoc"</span><span class="o">));</span> <span class="c1">// Else ./vdldoc will be used.</span>
+<span class="n">generator</span><span class="o">.</span><span class="na">setFacesConfig</span><span class="o">(</span><span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="s">"/path/to/faces-config.xml"</span><span class="o">));</span> <span class="c1">// Optional.</span>
+<span class="n">generator</span><span class="o">.</span><span class="na">setAttributes</span><span class="o">(</span><span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="s">"/path/to/cc-attributes.properties"</span><span class="o">));</span> <span class="c1">// Optional.</span>
+<span class="n">generator</span><span class="o">.</span><span class="na">addTaglib</span><span class="o">(</span><span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="s">"/path/to/foo.taglib.xml"</span><span class="o">));</span>
+<span class="n">generator</span><span class="o">.</span><span class="na">addTaglib</span><span class="o">(</span><span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="s">"/path/to/bar.taglib.xml"</span><span class="o">));</span>
 <span class="c1">// ...</span>
 <span class="n">generator</span><span class="o">.</span><span class="na">generate</span><span class="o">();</span>
 </pre></div>
