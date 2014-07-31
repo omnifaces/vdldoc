@@ -29,10 +29,10 @@
  - @author Bauke Scholtz
 -->
 <xsl:stylesheet
-	xmlns:javaee="http://java.sun.com/xml/ns/javaee"
+	xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fo="http://www.w3.org/1999/XSL/Format"
-	xmlns:vdldoc="http://vdldoc.org/vdldoc"
+	xmlns:vdldoc="http://vdldoc.omnifaces.org"
 	version="2.0"
 >
 	<xsl:output method="html" indent="yes"
@@ -145,20 +145,22 @@
 									<dl>
 										<dt>Description:</dt>
 										<dd>
-											<xsl:choose>
-												<xsl:when test="normalize-space(vdldoc:description)">
-													<xsl:if test="vdldoc:deprecation/vdldoc:deprecated = 'true'">
-														<b>Deprecated. </b><xsl:value-of select="vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
-													</xsl:if>
-													<xsl:value-of select="vdldoc:description" disable-output-escaping="yes" />
-												</xsl:when>
-												<xsl:otherwise>
-													<xsl:if test="vdldoc:deprecation/vdldoc:deprecated = 'true'">
-														<b>Deprecated. </b><xsl:value-of select="vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
-													</xsl:if>
-													<i>No Description</i>
-												</xsl:otherwise>
-											</xsl:choose>
+											<div class="block">
+												<xsl:choose>
+													<xsl:when test="normalize-space(vdldoc:description)">
+														<xsl:if test="vdldoc:deprecation/vdldoc:deprecated = 'true'">
+															<b>Deprecated. </b><xsl:value-of select="vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
+														</xsl:if>
+														<xsl:value-of select="vdldoc:description" disable-output-escaping="yes" />
+													</xsl:when>
+													<xsl:otherwise>
+														<xsl:if test="vdldoc:deprecation/vdldoc:deprecated = 'true'">
+															<b>Deprecated. </b><xsl:value-of select="vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
+														</xsl:if>
+														<i>No Description</i>
+													</xsl:otherwise>
+												</xsl:choose>
+											</div>
 										</dd>
 									</dl>
 								</li>

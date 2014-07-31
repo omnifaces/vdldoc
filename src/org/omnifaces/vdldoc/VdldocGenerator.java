@@ -80,8 +80,11 @@ public class VdldocGenerator {
 	/** The default title for the VDL documentation index page. */
 	private static final String DEFAULT_DOC_TITLE = DEFAULT_WINDOW_TITLE;
 
-	/** The XML namespace for Java EE */
-	private static final String NS_JAVAEE = "http://java.sun.com/xml/ns/javaee";
+	/** The sun.com XML namespace for Java EE. */
+	private static final String NS_JAVAEE_SUN = "http://java.sun.com/xml/ns/javaee";
+
+	/** The jcp.org XML namespace for Java EE. @since 2.0 */
+	private static final String NS_JAVAEE_JCP = "http://xmlns.jcp.org/xml/ns/javaee";
 
 	/** If true, outputs the input to the transform before generation. For internal use only. */
 	private static final boolean DEBUG_INPUT_DOCUMENT = false;
@@ -93,8 +96,8 @@ public class VdldocGenerator {
 		"%s is not a faces-config.xml file.";
 	private static final String ERROR_INVALID_ATTRIBUTES_FILE =
 		"%s is not a valid attributes file.";
-	private static final String ERROR_JAVAEE_MISSING =
-		"%s does not have xmlns=\"" + NS_JAVAEE + "\"";
+	private static final String ERROR_NS_JAVAEE_MISSING =
+		"%s does not have xmlns=\"" + NS_JAVAEE_JCP + "\"";
 	private static final String ERROR_TAGLIB_MISSING =
 		"%s does not have <facelet-taglib> as root.";
 	private static final String ERROR_INVALID_COMPOSITELIB =
@@ -346,18 +349,18 @@ public class VdldocGenerator {
 		summaryDocument = builder.newDocument();
 
 		// Create root <vdldoc> root element:
-		Element vdldocElement = summaryDocument.createElementNS(NS_JAVAEE, "vdldoc");
+		Element vdldocElement = summaryDocument.createElementNS(NS_JAVAEE_JCP, "vdldoc");
 		summaryDocument.appendChild(vdldocElement);
 
 		// Create configuration element <config>:
-		Element configElement = summaryDocument.createElementNS(NS_JAVAEE, "config");
+		Element configElement = summaryDocument.createElementNS(NS_JAVAEE_JCP, "config");
 		vdldocElement.appendChild(configElement);
 
-		Element windowTitle = summaryDocument.createElementNS(NS_JAVAEE, "window-title");
+		Element windowTitle = summaryDocument.createElementNS(NS_JAVAEE_JCP, "window-title");
 		windowTitle.appendChild(summaryDocument.createTextNode(this.windowTitle));
 		configElement.appendChild(windowTitle);
 
-		Element docTitle = summaryDocument.createElementNS(NS_JAVAEE, "doc-title");
+		Element docTitle = summaryDocument.createElementNS(NS_JAVAEE_JCP, "doc-title");
 		docTitle.appendChild(summaryDocument.createTextNode(this.docTitle));
 		configElement.appendChild(docTitle);
 
@@ -388,8 +391,8 @@ public class VdldocGenerator {
 			if (numTags > 0) {
 				Element taglibNode = (Element) summaryDocument.importNode(element, true);
 
-				if (!taglibNode.getNamespaceURI().equals(NS_JAVAEE)) {
-					throw new IllegalArgumentException(String.format(ERROR_JAVAEE_MISSING, taglib.getName()));
+				if (!taglibNode.getNamespaceURI().equals(NS_JAVAEE_JCP) && !taglibNode.getNamespaceURI().equals(NS_JAVAEE_SUN)) {
+					throw new IllegalArgumentException(String.format(ERROR_NS_JAVAEE_MISSING, taglib.getName()));
 				}
 
 				if (!taglibNode.getLocalName().equals("facelet-taglib")) {
@@ -429,7 +432,7 @@ public class VdldocGenerator {
 
 					if (compositeComponentFiles != null) {
 						for (File compositeComponentFile : compositeComponentFiles) {
-							parseCompositeComponentFile(NS_JAVAEE, taglibNode, compositeComponentFile);
+							parseCompositeComponentFile(NS_JAVAEE_JCP, taglibNode, compositeComponentFile);
 							vdldocElement.appendChild(taglibNode);
 						}
 					}
@@ -543,10 +546,10 @@ public class VdldocGenerator {
 				String functionName = findElementValue(function, "function-name");
 				generateFunctionDetail(outputDirectory, id, functionName);
 			}
-			
+
 			NodeList elVariables = taglib.getElementsByTagNameNS("*", "el-variable");
 			int numELVariables = elVariables.getLength();
-			
+
 			for (int j = 0; j < numELVariables; j++) {
 				Element elVariable = (Element) elVariables.item(j);
 				String elVariableName = findElementValue(elVariable, "el-variable-name");
@@ -604,7 +607,7 @@ public class VdldocGenerator {
 
 		generatePage(new File(outputDirectory, functionName + ".fn.html"), "function.html.xsl", parameters);
 	}
-	
+
 	private void generateELVariableDetail(File outputDirectory, String id, String elVariableName)
 			throws TransformerException
 	{

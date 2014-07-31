@@ -29,7 +29,7 @@
  - @author Bauke Scholtz
 -->
 <xsl:stylesheet
-	xmlns:javaee="http://java.sun.com/xml/ns/javaee"
+	xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fo="http://www.w3.org/1999/XSL/Format"
 	version="2.0"
@@ -140,14 +140,16 @@
 									<dl>
 										<dt>Description:</dt>
 										<dd>
-											<xsl:choose>
-												<xsl:when test="normalize-space(javaee:description)">
-													<xsl:value-of select="javaee:description" disable-output-escaping="yes" />
-												</xsl:when>
-												<xsl:otherwise>
-													<i>No Description</i>
-												</xsl:otherwise>
-											</xsl:choose>
+											<div class="block">
+												<xsl:choose>
+													<xsl:when test="normalize-space(javaee:description)">
+														<xsl:value-of select="javaee:description" disable-output-escaping="yes" />
+													</xsl:when>
+													<xsl:otherwise>
+														<i>No Description</i>
+													</xsl:otherwise>
+												</xsl:choose>
+											</div>
 										</dd>
 									</dl>
 								</li>

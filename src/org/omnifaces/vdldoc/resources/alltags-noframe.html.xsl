@@ -29,10 +29,10 @@
  - @author Bauke Scholtz
 -->
 <xsl:stylesheet
-	xmlns:javaee="http://java.sun.com/xml/ns/javaee"
+	xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fo="http://www.w3.org/1999/XSL/Format"
-	xmlns:vdldoc="http://vdldoc.org/vdldoc"
+	xmlns:vdldoc="http://vdldoc.omnifaces.org"
 	version="2.0"
 >
 	<xsl:output method="html" indent="yes"

@@ -29,10 +29,10 @@
  - @author Bauke Scholtz
 -->
 <xsl:stylesheet
-	xmlns:javaee="http://java.sun.com/xml/ns/javaee"
+	xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fo="http://www.w3.org/1999/XSL/Format"
-	xmlns:vdldoc="http://vdldoc.org/vdldoc"
+	xmlns:vdldoc="http://vdldoc.omnifaces.org"
 	version="2.0"
 >
 	<xsl:output method="html" indent="yes"
@@ -145,20 +145,22 @@
 									<dl>
 										<dt>Description:</dt>
 										<dd>
-											<xsl:choose>
-												<xsl:when test="normalize-space(javaee:description)">
-													<xsl:if test="javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
-														<b>Deprecated. </b> <xsl:value-of select="javaee:tag-extension/vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
-													</xsl:if>
-													<xsl:value-of select="javaee:description" disable-output-escaping="yes" />
-												</xsl:when>
-												<xsl:otherwise>
-													<xsl:if test="javaee:tag-extension/javaee:deprecation/javaee:deprecated = 'true'">
-														<b>Deprecated. </b> <xsl:value-of select="javaee:tag-extension/vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
-													</xsl:if>
-													<i>No Description</i>
-												</xsl:otherwise>
-											</xsl:choose>
+											<div class="block">
+												<xsl:choose>
+													<xsl:when test="normalize-space(javaee:description)">
+														<xsl:if test="javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+															<b>Deprecated. </b> <xsl:value-of select="javaee:tag-extension/vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
+														</xsl:if>
+														<xsl:value-of select="javaee:description" disable-output-escaping="yes" />
+													</xsl:when>
+													<xsl:otherwise>
+														<xsl:if test="javaee:tag-extension/javaee:deprecation/javaee:deprecated = 'true'">
+															<b>Deprecated. </b> <xsl:value-of select="javaee:tag-extension/vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
+														</xsl:if>
+														<i>No Description</i>
+													</xsl:otherwise>
+												</xsl:choose>
+											</div>
 										</dd>
 									</dl>
 								</li>
@@ -227,28 +229,26 @@
 											<span>Attributes</span>
 											<span class="tabEnd">&#160;</span>
 										</caption>
-										<xsl:choose>
-											<xsl:when test="count(javaee:attribute) > 0">
-												<thead>
-													<tr>
-														<th class="colFirst">Name</th>
-														<th class="colOne">Required</th>
-														<th class="colOne">Type</th>
-														<th class="colLast">Description</th>
-													</tr>
-												</thead>
-												<tbody>
+										<thead>
+											<tr>
+												<th class="colFirst">Name</th>
+												<th class="colOne">Required</th>
+												<th class="colOne">Type</th>
+												<th class="colLast">Description</th>
+											</tr>
+										</thead>
+										<tbody>
+											<xsl:choose>
+												<xsl:when test="count(javaee:attribute) > 0">
 													<xsl:apply-templates select="javaee:attribute" />
-												</tbody>
-											</xsl:when>
-											<xsl:otherwise>
-												<tbody>
+												</xsl:when>
+												<xsl:otherwise>
 													<td class="colOne" colspan="4">
 														<i>No Attributes Defined.</i>
 													</td>
-												</tbody>
-											</xsl:otherwise>
-										</xsl:choose>
+												</xsl:otherwise>
+											</xsl:choose>
+										</tbody>
 									</table>
 								</li>
 							</ul>

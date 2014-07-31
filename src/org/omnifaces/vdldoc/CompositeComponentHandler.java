@@ -22,10 +22,15 @@
  */
 package org.omnifaces.vdldoc;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableSet;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -46,7 +51,9 @@ public class CompositeComponentHandler extends DefaultHandler {
 	private static final String ATTRIBUTE = "attribute";
 	private static final String COMPONENT = "component";
 	private static final String COMPONENT_TYPE = "component-type";
-	private static final String COMPOSITE_NAMESPACE = "http://java.sun.com/jsf/composite";
+	private static final String COMPOSITE_NAMESPACE_SUN = "http://java.sun.com/jsf/composite";
+	private static final String COMPOSITE_NAMESPACE_JCP = "http://xmlns.jcp.org/jsf/composite";
+	private static final Set<String> COMPOSITE_NAMESPACES = unmodifiableSet(new HashSet<String>(asList(COMPOSITE_NAMESPACE_SUN, COMPOSITE_NAMESPACE_JCP)));
 	private static final String DEPRECATED = "deprecated";
 	private static final String DEPRECATION ="deprecation";
 	private static final String DESCRIPTION = "description";
@@ -66,7 +73,7 @@ public class CompositeComponentHandler extends DefaultHandler {
 	private static final String TYPE = "type";
 	private static final String VALUE = "value";
 	private static final String VALUE_HOLDER = "valueHolder";
-	private static final String VDLDOC_NAMESPACE = "http://vdldoc.org/vdldoc";
+	private static final String VDLDOC_NAMESPACE = "http://vdldoc.omnifaces.org";
 
 	// Private Data Members
 	private String componentName;
@@ -93,7 +100,7 @@ public class CompositeComponentHandler extends DefaultHandler {
 
 		if (uri != null && localName != null) {
 
-			if (uri.equals(COMPOSITE_NAMESPACE) && localName.equals(INTERFACE)) {
+			if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(INTERFACE)) {
 				if (valueHolder) {
 					if (valueGiven) {
 						System.out.println("INFO: valueHolder = " + valueHolder + ", but valueGiven = " + valueGiven +
@@ -106,7 +113,7 @@ public class CompositeComponentHandler extends DefaultHandler {
 
 				tagNode = null;
 
-			} else if (uri.equals(COMPOSITE_NAMESPACE) && localName.equals(EXTENSION)) {
+			} else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(EXTENSION)) {
 				tagExtensionNode = null;
 			}
 		}
@@ -123,7 +130,7 @@ public class CompositeComponentHandler extends DefaultHandler {
 
 		if (uri != null && localName != null) {
 
-			if (uri.equals(COMPOSITE_NAMESPACE) && localName.equals(INTERFACE)) {
+			if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(INTERFACE)) {
 				valueGiven = false;
 				Element tagElement = document.createElementNS(namespaceURI, TAG);
 				tagNode = taglibNode.appendChild(tagElement);
@@ -159,7 +166,7 @@ public class CompositeComponentHandler extends DefaultHandler {
 				}
 
 			}
-			else if (uri.equals(COMPOSITE_NAMESPACE) && localName.equals(ATTRIBUTE)) {
+			else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(ATTRIBUTE)) {
 
 				if (tagNode != null) {
 
@@ -216,44 +223,44 @@ public class CompositeComponentHandler extends DefaultHandler {
 					attributeNode.appendChild(typeElement);
 
 				}
-			} else if (uri.equals(COMPOSITE_NAMESPACE) && localName.equals(EXTENSION)) {
+			} else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(EXTENSION)) {
 				if (tagNode != null) {
 					tagExtensionNode = tagNode.appendChild(document.createElementNS(namespaceURI, TAG_EXTENSION));
 				}
 			} else if (uri.equals(VDLDOC_NAMESPACE) && localName.equals(SINCE)) {
-				
+
 				if (tagExtensionNode != null) {
 
 					String since = attributes.getValue(VALUE);
-					
+
 					if (since != null) {
 
 						Element sinceElement = document.createElementNS(VDLDOC_NAMESPACE, SINCE);
 						sinceElement.setTextContent(since);
 						tagExtensionNode.appendChild(sinceElement);
 					}
-				} 
+				}
 			} else if (uri.equals(VDLDOC_NAMESPACE) && localName.equals(EXAMPLE_URL)) {
-				
+
 				if (tagExtensionNode != null) {
-				
+
 					String exampleURL = attributes.getValue(VALUE);
-					
+
 					if (exampleURL != null) {
-						
+
 						Element exampleURLElement = document.createElementNS(VDLDOC_NAMESPACE, EXAMPLE_URL);
 						exampleURLElement.setTextContent(exampleURL);
 						tagExtensionNode.appendChild(exampleURLElement);
-					}	
+					}
 				}
 			} else if (uri.equals(VDLDOC_NAMESPACE) && localName.equals(DEPRECATED)) {
-				
+
 				if (tagExtensionNode != null) {
 
 					String deprecatedValue = attributes.getValue(VALUE);
-					
+
 					if (deprecatedValue != null) {
-						
+
 						Boolean deprecated = Boolean.parseBoolean(deprecatedValue);
 						Element deprecationElement = document.createElementNS(VDLDOC_NAMESPACE, DEPRECATION);
 						Element deprecatedElement = document.createElementNS(VDLDOC_NAMESPACE, DEPRECATED);
@@ -261,21 +268,21 @@ public class CompositeComponentHandler extends DefaultHandler {
 						deprecationElement.appendChild(deprecatedElement);
 
 						String descriptionValue = attributes.getValue(SHORT_DESCRIPTION);
-	
+
 						if (descriptionValue != null) {
 							Element descriptionElement = document.createElementNS(VDLDOC_NAMESPACE, DESCRIPTION);
 							descriptionElement.setTextContent(descriptionValue);
 							deprecationElement.appendChild(descriptionElement);
 						}
-					
+
 						tagExtensionNode.appendChild(deprecationElement);
 					}
-				} 
-			} else if (uri.equals(COMPOSITE_NAMESPACE) && localName.equals(VALUE_HOLDER)) {
+				}
+			} else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(VALUE_HOLDER)) {
 				if (tagNode != null) {
 					valueHolder = true;
 				}
-			} else if (uri.equals(COMPOSITE_NAMESPACE) && localName.equals(EDITABLE_VALUE_HOLDER)) {
+			} else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(EDITABLE_VALUE_HOLDER)) {
 				if (tagNode != null) {
 					valueHolder = true;
 				}
