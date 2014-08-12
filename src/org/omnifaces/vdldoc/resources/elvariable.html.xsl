@@ -120,7 +120,7 @@
 						<h1 title="Library" class="title">
 							<xsl:value-of select="$id" />
 						</h1>
-						<h2>
+						<h2 class="title">
 							<xsl:choose>
 								<xsl:when test="vdldoc:deprecation/vdldoc:deprecated = 'true'">
 									Tag

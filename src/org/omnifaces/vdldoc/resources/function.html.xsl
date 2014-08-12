@@ -118,7 +118,7 @@
 						<h1 title="Library" class="title">
 							<xsl:value-of select="$id" />
 						</h1>
-						<h2>
+						<h2 class="title">
 							Function <xsl:value-of select="javaee:function-name" />
 						</h2>
 					</div>

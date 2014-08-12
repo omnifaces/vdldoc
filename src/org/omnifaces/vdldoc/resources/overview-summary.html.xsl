@@ -82,9 +82,9 @@
 				<!-- ========= END OF TOP NAVBAR ========= -->
 
 				<div class="contentContainer">
-					<h2>
+					<h1 class="title">
 						<xsl:value-of select="/javaee:vdldoc/javaee:config/javaee:doc-title" />
-					</h2>
+					</h1>
 
 					<div class="summary">
 						<ul class="blockList">
