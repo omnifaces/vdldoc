@@ -50,6 +50,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -104,6 +105,8 @@ public class VdldocGenerator {
 		"%s can not have more than one <composite-library-name>.";
 	private static final String WARNING_NO_TAGS =
 		"WARNING: %s does not have any <tag>s or <function>s. Skipping!";
+	private static final String WARNING_OLD_NS_JAVAEE =
+		"WARNING: %s uses old java.sun.com XML namespace. It's recommend to upgrade it to xmlns.jcp.org... ";
 	private static final String WARNING_ID_MISSING =
 		"WARNING: %s does not have <facelet-taglib id> attribute. Defaulting to base filename '%s'... ";
 	private static final String WARNING_UNSUPPORTED_ATTRIBUTE =
@@ -381,6 +384,15 @@ public class VdldocGenerator {
 
 			Document document = parse(builder, taglib);
 			Element element = document.getDocumentElement();
+
+			// If this tagfile still uses old java.sun.com XML namespace, change it to new xmlns.jcp.org one.
+			if (element.getNamespaceURI().equals(NS_JAVAEE_SUN)) {
+				print(String.format(WARNING_OLD_NS_JAVAEE, taglib.getName()));
+				Document documentWithNewNS = builder.newDocument();
+				changeNamespace(document, documentWithNewNS);
+				element = documentWithNewNS.getDocumentElement();
+			}
+
 			NodeList compositeNodes = element.getElementsByTagNameNS("*", "composite-library-name");
 			NodeList tagNodes = element.getElementsByTagNameNS("*", "tag");
 			NodeList functionNodes = element.getElementsByTagNameNS("*", "function");
@@ -391,7 +403,7 @@ public class VdldocGenerator {
 			if (numTags > 0) {
 				Element taglibNode = (Element) summaryDocument.importNode(element, true);
 
-				if (!taglibNode.getNamespaceURI().equals(NS_JAVAEE_JCP) && !taglibNode.getNamespaceURI().equals(NS_JAVAEE_SUN)) {
+				if (!taglibNode.getNamespaceURI().equals(NS_JAVAEE_JCP)) {
 					throw new IllegalArgumentException(String.format(ERROR_NS_JAVAEE_MISSING, taglib.getName()));
 				}
 
@@ -684,6 +696,49 @@ public class VdldocGenerator {
 		}
 		finally {
 			try { in.close(); } catch (IOException ignore) { /**/ }
+		}
+	}
+
+	/**
+	 * Change the XML namespace of the node from {@value #NS_JAVAEE_SUN} to {@value #NS_JAVAEE_JCP}.
+	 * @param from The source node.
+	 * @param to The target node.
+	 */
+	private static void changeNamespace(Node from, Node to) {
+		NodeList children = from.getChildNodes();
+		Document document = (to.getNodeType() == Node.DOCUMENT_NODE) ? (Document) to : to.getOwnerDocument();
+
+		for (int i = 0; i < children.getLength(); i++) {
+			Node node = children.item(i);
+			changeNamespace(node, cloneAndChangeNamespace(document, node, to));
+		}
+	}
+
+	/**
+	 * Clone the document node and change the XML namespace from {@value #NS_JAVAEE_SUN} to {@value #NS_JAVAEE_JCP}.
+	 * @param document The target document.
+	 * @param from The source node.
+	 * @param to The target node.
+	 * @return The cloned node.
+	 */
+	private static Node cloneAndChangeNamespace(Document document, Node from, Node to) {
+		if (from.getNodeType() == Node.ELEMENT_NODE) {
+			Element clone = document.createElementNS(NS_JAVAEE_JCP, from.getNodeName());
+			to.appendChild(clone);
+
+			for (int i = 0; i < from.getAttributes().getLength(); i++) {
+				Attr attr = (Attr) from.getAttributes().item(i);
+				String value = attr.getValue();
+				clone.setAttributeNS(attr.getNamespaceURI(), attr.getNodeName(), NS_JAVAEE_SUN.equals(value) ? NS_JAVAEE_JCP : value);
+			}
+
+			return clone;
+		}
+		else {
+			Node clone = from.cloneNode(false);
+			document.adoptNode(clone);
+			to.appendChild(clone);
+			return clone;
 		}
 	}
 
