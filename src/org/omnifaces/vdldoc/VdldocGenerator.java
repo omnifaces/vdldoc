@@ -385,14 +385,6 @@ public class VdldocGenerator {
 			Document document = parse(builder, taglib);
 			Element element = document.getDocumentElement();
 
-			// If this tagfile still uses old java.sun.com XML namespace, change it to new xmlns.jcp.org one.
-			if (element.getNamespaceURI().equals(NS_JAVAEE_SUN)) {
-				print(String.format(WARNING_OLD_NS_JAVAEE, taglib.getName()));
-				Document documentWithNewNS = builder.newDocument();
-				changeNamespace(document, documentWithNewNS);
-				element = documentWithNewNS.getDocumentElement();
-			}
-
 			NodeList compositeNodes = element.getElementsByTagNameNS("*", "composite-library-name");
 			NodeList tagNodes = element.getElementsByTagNameNS("*", "tag");
 			NodeList functionNodes = element.getElementsByTagNameNS("*", "function");
@@ -688,11 +680,22 @@ public class VdldocGenerator {
 	 * @param file The file to be parsed.
 	 * @return The document.
 	 */
-	private static Document parse(DocumentBuilder builder, File file) throws SAXException, IOException {
+	private Document parse(DocumentBuilder builder, File file) throws SAXException, IOException {
 		FileInputStream in = new FileInputStream(file);
 
 		try {
-			return builder.parse(new InputSource(in));
+			Document document = builder.parse(new InputSource(in));
+
+			// If this document still uses old java.sun.com XML namespace, change it to new xmlns.jcp.org one.
+			if (document.getDocumentElement().getNamespaceURI().equals(NS_JAVAEE_SUN)) {
+				print(String.format(WARNING_OLD_NS_JAVAEE, file.getName()));
+				Document documentWithNewNS = builder.newDocument();
+				changeNamespace(document, documentWithNewNS);
+				return documentWithNewNS;
+			}
+			else {
+				return document;
+			}
 		}
 		finally {
 			try { in.close(); } catch (IOException ignore) { /**/ }
