@@ -94,9 +94,11 @@
 						<ul class="navList" id="alltags_navbar_top">
 							<li><a href="../alltags-noframe.html">All Tags</a></li>
 						</ul>
-						<script type="text/javascript">
-							document.getElementById("alltags_navbar_top").style.display = (window == top) ? "block" : "none";
-						</script>
+						<div>
+							<script type="text/javascript">
+								document.getElementById("alltags_navbar_top").style.display = (window == top) ? "block" : "none";
+							</script>
+						</div>
 						<a name="skip-navbar_top"></a>
 					</div>
 					<!-- ========= END OF TOP NAVBAR ========= -->
@@ -142,115 +144,99 @@
 						</div>
 
 						<div class="summary">
-							<ul class="blockList">
-								<li class="blockList">
-									<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Library Summary table, listing library information">
-										<caption>
-											<span>Tag Library Information</span>
-											<span class="tabEnd">&#160;</span>
-										</caption>
-										<thead>
-											<tr>
-												<th class="colFirst" scope="col">Info</th>
-												<th class="colLast" scope="col">Value</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr class="rowColor">
-												<td class="colFirst">ID (tag prefix)</td>
-												<td class="colLast"><code><xsl:value-of select="@id" /></code></td>
-											</tr>
-											<tr class="altColor">
-												<td class="colFirst">URI</td>
-												<td class="colLast">
-													<xsl:choose>
-														<xsl:when test="normalize-space(javaee:namespace)">
-															<code><xsl:value-of select="javaee:namespace" /></code>
-														</xsl:when>
-														<xsl:otherwise>
-															<i>None</i>
-														</xsl:otherwise>
-													</xsl:choose>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</li>
-							</ul>
+							<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Library Summary table, listing library information">
+								<caption>
+									<span>Tag Library Information</span>
+									<span class="tabEnd">&#160;</span>
+								</caption>
+								<thead>
+									<tr>
+										<th class="colFirst" scope="col">Info</th>
+										<th class="colLast" scope="col">Value</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="rowColor">
+										<td class="colFirst">ID (tag prefix)</td>
+										<td class="colLast"><code><xsl:value-of select="@id" /></code></td>
+									</tr>
+									<tr class="altColor">
+										<td class="colFirst">URI</td>
+										<td class="colLast">
+											<xsl:choose>
+												<xsl:when test="normalize-space(javaee:namespace)">
+													<code><xsl:value-of select="javaee:namespace" /></code>
+												</xsl:when>
+												<xsl:otherwise>
+													<i>None</i>
+												</xsl:otherwise>
+											</xsl:choose>
+										</td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 
 						<div class="summary">
 							<!-- tags and tag files -->
 							<xsl:if test="count(javaee:tag) > 0">
-								<ul class="blockList">
-									<li class="blockList">
-										<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Tag Summary table, listing tag information">
-											<caption>
-												<span>Tag Summary</span>
-												<span class="tabEnd">&#160;</span>
-											</caption>
-											<thead>
-												<tr>
-													<th class="colOne" scope="col">Tag</th>
-													<th class="colLast" scope="col">Description</th>
-												</tr>
-											</thead>
-											<tbody>
-												<xsl:apply-templates select="javaee:tag" />
-											</tbody>
-										</table>
-									</li>
-								</ul>
+								<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Tag Summary table, listing tag information">
+									<caption>
+										<span>Tag Summary</span>
+										<span class="tabEnd">&#160;</span>
+									</caption>
+									<thead>
+										<tr>
+											<th class="colOne" scope="col">Tag</th>
+											<th class="colLast" scope="col">Description</th>
+										</tr>
+									</thead>
+									<tbody>
+										<xsl:apply-templates select="javaee:tag" />
+									</tbody>
+								</table>
 							</xsl:if>
 
 							<!-- functions -->
 							<xsl:if test="count(javaee:function) > 0">
-								<ul class="blockList">
-									<li class="blockList">
-										<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0"
-											summary="Function Summary table, listing function information">
-											<caption>
-												<span>Function Summary</span>
-												<span class="tabEnd">&#160;</span>
-											</caption>
-											<thead>
-												<tr>
-													<th class="colFirst" scope="col">Type</th>
-													<th class="colOne" scope="col">Function</th>
-													<th class="colLast" scope="col">Description</th>
-												</tr>
-											</thead>
-											<tbody>
-												<xsl:apply-templates select="javaee:function" />
-											</tbody>
-										</table>
-									</li>
-								</ul>
+								<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0"
+									summary="Function Summary table, listing function information">
+									<caption>
+										<span>Function Summary</span>
+										<span class="tabEnd">&#160;</span>
+									</caption>
+									<thead>
+										<tr>
+											<th class="colFirst" scope="col">Type</th>
+											<th class="colOne" scope="col">Function</th>
+											<th class="colLast" scope="col">Description</th>
+										</tr>
+									</thead>
+									<tbody>
+										<xsl:apply-templates select="javaee:function" />
+									</tbody>
+								</table>
 							</xsl:if>
 							
 							<!-- tags and tag files -->
 							<xsl:if test="count(javaee:taglib-extension/vdldoc:el-variable) > 0">
-								<ul class="blockList">
-									<li class="blockList">
-										<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0"
-											summary="EL Variable Summary table, listing function information">
-											<caption>
-												<span>EL Variable Summary</span>
-												<span class="tabEnd">&#160;</span>
-											</caption>
-											<thead>
-												<tr>
-													<th class="colFirst" scope="col">EL Variable</th>
-													<th class="colOne" scope="col">Type</th>
-													<th class="colLast" scope="col">Description</th>
-												</tr>
-											</thead>
-											<tbody>
-												<xsl:apply-templates select="javaee:taglib-extension/vdldoc:el-variable" />
-											</tbody>
-										</table>
-									</li>
-								</ul>
+								<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0"
+									summary="EL Variable Summary table, listing function information">
+									<caption>
+										<span>EL Variable Summary</span>
+										<span class="tabEnd">&#160;</span>
+									</caption>
+									<thead>
+										<tr>
+											<th class="colFirst" scope="col">EL Variable</th>
+											<th class="colOne" scope="col">Type</th>
+											<th class="colLast" scope="col">Description</th>
+										</tr>
+									</thead>
+									<tbody>
+										<xsl:apply-templates select="javaee:taglib-extension/vdldoc:el-variable" />
+									</tbody>
+								</table>
 							</xsl:if>
 							
 						</div>

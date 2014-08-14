@@ -74,9 +74,11 @@
 					<ul class="navList" id="alltags_navbar_top">
 						<li><a href="alltags-noframe.html">All Tags</a></li>
 					</ul>
-					<script type="text/javascript">
-						document.getElementById("alltags_navbar_top").style.display = (window == top) ? "block" : "none";
-					</script>
+					<div>
+						<script type="text/javascript">
+							document.getElementById("alltags_navbar_top").style.display = (window == top) ? "block" : "none";
+						</script>
+					</div>
 					<a name="skip-navbar_top"></a>
 				</div>
 				<!-- ========= END OF TOP NAVBAR ========= -->
@@ -87,78 +89,60 @@
 					</h1>
 				</div>
 				<div class="contentContainer">
-					<div class="summary">
-						<ul class="blockList">
-							<li class="blockList">
-								<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Tag Library table, listing tag libraries, and an explanation">
-									<caption>
-										<span>Tag Libraries</span>
-										<span class="tabEnd">&#160;</span>
-									</caption>
-									<thead>
-										<tr>
-											<th class="colFirst" scope="col">Library</th>
-											<th class="colLast" scope="col">Description</th>
-										</tr>
-									</thead>
-									<tbody>
-										<xsl:apply-templates select="/javaee:vdldoc/javaee:facelet-taglib" />
-									</tbody>
-								</table>
-							</li>
-						</ul>
-					</div>
+					<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Tag Library table, listing tag libraries, and an explanation">
+						<caption>
+							<span>Tag Libraries</span>
+							<span class="tabEnd">&#160;</span>
+						</caption>
+						<thead>
+							<tr>
+								<th class="colFirst" scope="col">Library</th>
+								<th class="colLast" scope="col">Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<xsl:apply-templates select="/javaee:vdldoc/javaee:facelet-taglib" />
+						</tbody>
+					</table>
 
 					<xsl:if test="count(/javaee:vdldoc/javaee:faces-config/javaee:managed-bean) > 0">
-						<div class="summary">
-							<ul class="blockList">
-								<li class="blockList">
-									<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Managed bean table, listing managed beans, and an explanation">
-										<caption>
-											<span>Managed beans</span>
-											<span class="tabEnd">&#160;</span>
-										</caption>
-										<thead>
-											<tr>
-												<th class="colFirst" scope="col">Name</th>
-												<th class="colOne" scope="col">Class</th>
-												<th class="colOne" scope="col">Scope</th>
-												<th class="colLast" scope="col">Description</th>
-											</tr>
-										</thead>
-										<tbody>
-											<xsl:apply-templates select="/javaee:vdldoc/javaee:faces-config/javaee:managed-bean" />
-										</tbody>
-									</table>
-								</li>
-							</ul>
-						</div>
+						<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Managed bean table, listing managed beans, and an explanation">
+							<caption>
+								<span>Managed beans</span>
+								<span class="tabEnd">&#160;</span>
+							</caption>
+							<thead>
+								<tr>
+									<th class="colFirst" scope="col">Name</th>
+									<th class="colOne" scope="col">Class</th>
+									<th class="colOne" scope="col">Scope</th>
+									<th class="colLast" scope="col">Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<xsl:apply-templates select="/javaee:vdldoc/javaee:faces-config/javaee:managed-bean" />
+							</tbody>
+						</table>
 					</xsl:if>
 
 					<xsl:if test="count(/javaee:vdldoc/javaee:faces-config/javaee:validator) > 0">
-						<div class="summary">
-							<ul class="blockList">
-								<li class="blockList">
-									<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Components table, listing component, and an explanation">
-										<caption>
-											<span>Validators</span>
-											<span class="tabEnd">&#160;</span>
-										</caption>
-										<thead>
-											<tr>
-												<th class="colFirst" scope="col">Name</th>
-												<th class="colOne" scope="col">Class</th>
-												<th class="colOne" scope="col">Scope</th>
-												<th class="colLast" scope="col">Description</th>
-											</tr>
-										</thead>
-										<tbody>
-											<xsl:apply-templates select="/javaee:vdldoc/javaee:faces-config/javaee:behavior" />
-										</tbody>
-									</table>
-								</li>
-							</ul>
-						</div>
+						<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Components table, listing component, and an explanation">
+							<caption>
+								<span>Validators</span>
+								<span class="tabEnd">&#160;</span>
+							</caption>
+							<thead>
+								<tr>
+									<th class="colFirst" scope="col">Name</th>
+									<th class="colOne" scope="col">Class</th>
+									<th class="colOne" scope="col">Scope</th>
+									<th class="colLast" scope="col">Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<xsl:apply-templates select="/javaee:vdldoc/javaee:faces-config/javaee:behavior" />
+							</tbody>
+						</table>
 					</xsl:if>
 				</div>
 

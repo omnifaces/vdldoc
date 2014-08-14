@@ -107,9 +107,11 @@
 						<ul class="navList" id="alltags_navbar_top">
 							<li><a href="../alltags-noframe.html">All Tags</a></li>
 						</ul>
-						<script type="text/javascript">
-							document.getElementById("alltags_navbar_top").style.display = (window == top) ? "block" : "none";
-						</script>
+						<div>
+							<script type="text/javascript">
+								document.getElementById("alltags_navbar_top").style.display = (window == top) ? "block" : "none";
+							</script>
+						</div>
 						<a name="skip-navbar_top"></a>
 					</div>
 					<!-- ========= END OF TOP NAVBAR ========= -->
@@ -157,64 +159,60 @@
 						</div>
 
 						<div class="detail">
-							<ul class="blockList">
-								<li class="blockList">
-									<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0"
-										summary="Function Summary table, listing function information">
-										<caption>
-											<span>Function Information</span>
-											<span class="tabEnd">&#160;</span>
-										</caption>
-										<thead>
-											<tr>
-												<th class="colFirst" scope="col">Info</th>
-												<th class="colLast" scope="col">Value</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr class="rowColor">
-												<td class="colFirst">Function Class</td>
-												<td class="colLast">
-													<xsl:choose>
-														<xsl:when test="normalize-space(javaee:function-class)">
-															<code><xsl:value-of select="javaee:function-class" /></code>
-														</xsl:when>
-														<xsl:otherwise>
-															<i>None</i>
-														</xsl:otherwise>
-													</xsl:choose>
-												</td>
-											</tr>
-											<tr class="altColor">
-												<td class="colFirst">Function Signature</td>
-												<td class="colLast">
-													<xsl:choose>
-														<xsl:when test="normalize-space(javaee:function-signature)">
-															<code><xsl:value-of select="javaee:function-signature" /></code>
-														</xsl:when>
-														<xsl:otherwise>
-															<i>None</i>
-														</xsl:otherwise>
-													</xsl:choose>
-												</td>
-											</tr>
-											<tr class="rowColor">
-												<td class="colFirst">Display Name</td>
-												<td class="colLast">
-													<xsl:choose>
-														<xsl:when test="normalize-space(javaee:display-name)">
-															<xsl:value-of select="javaee:display-name" />
-														</xsl:when>
-														<xsl:otherwise>
-															<i>None</i>
-														</xsl:otherwise>
-													</xsl:choose>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</li>
-							</ul>
+							<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0"
+								summary="Function Summary table, listing function information">
+								<caption>
+									<span>Function Information</span>
+									<span class="tabEnd">&#160;</span>
+								</caption>
+								<thead>
+									<tr>
+										<th class="colFirst" scope="col">Info</th>
+										<th class="colLast" scope="col">Value</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="rowColor">
+										<td class="colFirst">Function Class</td>
+										<td class="colLast">
+											<xsl:choose>
+												<xsl:when test="normalize-space(javaee:function-class)">
+													<code><xsl:value-of select="javaee:function-class" /></code>
+												</xsl:when>
+												<xsl:otherwise>
+													<i>None</i>
+												</xsl:otherwise>
+											</xsl:choose>
+										</td>
+									</tr>
+									<tr class="altColor">
+										<td class="colFirst">Function Signature</td>
+										<td class="colLast">
+											<xsl:choose>
+												<xsl:when test="normalize-space(javaee:function-signature)">
+													<code><xsl:value-of select="javaee:function-signature" /></code>
+												</xsl:when>
+												<xsl:otherwise>
+													<i>None</i>
+												</xsl:otherwise>
+											</xsl:choose>
+										</td>
+									</tr>
+									<tr class="rowColor">
+										<td class="colFirst">Display Name</td>
+										<td class="colLast">
+											<xsl:choose>
+												<xsl:when test="normalize-space(javaee:display-name)">
+													<xsl:value-of select="javaee:display-name" />
+												</xsl:when>
+												<xsl:otherwise>
+													<i>None</i>
+												</xsl:otherwise>
+											</xsl:choose>
+										</td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 					</div>
 

@@ -109,9 +109,11 @@
 						<ul class="navList" id="alltags_navbar_top">
 							<li><a href="../alltags-noframe.html">All Tags</a></li>
 						</ul>
-						<script type="text/javascript">
-							document.getElementById("alltags_navbar_top").style.display = (window == top) ? "block" : "none";
-						</script>
+						<div>
+							<script type="text/javascript">
+								document.getElementById("alltags_navbar_top").style.display = (window == top) ? "block" : "none";
+							</script>
+						</div>
 						<a name="skip-navbar_top"></a>
 					</div>
 					<!-- ========= END OF TOP NAVBAR ========= -->

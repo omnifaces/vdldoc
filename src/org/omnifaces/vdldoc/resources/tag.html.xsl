@@ -109,9 +109,11 @@
 						<ul class="navList" id="alltags_navbar_top">
 							<li><a href="../alltags-noframe.html">All Tags</a></li>
 						</ul>
-						<script type="text/javascript">
-							document.getElementById("alltags_navbar_top").style.display = (window == top) ? "block" : "none";
-						</script>
+						<div>
+							<script type="text/javascript">
+								document.getElementById("alltags_navbar_top").style.display = (window == top) ? "block" : "none";
+							</script>
+						</div>
 						<a name="skip-navbar_top"></a>
 					</div>
 					<!-- ========= END OF TOP NAVBAR ========= -->
@@ -222,36 +224,32 @@
 
 						<!-- Attribute Information -->
 						<div class="summary">
-							<ul class="blockList">
-								<li class="blockList">
-									<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Attribute summary table, listing attribute information">
-										<caption>
-											<span>Attributes</span>
-											<span class="tabEnd">&#160;</span>
-										</caption>
-										<thead>
-											<tr>
-												<th class="colFirst">Name</th>
-												<th class="colOne">Required</th>
-												<th class="colOne">Type</th>
-												<th class="colLast">Description</th>
-											</tr>
-										</thead>
-										<tbody>
-											<xsl:choose>
-												<xsl:when test="count(javaee:attribute) > 0">
-													<xsl:apply-templates select="javaee:attribute" />
-												</xsl:when>
-												<xsl:otherwise>
-													<td class="colOne" colspan="4">
-														<i>No Attributes Defined.</i>
-													</td>
-												</xsl:otherwise>
-											</xsl:choose>
-										</tbody>
-									</table>
-								</li>
-							</ul>
+							<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Attribute summary table, listing attribute information">
+								<caption>
+									<span>Attributes</span>
+									<span class="tabEnd">&#160;</span>
+								</caption>
+								<thead>
+									<tr>
+										<th class="colFirst">Name</th>
+										<th class="colOne">Required</th>
+										<th class="colOne">Type</th>
+										<th class="colLast">Description</th>
+									</tr>
+								</thead>
+								<tbody>
+									<xsl:choose>
+										<xsl:when test="count(javaee:attribute) > 0">
+											<xsl:apply-templates select="javaee:attribute" />
+										</xsl:when>
+										<xsl:otherwise>
+											<td class="colOne" colspan="4">
+												<i>No Attributes Defined.</i>
+											</td>
+										</xsl:otherwise>
+									</xsl:choose>
+								</tbody>
+							</table>
 						</div>
 					</div>
 
@@ -341,88 +339,84 @@
 		<xsl:param name="id-value" />
 
 		<div class="summary">
-			<ul class="blockList">
-				<li class="blockList">
-					<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0">
-						<xsl:attribute name="summary">
-							<xsl:value-of select="$summary" />
-						</xsl:attribute>
+			<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0">
+				<xsl:attribute name="summary">
+					<xsl:value-of select="$summary" />
+				</xsl:attribute>
 
-						<caption>
-							<span><xsl:value-of select="$caption" /></span>
-							<span class="tabEnd">&#160;</span>
-						</caption>
-						<thead>
-							<tr>
-								<th class="colFirst" scope="col">Info</th>
-								<th class="colLast" scope="col">Value</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr class="rowColor">
-								<td class="colFirst"><xsl:value-of select="$id-name" /></td>
-								<td class="colLast">
-									<xsl:choose>
-										<xsl:when test="normalize-space($id-value)">
-											<code><xsl:value-of select="$id-value" /></code>
-										</xsl:when>
-										<xsl:otherwise>
-											<i>None</i>
-										</xsl:otherwise>
-									</xsl:choose>
-								</td>
-							</tr>
-							<tr class="altColor">
-								<td class="colFirst">Handler Class</td>
-								<td class="colLast">
-									<xsl:choose>
-										<xsl:when test="normalize-space(javaee:handler-class)">
-											<code><xsl:value-of select="javaee:handler-class" /></code>
-										</xsl:when>
-										<xsl:otherwise>
-											<i>None</i>
-										</xsl:otherwise>
-									</xsl:choose>
-								</td>
-							</tr>
-							<xsl:if test="normalize-space(javaee:component-type)">
-								<tr class="rowColor">
-									<td class="colFirst">Renderer Type</td>
-									<td class="colLast">
-										<xsl:choose>
-											<xsl:when test="normalize-space(javaee:renderer-type)">
-												<code><xsl:value-of select="javaee:renderer-type" /></code>
-											</xsl:when>
-											<xsl:otherwise>
-												<i>None</i>
-											</xsl:otherwise>
-										</xsl:choose>
-									</td>
-								</tr>
-							</xsl:if>
-							<tr>
-								<xsl:attribute name="class">
-									<xsl:choose>
-										<xsl:when test="normalize-space(javaee:component-type)">altColor</xsl:when>
-										<xsl:otherwise>rowColor</xsl:otherwise>
-									</xsl:choose>
-								</xsl:attribute>
-								<td class="colFirst">Description</td>
-								<td class="colLast">
-									<xsl:choose>
-										<xsl:when test="normalize-space(javaee:description)">
-											<xsl:value-of select="javaee:description" disable-output-escaping="yes" />
-										</xsl:when>
-										<xsl:otherwise>
-											<i>None</i>
-										</xsl:otherwise>
-									</xsl:choose>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</li>
-			</ul>
+				<caption>
+					<span><xsl:value-of select="$caption" /></span>
+					<span class="tabEnd">&#160;</span>
+				</caption>
+				<thead>
+					<tr>
+						<th class="colFirst" scope="col">Info</th>
+						<th class="colLast" scope="col">Value</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="rowColor">
+						<td class="colFirst"><xsl:value-of select="$id-name" /></td>
+						<td class="colLast">
+							<xsl:choose>
+								<xsl:when test="normalize-space($id-value)">
+									<code><xsl:value-of select="$id-value" /></code>
+								</xsl:when>
+								<xsl:otherwise>
+									<i>None</i>
+								</xsl:otherwise>
+							</xsl:choose>
+						</td>
+					</tr>
+					<tr class="altColor">
+						<td class="colFirst">Handler Class</td>
+						<td class="colLast">
+							<xsl:choose>
+								<xsl:when test="normalize-space(javaee:handler-class)">
+									<code><xsl:value-of select="javaee:handler-class" /></code>
+								</xsl:when>
+								<xsl:otherwise>
+									<i>None</i>
+								</xsl:otherwise>
+							</xsl:choose>
+						</td>
+					</tr>
+					<xsl:if test="normalize-space(javaee:component-type)">
+						<tr class="rowColor">
+							<td class="colFirst">Renderer Type</td>
+							<td class="colLast">
+								<xsl:choose>
+									<xsl:when test="normalize-space(javaee:renderer-type)">
+										<code><xsl:value-of select="javaee:renderer-type" /></code>
+									</xsl:when>
+									<xsl:otherwise>
+										<i>None</i>
+									</xsl:otherwise>
+								</xsl:choose>
+							</td>
+						</tr>
+					</xsl:if>
+					<tr>
+						<xsl:attribute name="class">
+							<xsl:choose>
+								<xsl:when test="normalize-space(javaee:component-type)">altColor</xsl:when>
+								<xsl:otherwise>rowColor</xsl:otherwise>
+							</xsl:choose>
+						</xsl:attribute>
+						<td class="colFirst">Description</td>
+						<td class="colLast">
+							<xsl:choose>
+								<xsl:when test="normalize-space(javaee:description)">
+									<xsl:value-of select="javaee:description" disable-output-escaping="yes" />
+								</xsl:when>
+								<xsl:otherwise>
+									<i>None</i>
+								</xsl:otherwise>
+							</xsl:choose>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</xsl:template>
 
