@@ -3,13 +3,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 >
 	<modelVersion>4.0.0</modelVersion>
+	<prerequisites>
+		<maven>3.0.0</maven>
+	</prerequisites>
 
 	<groupId>org.omnifaces</groupId>
 	<artifactId>vdldoc</artifactId>
-	<packaging>jar</packaging>
-	<name>Vdldoc</name>
 	<version>2.0</version>
+	<packaging>jar</packaging>
+
+	<name>Vdldoc</name>
 	<description>Facelets .taglib.xml documentation generator</description>
+
 	<url>http://vdldoc.omnifaces.org</url>
 	<organization>
 		<name>OmniFaces</name>
@@ -50,50 +55,18 @@
 		</developer>
 	</developers>
 
-	<!-- Build part provided by mellowaredev (http://code.google.com/u/mellowaredev) -->
 	<build>
-		<sourceDirectory>${basedir}/src</sourceDirectory>
 		<plugins>
 			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>${jdk.version}</source>
-					<target>${jdk.version}</target>
-					<compilerVersion>${jdk.version}</compilerVersion>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.5</version>
-				<executions>
-					<execution>
-						<id>copy-resources</id>
-						<!-- here the phase you need -->
-						<phase>validate</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/classes/org/omnifaces/vdldoc/resources</outputDirectory>
-							<resources>          
-								<resource>
-									<directory>${basedir}/src/org/omnifaces/vdldoc/resources</directory>
-								</resource>
-							</resources>              
-						</configuration>            
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.2.2</version>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
 				<configuration>
-					<preparationGoals>clean verify javadoc:jar source:jar</preparationGoals>
-					<completionGoals>deploy</completionGoals>
+					<source>${javase.version}</source>
+					<target>${javase.version}</target>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.4</version>
@@ -102,9 +75,6 @@
 						<manifest>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>src/</classpathPrefix>
-							<mainClass>org.omnifaces.vdldoc.Main</mainClass>
 						</manifest>
 						<manifestEntries>
 							<URL>${project.url}</URL>
@@ -113,17 +83,7 @@
 					</archive>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.9</version>
-				<configuration>
-					<addGroupIdToProjectName>true</addGroupIdToProjectName>
-					<downloadSources>true</downloadSources>
-					<downloadJavadocs>true</downloadJavadocs>
-					<ajdtVersion>none</ajdtVersion>
-				</configuration>
-			</plugin>
+			
 		</plugins>
 	</build>
 
