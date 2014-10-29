@@ -483,10 +483,6 @@ public class VdldocGenerator {
 		copyResourceToFile("stylesheet.css", outputDirectory);
 		File outputResourceDirectory = new File(outputDirectory, "resources");
 		outputResourceDirectory.mkdirs();
-		copyResourceToFile("background.gif", outputResourceDirectory);
-		copyResourceToFile("tab.gif", outputResourceDirectory);
-		copyResourceToFile("titlebar_end.gif", outputResourceDirectory);
-		copyResourceToFile("titlebar.gif", outputResourceDirectory);
 
 		println("OK!");
 	}
