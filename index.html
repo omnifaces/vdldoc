@@ -20,6 +20,11 @@
 
           <h1 id="project_title">Vdldoc</h1>
           <h2 id="project_tagline">Facelets .taglib.xml documentation generator</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/omnifaces/vdldoc/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/omnifaces/vdldoc/tarball/master">Download this project as a tar.gz file</a>
+            </section>
         </header>
     </div>
 
@@ -27,7 +32,7 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h2>
-<a name="what-is-vdldoc" class="anchor" href="#what-is-vdldoc"><span class="octicon octicon-link"></span></a>What is Vdldoc?</h2>
+<a id="what-is-vdldoc" class="anchor" href="#what-is-vdldoc" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is Vdldoc?</h2>
 
 <p>Vdldoc is a forked and rewritten version of old JSP TLDdoc Generator as
 previously available at
@@ -39,87 +44,85 @@ for Facelets <code>*.taglib.xml</code> files. The generated documentation has Ja
 <p>As a preview, you can check the following online examples:</p>
 
 <ul>
-<li>  <a href="http://omnifaces.org">OmniFaces</a> <a href="http://omnifaces.org/docs/vdldoc/1.8/">VDL
-documentation</a>
-</li>
-<li>  <a href="http://primefaces.org">PrimeFaces</a> <a href="http://www.primefaces.org/docs/vdl/5.0/core/">5.0 VDL
-documentation</a>
-</li>
+<li>  <a href="http://omnifaces.org">OmniFaces</a> <a href="http://omnifaces.org/docs/vdldoc/2.0/">VDL
+documentation</a> (Vdldoc 2.0)</li>
+<li>  <a href="http://primefaces.org">PrimeFaces</a> <a href="http://www.primefaces.org/docs/vdl/5.1/core/">5.1 VDL
+documentation</a> (Vdldoc 1.1)</li>
 <li>  <a href="http://jboss.org/richfaces">RichFaces</a> <a href="http://docs.jboss.org/richfaces/5.0.X/5.0.0.Alpha3/vdldoc/">5.0.0 Alpha3 VDL
-documentation</a>
-</li>
-</ul><h2>
-<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+documentation</a> (Vdldoc 1.1)</li>
+</ul>
 
-<p>Just drop the <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/">Vdldoc 1.2 JAR file</a> file
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Just drop the <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/">Vdldoc 2.0 JAR file</a> file
 into the classpath. If you are using Maven, you can include the following
 dependency in your <code>pom.xml</code>:</p>
 
-<div class="highlight highlight-xml"><pre><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.omnifaces<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>vdldoc<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.2<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
-</pre></div>
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;org.omnifaces&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;vdldoc&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;2.0&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <h2>
-<a name="download" class="anchor" href="#download"><span class="octicon octicon-link"></span></a>Download</h2>
+<a id="download" class="anchor" href="#download" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download</h2>
 
 <ul>
 <li>
-<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2.jar">Vdldoc library</a>
+<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/vdldoc-2.0.jar">Vdldoc library</a>
 
 <ul>
 <li>
-<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2.jar">1.2</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.1/vdldoc-1.1.jar">1.1</a> - <a href="http://vdldoc.omnifaces.org/downloads/vdldoc-1.0.jar">1.0</a>
+<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/vdldoc-2.0.jar">2.0</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2.jar">1.2</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.1/vdldoc-1.1.jar">1.1</a> - <a href="http://vdldoc.omnifaces.org/downloads/vdldoc-1.0.jar">1.0</a>
 </li>
 </ul>
 </li>
 <li>
-<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2-sources.jar">Vdldoc sources</a>
+<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/vdldoc-2.0-sources.jar">Vdldoc sources</a>
 
 <ul>
 <li>
-<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2-sources.jar">1.2</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.1/vdldoc-1.1-sources.jar">1.1</a> - <a href="http://vdldoc.omnifaces.org/downloads/vdldoc-1.0-sources.jar">1.0</a>
+<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/vdldoc-2.0-sources.jar">2.0</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2-sources.jar">1.2</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.1/vdldoc-1.1-sources.jar">1.1</a> - <a href="http://vdldoc.omnifaces.org/downloads/vdldoc-1.0-sources.jar">1.0</a>
 </li>
 </ul>
 </li>
 <li>
-<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2-javadoc.jar">Vdldoc javadoc</a>
+<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/vdldoc-2.0-javadoc.jar">Vdldoc javadoc</a>
 
 <ul>
 <li>
-<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2-javadoc.jar">1.2</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.1/vdldoc-1.1-javadoc.jar">1.1</a>
+<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/vdldoc-2.0-javadoc.jar">2.0</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2-javadoc.jar">1.2</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.1/vdldoc-1.1-javadoc.jar">1.1</a>
 </li>
 </ul>
 </li>
-</ul><h2>
-<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+</ul>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
 <p>Much like old TLDdoc usage, once the jar is in runtime classpath, run it
 as follows:</p>
 
-<div class="highlight highlight-java"><pre><span class="n">VdldocGenerator</span> <span class="n">generator</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">VdldocGenerator</span><span class="o">();</span>
-<span class="n">generator</span><span class="o">.</span><span class="na">setWindowTitle</span><span class="o">(</span><span class="s">"Browser window title"</span><span class="o">);</span> <span class="c1">// Else default will be used.</span>
-<span class="n">generator</span><span class="o">.</span><span class="na">setDocTitle</span><span class="o">(</span><span class="s">"Documentation title"</span><span class="o">);</span> <span class="c1">// Else default will be used.</span>
-<span class="n">generator</span><span class="o">.</span><span class="na">setOutputDirectory</span><span class="o">(</span><span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="s">"/path/to/vdldoc"</span><span class="o">));</span> <span class="c1">// Else ./vdldoc will be used.</span>
-<span class="n">generator</span><span class="o">.</span><span class="na">setFacesConfig</span><span class="o">(</span><span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="s">"/path/to/faces-config.xml"</span><span class="o">));</span> <span class="c1">// Optional.</span>
-<span class="n">generator</span><span class="o">.</span><span class="na">setAttributes</span><span class="o">(</span><span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="s">"/path/to/cc-attributes.properties"</span><span class="o">));</span> <span class="c1">// Optional.</span>
-<span class="n">generator</span><span class="o">.</span><span class="na">addTaglib</span><span class="o">(</span><span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="s">"/path/to/foo.taglib.xml"</span><span class="o">));</span>
-<span class="n">generator</span><span class="o">.</span><span class="na">addTaglib</span><span class="o">(</span><span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="s">"/path/to/bar.taglib.xml"</span><span class="o">));</span>
-<span class="c1">// ...</span>
-<span class="n">generator</span><span class="o">.</span><span class="na">generate</span><span class="o">();</span>
-</pre></div>
+<div class="highlight highlight-java"><pre><span class="pl-stj">VdldocGenerator</span> generator <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">VdldocGenerator</span>();
+generator<span class="pl-k">.</span>setWindowTitle(<span class="pl-s1"><span class="pl-pds">"</span>Browser window title<span class="pl-pds">"</span></span>); <span class="pl-c">// Else default will be used.</span>
+generator<span class="pl-k">.</span>setDocTitle(<span class="pl-s1"><span class="pl-pds">"</span>Documentation title<span class="pl-pds">"</span></span>); <span class="pl-c">// Else default will be used.</span>
+generator<span class="pl-k">.</span>setOutputDirectory(<span class="pl-k">new</span> <span class="pl-stj">File</span>(<span class="pl-s1"><span class="pl-pds">"</span>/path/to/vdldoc<span class="pl-pds">"</span></span>)); <span class="pl-c">// Else ./vdldoc will be used.</span>
+generator<span class="pl-k">.</span>setFacesConfig(<span class="pl-k">new</span> <span class="pl-stj">File</span>(<span class="pl-s1"><span class="pl-pds">"</span>/path/to/faces-config.xml<span class="pl-pds">"</span></span>)); <span class="pl-c">// Optional.</span>
+generator<span class="pl-k">.</span>setAttributes(<span class="pl-k">new</span> <span class="pl-stj">File</span>(<span class="pl-s1"><span class="pl-pds">"</span>/path/to/cc-attributes.properties<span class="pl-pds">"</span></span>)); <span class="pl-c">// Optional.</span>
+generator<span class="pl-k">.</span>addTaglib(<span class="pl-k">new</span> <span class="pl-stj">File</span>(<span class="pl-s1"><span class="pl-pds">"</span>/path/to/foo.taglib.xml<span class="pl-pds">"</span></span>));
+generator<span class="pl-k">.</span>addTaglib(<span class="pl-k">new</span> <span class="pl-stj">File</span>(<span class="pl-s1"><span class="pl-pds">"</span>/path/to/bar.taglib.xml<span class="pl-pds">"</span></span>));
+<span class="pl-c">// ...</span>
+generator<span class="pl-k">.</span>generate();</pre></div>
 
 <p>The <code>&lt;facelet-taglib id&gt;</code> will be used as the taglib prefix. Make sure
 that you have supplied one. E.g.</p>
 
-<div class="highlight highlight-xml"><pre><span class="nt">&lt;facelet-taglib</span> <span class="na">id=</span><span class="s">"o"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;description&gt;</span>OmniFaces UI components.<span class="nt">&lt;/description&gt;</span>
-    <span class="nt">&lt;namespace&gt;</span>http://omnifaces.org/ui<span class="nt">&lt;/namespace&gt;</span>
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">facelet-taglib</span> <span class="pl-e">id</span>=<span class="pl-s1"><span class="pl-pds">"</span>o<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">description</span>&gt;OmniFaces UI components.&lt;/<span class="pl-ent">description</span>&gt;
+    &lt;<span class="pl-ent">namespace</span>&gt;http://omnifaces.org/ui&lt;/<span class="pl-ent">namespace</span>&gt;
     ...
-<span class="nt">&lt;/facelet-taglib&gt;</span>
-</pre></div>
+&lt;/<span class="pl-ent">facelet-taglib</span>&gt;</pre></div>
 
 <p>Otherwise it will default to the base filename without the <code>.taglib.xml</code>
 extension.</p>
@@ -132,27 +135,25 @@ unrelated to Vdldoc.</p>
 
 <p>As to the <code>cc-attributes.properties</code> file (the file name is by the way fully free to your choice, as long as it's a valid Java <code>.properties</code> file), this is specifically for implied composite component attributes which are not definied via <code>&lt;cc:attribute&gt;</code>. Therein you can define the display name, description, required and type columns of the attributes in the following syntax:</p>
 
-<div class="highlight highlight-ini"><pre><span class="c1"># id</span>
-<span class="na">id.displayName</span><span class="o">=</span><span class="s">id</span>
-<span class="na">id.description</span><span class="o">=</span><span class="s">The identifier of the component.</span>
-<span class="na">id.required</span><span class="o">=</span><span class="s">false</span>
-<span class="na">id.type</span><span class="o">=</span><span class="s">java.lang.String</span>
-<span class="c1"># rendered</span>
-<span class="na">rendered.displayName</span><span class="o">=</span><span class="s">rendered</span>
-<span class="na">rendered.description</span><span class="o">=</span><span class="s">Boolean flag indicating whether or not this component is to be rendered during the RENDER_RESPONSE phase of the JSF lifecycle.  The default value is true.</span>
-<span class="na">rendered.required</span><span class="o">=</span><span class="s">false</span>
-<span class="na">rendered.type</span><span class="o">=</span><span class="s">java.lang.Boolean</span>
-</pre></div>
+<div class="highlight highlight-ini"><pre><span class="pl-c"># id</span>
+<span class="pl-k">id.displayName</span>=id
+<span class="pl-k">id.description</span>=The identifier of the component.
+<span class="pl-k">id.required</span>=false
+<span class="pl-k">id.type</span>=java.lang.String
+<span class="pl-c"># rendered</span>
+<span class="pl-k">rendered.displayName</span>=rendered
+<span class="pl-k">rendered.description</span>=Boolean flag indicating whether or not this component is to be rendered during the RENDER_RESPONSE phase of the JSF lifecycle.  The default value is true.
+<span class="pl-k">rendered.required</span>=false
+<span class="pl-k">rendered.type</span>=java.lang.Boolean</pre></div>
 
 <p>If this file is not specified, then the above specified defaults will be used.</p>
 
 <h2>
-<a name="cli" class="anchor" href="#cli"><span class="octicon octicon-link"></span></a>CLI</h2>
+<a id="cli" class="anchor" href="#cli" aria-hidden="true"><span class="octicon octicon-link"></span></a>CLI</h2>
 
 <p>The <code>vdldoc.jar</code> can be also run in the command line like so: </p>
 
-<div class="highlight highlight-sh"><pre>java -jar vdldoc-1.1.jar foo.taglib.xml bar.taglib.xml
-</pre></div>
+<div class="highlight highlight-sh"><pre>java -jar vdldoc-2.0.jar foo.taglib.xml bar.taglib.xml</pre></div>
 
 <p>The files will by default be generated into a new <code>/vdldoc</code> folder in
 the working directory. The usage options are laid out below:</p>
@@ -180,17 +181,21 @@ taglib1 [taglib2 [taglib3 ...]]: Space separated paths to .taglib.xml files.
 </code></pre>
 
 <h2>
-<a name="version-history" class="anchor" href="#version-history"><span class="octicon octicon-link"></span></a>Version history</h2>
+<a id="version-history" class="anchor" href="#version-history" aria-hidden="true"><span class="octicon octicon-link"></span></a>Version history</h2>
 
 <ul>
+<li>
+<strong>2.0</strong> - Changed look'n'feel to Java 8 javadoc.</li>
 <li>
 <strong>1.2</strong> - Added support for composite components available by <code>&lt;composite-library-name&gt;</code> entry of <code>.taglib.xml</code> files.</li>
 <li>
 <strong>1.1</strong> - Added support for managed beans definied in <code>&lt;managed-bean&gt;</code> entries of <code>faces-config.xml</code> file.</li>
 <li>
 <strong>1.0</strong> - Initial release, just forked TLDdoc and altered for Facelets <code>.taglib.xml</code> files with Java 7 javadoc look'n'feel, with support for <code>&lt;tag&gt;</code> and <code>&lt;function&gt;</code> entries of <code>.taglib.xml</code> files.</li>
-</ul><h2>
-<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+</ul>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
 
 <p>Vdldoc has BSD license, because the original TLDDoc was also BSD. Note
 that we would personally like it to be Apache 2.0 license instead, but
