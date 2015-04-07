@@ -481,7 +481,7 @@
 						<br />(<i>signature must match </i><code><xsl:value-of select="javaee:method-signature" /></code>)
 					</xsl:when>
 					<xsl:otherwise>
-						<code>java.lang.Object</code>
+						<code>java.lang.String</code>
 					</xsl:otherwise>
 				</xsl:choose>
 			</td>
