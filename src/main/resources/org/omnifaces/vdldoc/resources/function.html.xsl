@@ -68,7 +68,14 @@
 					</title>
 					<meta name="keywords" content="$title" />
 					<link rel="stylesheet" type="text/css" title="Style">
-						<xsl:attribute name="href"><xsl:value-of select="javaee:vdldoc/javaee:config/@css-location" /></xsl:attribute>
+						<xsl:attribute name="href">
+							<xsl:choose>
+								<xsl:when test="/javaee:vdldoc/javaee:config/@css-location">
+									<xsl:value-of select="/javaee:vdldoc/javaee:config/@css-location" />
+								</xsl:when>
+								<xsl:otherwise>../stylesheet.css</xsl:otherwise>
+							</xsl:choose>
+						</xsl:attribute>
 					</link>
 				</head>
 				<body>

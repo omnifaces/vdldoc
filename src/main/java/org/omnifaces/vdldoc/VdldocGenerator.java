@@ -83,9 +83,6 @@ public class VdldocGenerator {
 	/** The default title for the VDL documentation index page. */
 	private static final String DEFAULT_DOC_TITLE = DEFAULT_WINDOW_TITLE;
 
-	/** The default location of CSS file. @since 2.1 */
-	private static final String DEFAULT_CSS_LOCATION = "stylesheet.css";
-
 	/** The sun.com XML namespace for Java EE. */
 	private static final String NS_JAVAEE_SUN = "http://java.sun.com/xml/ns/javaee";
 
@@ -141,7 +138,7 @@ public class VdldocGenerator {
 	private String docTitle = DEFAULT_DOC_TITLE;
 
 	/** The location of the CSS file. @since 2.1 */
-	private String cssLocation = DEFAULT_CSS_LOCATION;
+	private String cssLocation;
 
 	/** The properties file for implied attributes of composite components. */
 	private File attributesFile;
@@ -393,8 +390,11 @@ public class VdldocGenerator {
 		// Create configuration element <config>:
 		Element configElement = summaryDocument.createElementNS(NS_JAVAEE_JCP, "config");
 		vdldocElement.appendChild(configElement);
-		configElement.setAttribute("css-location", cssLocation);
 		configElement.setAttribute("hide-generated-by", String.valueOf(hideGeneratedBy));
+
+		if (cssLocation != null) {
+			configElement.setAttribute("css-location", cssLocation);
+		}
 
 		Element windowTitle = summaryDocument.createElementNS(NS_JAVAEE_JCP, "window-title");
 		windowTitle.appendChild(summaryDocument.createTextNode(this.windowTitle));
