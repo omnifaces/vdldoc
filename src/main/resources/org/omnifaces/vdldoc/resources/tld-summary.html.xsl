@@ -59,7 +59,9 @@
 					<title>
 						<xsl:value-of select="$title" />
 					</title>
-					<link rel="stylesheet" type="text/css" href="../stylesheet.css" title="styie" />
+					<link rel="stylesheet" type="text/css" title="Style">
+						<xsl:attribute name="href"><xsl:value-of select="javaee:vdldoc/javaee:config/@css-location" /></xsl:attribute>
+					</link>
 				</head>
 				<body>
 					<script type="text/javascript">

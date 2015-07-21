@@ -48,6 +48,7 @@ public class Main {
 		+ "                          VDL Documentation Generator - Generated Documentation\n"
 		+ "   -doctitle <html-code>  Documentation title for the VDL index page.          \n"
 		+ "                          This defaults to the same as window title.           \n"
+		+ "   -css <uri>             URI of the CSS file. This defaults to internal CSS.  \n"
 		+ "   -facesconfig <path>    Path to the faces-config.xml file.                   \n"
 		+ "   -attr <path>           Path to properties file containing descriptions for  \n"
 		+ "                          implied attributes of composite components, such as  \n"
@@ -85,6 +86,9 @@ public class Main {
 				}
 				else if (arg.equals("-doctitle")) {
 					generator.setDocTitle(iter.next());
+				}
+				else if (arg.equals("-css")) {
+					generator.setCssLocation(iter.next());
 				}
 				else if (arg.equals("-facesconfig")) {
 					generator.setFacesConfig(new File(iter.next()));

@@ -44,7 +44,9 @@
 		<html lang="en">
 			<head>
 				<title>All Tags / Functions</title>
-				<link rel="stylesheet" type="text/css" href="stylesheet.css" title="Style" />
+				<link rel="stylesheet" type="text/css" title="Style">
+					<xsl:attribute name="href"><xsl:value-of select="javaee:vdldoc/javaee:config/@css-location" /></xsl:attribute>
+				</link>
 			</head>
 			<body>
 				<h1 class="bar">All Tags / Functions</h1>
