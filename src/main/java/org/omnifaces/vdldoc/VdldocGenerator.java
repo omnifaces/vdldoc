@@ -83,6 +83,9 @@ public class VdldocGenerator {
 	/** The default title for the VDL documentation index page. */
 	private static final String DEFAULT_DOC_TITLE = DEFAULT_WINDOW_TITLE;
 
+	/** The default CSS location. @since 2.1 */
+	private static final String DEFAULT_CSS_LOCATION = "stylesheet.css";
+
 	/** The sun.com XML namespace for Java EE. */
 	private static final String NS_JAVAEE_SUN = "http://java.sun.com/xml/ns/javaee";
 
@@ -392,9 +395,10 @@ public class VdldocGenerator {
 		vdldocElement.appendChild(configElement);
 		configElement.setAttribute("hide-generated-by", String.valueOf(hideGeneratedBy));
 
-		if (cssLocation != null) {
-			configElement.setAttribute("css-location", cssLocation);
-		}
+		String rootCssLocation = (cssLocation != null) ? cssLocation : DEFAULT_CSS_LOCATION;
+		String subfolderCssLocation = (rootCssLocation.matches("^(https?://|/).+") ? "" : "../") + rootCssLocation;
+		configElement.setAttribute("css-location", rootCssLocation);
+		configElement.setAttribute("subfolder-css-location", subfolderCssLocation);
 
 		Element windowTitle = summaryDocument.createElementNS(NS_JAVAEE_JCP, "window-title");
 		windowTitle.appendChild(summaryDocument.createTextNode(this.windowTitle));
@@ -517,7 +521,11 @@ public class VdldocGenerator {
 		print("Copying static files... ");
 
 		outputDirectory.mkdirs();
-		copyResourceToFile("stylesheet.css", outputDirectory);
+
+		if (cssLocation == null) {
+			copyResourceToFile("stylesheet.css", outputDirectory);
+		}
+
 		File outputResourceDirectory = new File(outputDirectory, "resources");
 		outputResourceDirectory.mkdirs();
 
