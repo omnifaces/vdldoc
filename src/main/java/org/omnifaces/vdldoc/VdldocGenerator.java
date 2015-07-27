@@ -767,7 +767,8 @@ public class VdldocGenerator {
 	 */
 	private static Node cloneAndChangeNamespace(Document document, Node from, Node to) {
 		if (from.getNodeType() == Node.ELEMENT_NODE) {
-			Element clone = document.createElementNS(NS_JAVAEE_JCP, from.getNodeName());
+			String oldNS = from.getNamespaceURI();
+			Element clone = document.createElementNS(NS_JAVAEE_SUN.equals(oldNS) ? NS_JAVAEE_JCP : oldNS, from.getNodeName());
 			to.appendChild(clone);
 
 			for (int i = 0; i < from.getAttributes().getLength(); i++) {
