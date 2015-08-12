@@ -115,7 +115,7 @@ public class VdldocGenerator {
 	private static final String WARNING_OLD_NS_JAVAEE =
 		"WARNING: %s uses old java.sun.com XML namespace. It's recommend to upgrade it to xmlns.jcp.org... ";
 	private static final String WARNING_ID_MISSING =
-		"WARNING: %s does not have <facelet-taglib id> attribute. Defaulting to base filename '%s'... ";
+		"WARNING: %s does not have <short-name> nor <facelet-taglib id> attribute. Defaulting to base filename '%s'... ";
 	private static final String WARNING_UNSUPPORTED_ATTRIBUTE =
 		"WARNING: '%s' is not a supported composite attribute. Skipping!";
 	private static final String WARNING_INVALID_ATTRIBUTE =
@@ -444,14 +444,15 @@ public class VdldocGenerator {
 					throw new IllegalArgumentException(String.format(ERROR_TAGLIB_MISSING, taglib.getName()));
 				}
 
-				String id = taglibNode.getAttribute("id");
+				NodeList shortNames = taglibNode.getElementsByTagNameNS("*", "short-name");
+				String id = shortNames.getLength() > 0 ? shortNames.item(0).getTextContent() : taglibNode.getAttribute("id");
 
 				if (id == null || id.trim().isEmpty()) {
 					id = taglib.getName().substring(0, taglib.getName().indexOf('.'));
-					taglibNode.setAttribute("id", id);
 					print(String.format(WARNING_ID_MISSING, taglib.getName(), id));
 				}
 
+				taglibNode.setAttribute("id", id);
 				vdldocElement.appendChild(taglibNode);
 
 				if (compositeNodes.getLength() > 0) {
