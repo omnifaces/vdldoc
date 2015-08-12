@@ -74,9 +74,6 @@
 					</link>
 				</head>
 				<body>
-					<script type="text/javascript">
-						if (location.href.indexOf('is-external=true') == -1) parent.document.title = "Function Documentation";
-					</script>
 					<noscript>
 						<div>JavaScript is disabled on your browser.</div>
 					</noscript>
