@@ -257,26 +257,18 @@ public class CompositeComponentHandler extends DefaultHandler {
 
 				if (tagExtensionNode != null) {
 
+					Element deprecatedElement = document.createElementNS(VDLDOC_NAMESPACE, DEPRECATED);
+					String deprecatedShortDescription = attributes.getValue(SHORT_DESCRIPTION);
 					String deprecatedValue = attributes.getValue(VALUE);
 
-					if (deprecatedValue != null) {
-
-						Boolean deprecated = Boolean.parseBoolean(deprecatedValue);
-						Element deprecationElement = document.createElementNS(VDLDOC_NAMESPACE, DEPRECATION);
-						Element deprecatedElement = document.createElementNS(VDLDOC_NAMESPACE, DEPRECATED);
-						deprecatedElement.setTextContent(deprecated.toString());
-						deprecationElement.appendChild(deprecatedElement);
-
-						String descriptionValue = attributes.getValue(SHORT_DESCRIPTION);
-
-						if (descriptionValue != null) {
-							Element descriptionElement = document.createElementNS(VDLDOC_NAMESPACE, DESCRIPTION);
-							descriptionElement.setTextContent(descriptionValue);
-							deprecationElement.appendChild(descriptionElement);
-						}
-
-						tagExtensionNode.appendChild(deprecationElement);
+					if (deprecatedShortDescription != null) {
+						deprecatedElement.setTextContent(deprecatedShortDescription);
 					}
+					else if (deprecatedValue != null) {
+						deprecatedElement.setTextContent(deprecatedValue);
+					}
+
+					tagExtensionNode.appendChild(deprecatedElement);
 				}
 			} else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(VALUE_HOLDER)) {
 				if (tagNode != null) {

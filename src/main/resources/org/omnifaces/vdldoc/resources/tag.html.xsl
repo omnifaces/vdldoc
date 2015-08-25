@@ -124,15 +124,15 @@
 							<xsl:value-of select="$id" />
 						</h1>
 						<h2 class="title">
+							Tag
 							<xsl:choose>
-								<xsl:when test="javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
-									Tag
+								<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
+								<xsl:when test="javaee:tag-extension/vdldoc:deprecated or javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
 									<del>
 										<xsl:value-of select="javaee:tag-name" />
 									</del>
 								</xsl:when>
 								<xsl:otherwise>
-									Tag
 									<xsl:value-of select="javaee:tag-name" />
 								</xsl:otherwise>
 							</xsl:choose>
@@ -149,17 +149,25 @@
 										<dt>Description:</dt>
 										<dd>
 											<div class="block">
+												<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
+												<xsl:if test="javaee:tag-extension/vdldoc:deprecated or javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+													<b>Deprecated. </b>
+													<xsl:choose>
+														<xsl:when test="javaee:tag-extension/vdldoc:deprecated">
+															<xsl:value-of select="javaee:tag-extension/vdldoc:deprecated" />
+														</xsl:when>
+														<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
+														<xsl:when test="javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+															<xsl:value-of select="javaee:tag-extension/vdldoc:deprecation/vdldoc:description" />
+														</xsl:when>
+													</xsl:choose>
+													<xsl:text>&#160;</xsl:text>
+												</xsl:if>
 												<xsl:choose>
 													<xsl:when test="normalize-space(javaee:description)">
-														<xsl:if test="javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
-															<b>Deprecated. </b> <xsl:value-of select="javaee:tag-extension/vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
-														</xsl:if>
 														<xsl:value-of select="javaee:description" disable-output-escaping="yes" />
 													</xsl:when>
 													<xsl:otherwise>
-														<xsl:if test="javaee:tag-extension/javaee:deprecation/javaee:deprecated = 'true'">
-															<b>Deprecated. </b> <xsl:value-of select="javaee:tag-extension/vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
-														</xsl:if>
 														<i>No Description</i>
 													</xsl:otherwise>
 												</xsl:choose>
@@ -437,7 +445,8 @@
 
 			<td class="colFirst">
 				<xsl:choose>
-					<xsl:when test="../javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+					<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
+					<xsl:when test="../javaee:tag-extension/vdldoc:deprecated or ../javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
 						<a>
 							<xsl:attribute name="href">
 								<xsl:text>#</xsl:text><xsl:value-of select="javaee:name" />

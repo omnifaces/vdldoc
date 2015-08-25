@@ -124,15 +124,15 @@
 							<xsl:value-of select="$id" />
 						</h1>
 						<h2 class="title">
+							Tag
 							<xsl:choose>
-								<xsl:when test="vdldoc:deprecation/vdldoc:deprecated = 'true'">
-									Tag
+								<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
+								<xsl:when test="vdldoc:deprecated or vdldoc:deprecation/vdldoc:deprecated = 'true'">
 									<del>
 										<xsl:value-of select="vdldoc:el-variable-name" />
 									</del>
 								</xsl:when>
 								<xsl:otherwise>
-									Tag
 									<xsl:value-of select="vdldoc:el-variable-name" />
 								</xsl:otherwise>
 							</xsl:choose>
@@ -149,17 +149,25 @@
 										<dt>Description:</dt>
 										<dd>
 											<div class="block">
+												<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
+												<xsl:if test="vdldoc:deprecated or vdldoc:deprecation/vdldoc:deprecated = 'true'">
+													<b>Deprecated. </b>
+													<xsl:choose>
+														<xsl:when test="vdldoc:deprecated">
+															<xsl:value-of select="vdldoc:deprecated" />
+														</xsl:when>
+														<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
+														<xsl:when test="vdldoc:deprecation/vdldoc:deprecated = 'true'">
+															<xsl:value-of select="vdldoc:deprecation/vdldoc:description" />
+														</xsl:when>
+													</xsl:choose>
+													<xsl:text>&#160;</xsl:text>
+												</xsl:if>
 												<xsl:choose>
 													<xsl:when test="normalize-space(vdldoc:description)">
-														<xsl:if test="vdldoc:deprecation/vdldoc:deprecated = 'true'">
-															<b>Deprecated. </b><xsl:value-of select="vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
-														</xsl:if>
 														<xsl:value-of select="vdldoc:description" disable-output-escaping="yes" />
 													</xsl:when>
 													<xsl:otherwise>
-														<xsl:if test="vdldoc:deprecation/vdldoc:deprecated = 'true'">
-															<b>Deprecated. </b><xsl:value-of select="vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
-														</xsl:if>
 														<i>No Description</i>
 													</xsl:otherwise>
 												</xsl:choose>

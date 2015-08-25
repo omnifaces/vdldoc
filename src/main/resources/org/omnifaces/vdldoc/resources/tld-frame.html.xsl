@@ -106,7 +106,8 @@
 				<xsl:attribute name="href"><xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
 				<xsl:attribute name="target">tagFrame</xsl:attribute>
 				<xsl:choose>
-					<xsl:when test="javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+					<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
+					<xsl:when test="javaee:tag-extension/vdldoc:deprecated or javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
 						<del>
 							<xsl:value-of select="../@id" />:<xsl:value-of select="javaee:tag-name" />
 						</del>
@@ -135,7 +136,8 @@
 				<xsl:attribute name="href"><xsl:value-of select="vdldoc:el-variable-name" />.el.html</xsl:attribute>
 				<xsl:attribute name="target">tagFrame</xsl:attribute>
 				<xsl:choose>
-					<xsl:when test="vdldoc:deprecation/vdldoc:deprecated = 'true'">
+					<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
+					<xsl:when test="vdldoc:deprecated or vdldoc:deprecation/vdldoc:deprecated = 'true'">
 						<del>
 							<xsl:value-of select="vdldoc:el-variable-name" />
 						</del>

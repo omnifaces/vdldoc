@@ -297,7 +297,8 @@
 					<a>
 						<xsl:attribute name="href"><xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
 						<xsl:choose>
-							<xsl:when test="javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+							<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
+							<xsl:when test="javaee:tag-extension/vdldoc:deprecated or javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
 								<del>
 									<xsl:value-of select="javaee:tag-name" />
 								</del>
@@ -310,17 +311,25 @@
 				</b>
 			</td>
 			<td class="colLast">
+				<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
+				<xsl:if test="javaee:tag-extension/vdldoc:deprecated or javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+					<b>Deprecated. </b>
+					<xsl:choose>
+						<xsl:when test="javaee:tag-extension/vdldoc:deprecated">
+							<xsl:value-of select="javaee:tag-extension/vdldoc:deprecated" />
+						</xsl:when>
+						<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
+						<xsl:when test="javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+							<xsl:value-of select="javaee:tag-extension/vdldoc:deprecation/vdldoc:description" />
+						</xsl:when>
+					</xsl:choose>
+					<xsl:text>&#160;</xsl:text>
+				</xsl:if>
 				<xsl:choose>
 					<xsl:when test="normalize-space(javaee:description)">
-						<xsl:if test="javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
-							<b>Deprecated. </b> <xsl:value-of select="javaee:tag-extension/vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
-						</xsl:if>
 						<xsl:value-of select="javaee:description" disable-output-escaping="yes" />
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:if test="javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
-							<b>Deprecated. </b> <xsl:value-of select="javaee:tag-extension/vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
-						</xsl:if>
 						<i>No Description</i>
 					</xsl:otherwise>
 				</xsl:choose>
@@ -379,7 +388,8 @@
 					<a>
 						<xsl:attribute name="href"><xsl:value-of select="vdldoc:el-variable-name" />.el.html</xsl:attribute>
 						<xsl:choose>
-							<xsl:when test="vdldoc:deprecation/vdldoc:deprecated = 'true'">
+							<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
+							<xsl:when test="vdldoc:deprecated or vdldoc:deprecation/vdldoc:deprecated = 'true'">
 								<del>
 									<xsl:value-of select="vdldoc:el-variable-name" />
 								</del>
@@ -397,17 +407,25 @@
 				</code>
 			</td>
 			<td class="colLast">
+				<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
+				<xsl:if test="vdldoc:deprecated or vdldoc:deprecation/vdldoc:deprecated = 'true'">
+					<b>Deprecated. </b>
+					<xsl:choose>
+						<xsl:when test="vdldoc:deprecated">
+							<xsl:value-of select="vdldoc:deprecated" />
+						</xsl:when>
+						<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
+						<xsl:when test="vdldoc:deprecation/vdldoc:deprecated = 'true'">
+							<xsl:value-of select="vdldoc:deprecation/vdldoc:description" />
+						</xsl:when>
+					</xsl:choose>
+					<xsl:text>&#160;</xsl:text>
+				</xsl:if>
 				<xsl:choose>
-					<xsl:when test="normalize-space(vdldoc:description)">
-						<xsl:if test="vdldoc:deprecation/vdldoc:deprecated = 'true'">
-							<b>Deprecated. </b><xsl:value-of select="vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
-						</xsl:if>
-						<xsl:value-of select="vdldoc:description" disable-output-escaping="yes" />
+					<xsl:when test="normalize-space(javaee:description)">
+						<xsl:value-of select="javaee:description" disable-output-escaping="yes" />
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:if test="vdldoc:deprecation/vdldoc:deprecated = 'true'">
-							<b>Deprecated. </b><xsl:value-of select="vdldoc:deprecation/vdldoc:description" /><xsl:text>&#160;</xsl:text>
-						</xsl:if>
 						<i>No Description</i>
 					</xsl:otherwise>
 				</xsl:choose>

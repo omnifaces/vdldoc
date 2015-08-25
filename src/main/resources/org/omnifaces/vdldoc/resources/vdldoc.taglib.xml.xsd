@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://vdldoc.omnifaces.org">
+	<xs:element name="deprecated" type="xs:string" />
+	<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
 	<xs:element name="deprecation">
 		<xs:complexType>
 			<xs:sequence>
@@ -16,6 +18,8 @@
 			<xs:element name="el-variable-name" type="xs:string" maxOccurs="1" minOccurs="0" />
 			<xs:element name="description" type="xs:string" maxOccurs="1" minOccurs="0" />
 			<xs:element name="type" type="xs:string" maxOccurs="1" minOccurs="0" />
+			<xs:element name="deprecated" type="xs:string" />
+			<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
 			<xs:element name="deprecation" maxOccurs="1" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
