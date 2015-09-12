@@ -20,6 +20,11 @@
 
           <h1 id="project_title">Vdldoc</h1>
           <h2 id="project_tagline">Facelets .taglib.xml documentation generator</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/omnifaces/vdldoc/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/omnifaces/vdldoc/tarball/master">Download this project as a tar.gz file</a>
+            </section>
         </header>
     </div>
 
@@ -39,9 +44,9 @@ for Facelets <code>*.taglib.xml</code> files. The generated documentation has Ja
 <p>As a preview, you can check the following online examples:</p>
 
 <ul>
-<li>  <a href="http://omnifaces.org">OmniFaces</a> <a href="http://omnifaces.org/docs/vdldoc/2.0/">VDL
-documentation</a> (Vdldoc 2.0)</li>
-<li>  <a href="http://primefaces.org">PrimeFaces</a> <a href="http://www.primefaces.org/docs/vdl/5.2/core//">5.2 VDL
+<li>  <a href="http://omnifaces.org">OmniFaces</a> <a href="http://omnifaces.org/docs/vdldoc/current/">VDL
+documentation</a> (Vdldoc 2.1)</li>
+<li>  <a href="http://primefaces.org">PrimeFaces</a> <a href="http://www.primefaces.org/docs/vdl/5.2/core//">5.1 VDL
 documentation</a> (Vdldoc 1.1)</li>
 <li>  <a href="http://richfaces.jboss.org">RichFaces</a> <a href="http://docs.jboss.org/richfaces/latest_4_5_X/vdldoc/">4.5.x VDL
 documentation</a> (Vdldoc 1.2)</li>
@@ -50,14 +55,14 @@ documentation</a> (Vdldoc 1.2)</li>
 <h2>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
 
-<p>Just drop the <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/">Vdldoc 2.0 JAR file</a> file
+<p>Just drop the <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.1/">Vdldoc 2.1 JAR file</a> file
 into the classpath. If you are using Maven, you can include the following
 dependency in your <code>pom.xml</code>:</p>
 
-<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+<div class="highlight highlight-XML"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
     &lt;<span class="pl-ent">groupId</span>&gt;org.omnifaces&lt;/<span class="pl-ent">groupId</span>&gt;
     &lt;<span class="pl-ent">artifactId</span>&gt;vdldoc&lt;/<span class="pl-ent">artifactId</span>&gt;
-    &lt;<span class="pl-ent">version</span>&gt;2.0&lt;/<span class="pl-ent">version</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;2.1&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <h2>
@@ -65,32 +70,36 @@ dependency in your <code>pom.xml</code>:</p>
 
 <ul>
 <li>
-<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/vdldoc-2.0.jar">Vdldoc library</a>
+<strong>2.1</strong> (12 Sep 2015) - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.1/vdldoc-2.1.jar">library</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.1/vdldoc-2.1-sources.jar">sources</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.1/vdldoc-2.1-javadoc.jar">javadoc</a>
+</li>
+<li>
+<strong>2.0</strong> (24 Nov 2014) - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/vdldoc-2.0.jar">library</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/vdldoc-2.0-sources.jar">sources</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/vdldoc-2.0-javadoc.jar">javadoc</a>
+</li>
+<li>
+<strong>1.2</strong> (30 Apr 2014) - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2.jar">library</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2-sources.jar">sources</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2-javadoc.jar">javadoc</a>
+</li>
+<li>
+<strong>1.1</strong> (10 Sep 2013) - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.1/vdldoc-1.1.jar">library</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.1/vdldoc-1.1-sources.jar">sources</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.1/vdldoc-1.1-javadoc.jar">javadoc</a>
+</li>
+<li>
+<strong>1.0</strong> (9 March 2012) - <a href="http://vdldoc.omnifaces.org/downloads/vdldoc-1.0.jar">library</a> - <a href="http://vdldoc.omnifaces.org/downloads/vdldoc-1.0-sources.jar">sources</a>
+</li>
+</ul>
+
+<h2>
+<a id="version-history" class="anchor" href="#version-history" aria-hidden="true"><span class="octicon octicon-link"></span></a>Version history</h2>
 
 <ul>
 <li>
-<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/vdldoc-2.0.jar">2.0</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2.jar">1.2</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.1/vdldoc-1.1.jar">1.1</a> - <a href="http://vdldoc.omnifaces.org/downloads/vdldoc-1.0.jar">1.0</a>
-</li>
-</ul>
-</li>
+<strong>2.1</strong> - Added option to hide "Generated by Vdldoc" footer. Added option to explicitly set CSS location (allowing overriding default CSS). Added support for Facelets 2.2 <code>&lt;short-name&gt;</code> tag.</li>
 <li>
-<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/vdldoc-2.0-sources.jar">Vdldoc sources</a>
-
-<ul>
+<strong>2.0</strong> - Changed look'n'feel to Java 8 javadoc and added support for new Java EE 7's <code>http://xmlns.jcp.org/*</code> XML namespace in addition to old <code>http://java.sun.com/*</code> XML namespace.</li>
 <li>
-<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/vdldoc-2.0-sources.jar">2.0</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2-sources.jar">1.2</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.1/vdldoc-1.1-sources.jar">1.1</a> - <a href="http://vdldoc.omnifaces.org/downloads/vdldoc-1.0-sources.jar">1.0</a>
-</li>
-</ul>
-</li>
+<strong>1.2</strong> - Added support for composite components available by <code>&lt;composite-library-name&gt;</code> entry of <code>.taglib.xml</code> files.</li>
 <li>
-<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/vdldoc-2.0-javadoc.jar">Vdldoc javadoc</a>
-
-<ul>
+<strong>1.1</strong> - Added support for managed beans definied in <code>&lt;managed-bean&gt;</code> entries of <code>faces-config.xml</code> file.</li>
 <li>
-<a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.0/vdldoc-2.0-javadoc.jar">2.0</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.2/vdldoc-1.2-javadoc.jar">1.2</a> - <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/1.1/vdldoc-1.1-javadoc.jar">1.1</a>
-</li>
-</ul>
-</li>
+<strong>1.0</strong> - Initial release, just forked TLDdoc and altered for Facelets <code>.taglib.xml</code> files with Java 7 javadoc look'n'feel, with support for <code>&lt;tag&gt;</code> and <code>&lt;function&gt;</code> entries of <code>.taglib.xml</code> files.</li>
 </ul>
 
 <h2>
@@ -99,27 +108,38 @@ dependency in your <code>pom.xml</code>:</p>
 <p>Much like old TLDdoc usage, once the jar is in runtime classpath, run it
 as follows:</p>
 
-<div class="highlight highlight-java"><pre><span class="pl-smi">VdldocGenerator</span> generator <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">VdldocGenerator</span>();
+<div class="highlight highlight-Java"><pre><span class="pl-smi">VdldocGenerator</span> generator <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">VdldocGenerator</span>();
 generator<span class="pl-k">.</span>setWindowTitle(<span class="pl-s"><span class="pl-pds">"</span>Browser window title<span class="pl-pds">"</span></span>); <span class="pl-c">// Else default will be used.</span>
 generator<span class="pl-k">.</span>setDocTitle(<span class="pl-s"><span class="pl-pds">"</span>Documentation title<span class="pl-pds">"</span></span>); <span class="pl-c">// Else default will be used.</span>
 generator<span class="pl-k">.</span>setOutputDirectory(<span class="pl-k">new</span> <span class="pl-smi">File</span>(<span class="pl-s"><span class="pl-pds">"</span>/path/to/vdldoc<span class="pl-pds">"</span></span>)); <span class="pl-c">// Else ./vdldoc will be used.</span>
+generator<span class="pl-k">.</span>setCssLocation(<span class="pl-s"><span class="pl-pds">"</span>/uri/to/style.css<span class="pl-pds">"</span></span>); <span class="pl-c">// Optional (overrides default CSS).</span>
 generator<span class="pl-k">.</span>setFacesConfig(<span class="pl-k">new</span> <span class="pl-smi">File</span>(<span class="pl-s"><span class="pl-pds">"</span>/path/to/faces-config.xml<span class="pl-pds">"</span></span>)); <span class="pl-c">// Optional.</span>
 generator<span class="pl-k">.</span>setAttributes(<span class="pl-k">new</span> <span class="pl-smi">File</span>(<span class="pl-s"><span class="pl-pds">"</span>/path/to/cc-attributes.properties<span class="pl-pds">"</span></span>)); <span class="pl-c">// Optional.</span>
+generator<span class="pl-k">.</span>setHideGeneratedBy(<span class="pl-c1">true</span>); <span class="pl-c">// Optional.</span>
 generator<span class="pl-k">.</span>addTaglib(<span class="pl-k">new</span> <span class="pl-smi">File</span>(<span class="pl-s"><span class="pl-pds">"</span>/path/to/foo.taglib.xml<span class="pl-pds">"</span></span>));
 generator<span class="pl-k">.</span>addTaglib(<span class="pl-k">new</span> <span class="pl-smi">File</span>(<span class="pl-s"><span class="pl-pds">"</span>/path/to/bar.taglib.xml<span class="pl-pds">"</span></span>));
 <span class="pl-c">// ...</span>
 generator<span class="pl-k">.</span>generate();</pre></div>
 
-<p>The <code>&lt;facelet-taglib id&gt;</code> will be used as the taglib prefix. Make sure
+<p>The <code>&lt;facelet-taglib&gt;&lt;short-name&gt;</code> will be used as the taglib prefix. Make sure
 that you have supplied one. E.g.</p>
 
-<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">facelet-taglib</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>o<span class="pl-pds">"</span></span>&gt;
+<div class="highlight highlight-XML"><pre>&lt;<span class="pl-ent">facelet-taglib</span>&gt;
+    &lt;<span class="pl-ent">description</span>&gt;OmniFaces UI components.&lt;/<span class="pl-ent">description</span>&gt;
+    &lt;<span class="pl-ent">namespace</span>&gt;http://omnifaces.org/ui&lt;/<span class="pl-ent">namespace</span>&gt;
+    &lt;<span class="pl-ent">short-name</span>&gt;o&lt;/<span class="pl-ent">short-name</span>&gt;
+    ...
+&lt;/<span class="pl-ent">facelet-taglib</span>&gt;</pre></div>
+
+<p>Or if you are not on Facelets 2.2 yet, you can supply <code>&lt;facelet-taglib id&gt;</code> instead. E.g.</p>
+
+<div class="highlight highlight-XML"><pre>&lt;<span class="pl-ent">facelet-taglib</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>o<span class="pl-pds">"</span></span>&gt;
     &lt;<span class="pl-ent">description</span>&gt;OmniFaces UI components.&lt;/<span class="pl-ent">description</span>&gt;
     &lt;<span class="pl-ent">namespace</span>&gt;http://omnifaces.org/ui&lt;/<span class="pl-ent">namespace</span>&gt;
     ...
 &lt;/<span class="pl-ent">facelet-taglib</span>&gt;</pre></div>
 
-<p>Otherwise it will default to the base filename without the <code>.taglib.xml</code>
+<p>Otherwise, it will default to the base filename without the <code>.taglib.xml</code>
 extension.</p>
 
 <p><strong>Note:</strong> MyFaces has a <a href="https://issues.apache.org/jira/browse/MYFACES-3537">known parsing
@@ -130,7 +150,7 @@ unrelated to Vdldoc.</p>
 
 <p>As to the <code>cc-attributes.properties</code> file (the file name is by the way fully free to your choice, as long as it's a valid Java <code>.properties</code> file), this is specifically for implied composite component attributes which are not definied via <code>&lt;cc:attribute&gt;</code>. Therein you can define the display name, description, required and type columns of the attributes in the following syntax:</p>
 
-<div class="highlight highlight-ini"><pre><span class="pl-c"># id</span>
+<div class="highlight highlight-INI"><pre><span class="pl-c"># id</span>
 <span class="pl-k">id.displayName</span>=id
 <span class="pl-k">id.description</span>=The identifier of the component.
 <span class="pl-k">id.required</span>=false
@@ -165,29 +185,17 @@ options:
                          VDL Documentation Generator - Generated Documentation
   -doctitle &lt;html-code&gt;  Documentation title for the VDL index page.
                          This defaults to the same as window title.
+  -css &lt;uri&gt;             URI of the CSS file. This defaults to internal CSS.
   -facesconfig &lt;path&gt;    Path to the faces-config.xml file.
   -attr &lt;path&gt;           Path to properties file containing descriptions for
                          implied attributes of composite components, such as
                          'id', 'rendered', etc.
+  -f                     Hide 'Output generated by Vdldoc' footer.
   -q                     Quiet Mode, i.e. disable logging.
 taglib1 [taglib2 [taglib3 ...]]: Space separated paths to .taglib.xml files.
     NOTE: if an argument or file path contains by itself spaces, quote it.
 ------------------------------------------------------------------------------
 </code></pre>
-
-<h2>
-<a id="version-history" class="anchor" href="#version-history" aria-hidden="true"><span class="octicon octicon-link"></span></a>Version history</h2>
-
-<ul>
-<li>
-<strong>2.0</strong> - Changed look'n'feel to Java 8 javadoc and added support for new Java EE 7's <code>http://xmlns.jcp.org/*</code> XML namespace in addition to old <code>http://java.sun.com/*</code> XML namespace.</li>
-<li>
-<strong>1.2</strong> - Added support for composite components available by <code>&lt;composite-library-name&gt;</code> entry of <code>.taglib.xml</code> files.</li>
-<li>
-<strong>1.1</strong> - Added support for managed beans definied in <code>&lt;managed-bean&gt;</code> entries of <code>faces-config.xml</code> file.</li>
-<li>
-<strong>1.0</strong> - Initial release, just forked TLDdoc and altered for Facelets <code>.taglib.xml</code> files with Java 7 javadoc look'n'feel, with support for <code>&lt;tag&gt;</code> and <code>&lt;function&gt;</code> entries of <code>.taglib.xml</code> files.</li>
-</ul>
 
 <h2>
 <a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
