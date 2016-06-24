@@ -21,6 +21,10 @@
           <h1 id="project_title">Vdldoc</h1>
           <h2 id="project_tagline">Facelets .taglib.xml documentation generator</h2>
 
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/omnifaces/vdldoc/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/omnifaces/vdldoc/tarball/master">Download this project as a tar.gz file</a>
+            </section>
         </header>
     </div>
 
@@ -28,7 +32,7 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h2>
-<a id="what-is-vdldoc" class="anchor" href="#what-is-vdldoc" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is Vdldoc?</h2>
+<a id="what-is-vdldoc" class="anchor" href="#what-is-vdldoc" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is Vdldoc?</h2>
 
 <p>Vdldoc is a forked and rewritten version of old JSP TLDdoc Generator as
 previously available at
@@ -42,27 +46,35 @@ for Facelets <code>*.taglib.xml</code> files. The generated documentation has Ja
 <ul>
 <li>  <a href="http://omnifaces.org">OmniFaces</a> <a href="http://omnifaces.org/docs/vdldoc/current/">VDL
 documentation</a> (Vdldoc 2.1)</li>
-<li>  <a href="http://primefaces.org">PrimeFaces</a> <a href="http://www.primefaces.org/docs/vdl/5.2/core/">5.2 VDL
+<li>  <a href="https://javaserverfaces.java.net">Mojarra</a> <a href="https://javaserverfaces.java.net/docs/2.3/vdldoc/">2.3 VDL documentation</a> (vdldoc 2.1)</li>
+<li>  <a href="http://primefaces.org">PrimeFaces</a> <a href="http://www.primefaces.org/docs/vdl/6.0/core/">6.0 VDL
 documentation</a> (Vdldoc 1.1)</li>
 <li>  <a href="http://richfaces.jboss.org">RichFaces</a> <a href="http://docs.jboss.org/richfaces/latest_4_5_X/vdldoc/">4.5.x VDL
 documentation</a> (Vdldoc 1.2)</li>
 </ul>
 
 <h2>
-<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
 
 <p>Just drop the <a href="http://central.maven.org/maven2/org/omnifaces/vdldoc/2.1/">Vdldoc 2.1 JAR file</a> file
 into the classpath. If you are using Maven, you can include the following
 dependency in your <code>pom.xml</code>:</p>
 
-<div class="highlight highlight-XML"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
     &lt;<span class="pl-ent">groupId</span>&gt;org.omnifaces&lt;/<span class="pl-ent">groupId</span>&gt;
     &lt;<span class="pl-ent">artifactId</span>&gt;vdldoc&lt;/<span class="pl-ent">artifactId</span>&gt;
     &lt;<span class="pl-ent">version</span>&gt;2.1&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
+<p>There are so far two Maven plugins (maintained by others) available in order to automate Vdldoc during a Maven build:</p>
+
+<ul>
+<li><a href="https://github.com/matinh/vdldoc-maven-plugin">https://github.com/matinh/vdldoc-maven-plugin</a></li>
+<li><a href="https://bitbucket.org/jyeary/vdldoc-maven-plugin">https://bitbucket.org/jyeary/vdldoc-maven-plugin</a></li>
+</ul>
+
 <h2>
-<a id="download" class="anchor" href="#download" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download</h2>
+<a id="download" class="anchor" href="#download" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Download</h2>
 
 <ul>
 <li>
@@ -83,12 +95,12 @@ Initial release, just forked TLDdoc and altered for Facelets <code>.taglib.xml</
 </ul>
 
 <h2>
-<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
 
 <p>Much like old TLDdoc usage, once the jar is in runtime classpath, run it
 as follows:</p>
 
-<div class="highlight highlight-Java"><pre><span class="pl-smi">VdldocGenerator</span> generator <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">VdldocGenerator</span>();
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">VdldocGenerator</span> generator <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">VdldocGenerator</span>();
 generator<span class="pl-k">.</span>setWindowTitle(<span class="pl-s"><span class="pl-pds">"</span>Browser window title<span class="pl-pds">"</span></span>); <span class="pl-c">// Else default will be used.</span>
 generator<span class="pl-k">.</span>setDocTitle(<span class="pl-s"><span class="pl-pds">"</span>Documentation title<span class="pl-pds">"</span></span>); <span class="pl-c">// Else default will be used.</span>
 generator<span class="pl-k">.</span>setOutputDirectory(<span class="pl-k">new</span> <span class="pl-smi">File</span>(<span class="pl-s"><span class="pl-pds">"</span>/path/to/vdldoc<span class="pl-pds">"</span></span>)); <span class="pl-c">// Else ./vdldoc will be used.</span>
@@ -104,7 +116,7 @@ generator<span class="pl-k">.</span>generate();</pre></div>
 <p>The <code>&lt;facelet-taglib&gt;&lt;short-name&gt;</code> will be used as the taglib prefix. Make sure
 that you have supplied one. E.g.</p>
 
-<div class="highlight highlight-XML"><pre>&lt;<span class="pl-ent">facelet-taglib</span>&gt;
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">facelet-taglib</span>&gt;
     &lt;<span class="pl-ent">description</span>&gt;OmniFaces UI components.&lt;/<span class="pl-ent">description</span>&gt;
     &lt;<span class="pl-ent">namespace</span>&gt;http://omnifaces.org/ui&lt;/<span class="pl-ent">namespace</span>&gt;
     &lt;<span class="pl-ent">short-name</span>&gt;o&lt;/<span class="pl-ent">short-name</span>&gt;
@@ -113,7 +125,7 @@ that you have supplied one. E.g.</p>
 
 <p>Or if you are not on Facelets 2.2 yet, you can supply <code>&lt;facelet-taglib id&gt;</code> instead. E.g.</p>
 
-<div class="highlight highlight-XML"><pre>&lt;<span class="pl-ent">facelet-taglib</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>o<span class="pl-pds">"</span></span>&gt;
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">facelet-taglib</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>o<span class="pl-pds">"</span></span>&gt;
     &lt;<span class="pl-ent">description</span>&gt;OmniFaces UI components.&lt;/<span class="pl-ent">description</span>&gt;
     &lt;<span class="pl-ent">namespace</span>&gt;http://omnifaces.org/ui&lt;/<span class="pl-ent">namespace</span>&gt;
     ...
@@ -130,7 +142,7 @@ unrelated to Vdldoc.</p>
 
 <p>As to the <code>cc-attributes.properties</code> file (the file name is by the way fully free to your choice, as long as it's a valid Java <code>.properties</code> file), this is specifically for implied composite component attributes which are not definied via <code>&lt;cc:attribute&gt;</code>. Therein you can define the display name, description, required and type columns of the attributes in the following syntax:</p>
 
-<div class="highlight highlight-INI"><pre><span class="pl-c"># id</span>
+<div class="highlight highlight-source-ini"><pre><span class="pl-c"># id</span>
 <span class="pl-k">id.displayName</span>=id
 <span class="pl-k">id.description</span>=The identifier of the component.
 <span class="pl-k">id.required</span>=false
@@ -144,11 +156,11 @@ unrelated to Vdldoc.</p>
 <p>If this file is not specified, then the above specified defaults will be used.</p>
 
 <h2>
-<a id="cli" class="anchor" href="#cli" aria-hidden="true"><span class="octicon octicon-link"></span></a>CLI</h2>
+<a id="cli" class="anchor" href="#cli" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>CLI</h2>
 
 <p>The <code>vdldoc.jar</code> can be also run in the command line like so: </p>
 
-<div class="highlight highlight-sh"><pre>java -jar vdldoc-2.1.jar foo.taglib.xml bar.taglib.xml</pre></div>
+<div class="highlight highlight-source-shell"><pre>java -jar vdldoc-2.1.jar foo.taglib.xml bar.taglib.xml</pre></div>
 
 <p>The files will by default be generated into a new <code>/vdldoc</code> folder in
 the working directory. The usage options are laid out below:</p>
@@ -178,7 +190,7 @@ taglib1 [taglib2 [taglib3 ...]]: Space separated paths to .taglib.xml files.
 </code></pre>
 
 <h2>
-<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
 
 <p>Vdldoc has BSD license, because the original TLDDoc was also BSD. Note
 that we would personally like it to be Apache 2.0 license instead, but
