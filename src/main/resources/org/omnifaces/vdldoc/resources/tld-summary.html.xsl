@@ -422,8 +422,8 @@
 					<xsl:text>&#160;</xsl:text>
 				</xsl:if>
 				<xsl:choose>
-					<xsl:when test="normalize-space(javaee:description)">
-						<xsl:value-of select="javaee:description" disable-output-escaping="yes" />
+					<xsl:when test="normalize-space(vdldoc:description)">
+						<xsl:value-of select="vdldoc:description" disable-output-escaping="yes" />
 					</xsl:when>
 					<xsl:otherwise>
 						<i>No Description</i>
