@@ -92,6 +92,12 @@ public class VdldocGenerator {
 	/** The jcp.org XML namespace for Java EE. @since 2.0 */
 	private static final String NS_JAVAEE_JCP = "http://xmlns.jcp.org/xml/ns/javaee";
 
+	/** The deprecated vdldoc XML namespace for vdldoc 2.0 and earlier. @since 2.2 */
+	public static final String NS_VDLDOC_OLD = "http://vdldoc.org/vdldoc";
+
+	/** The vdldoc XML namespace. @since 2.2 */
+	public static final String NS_VDLDOC = "http://vdldoc.omnifaces.org";
+
 	/** If true, outputs the input to the transform before generation. For internal use only. */
 	private static final boolean DEBUG_INPUT_DOCUMENT = false;
 
@@ -114,6 +120,8 @@ public class VdldocGenerator {
 		"WARNING: %s does not have any <tag>s or <function>s. Skipping!";
 	private static final String WARNING_OLD_NS_JAVAEE =
 		"WARNING: %s uses old java.sun.com XML namespace. It's recommend to upgrade it to xmlns.jcp.org... ";
+	private static final String WARNING_OLD_NS_VDLDOC =
+		"WARNING: %s uses old vdldoc.org/vdldoc XML namespace. It's recommend to upgrade it to vdldoc.omnifaces.org... ";
 	private static final String WARNING_ID_MISSING =
 		"WARNING: %s does not have <short-name> nor <facelet-taglib id> attribute. Defaulting to base filename '%s'... ";
 	private static final String WARNING_UNSUPPORTED_ATTRIBUTE =
@@ -727,10 +735,30 @@ public class VdldocGenerator {
 
 		try {
 			Document document = builder.parse(new InputSource(in));
+			Element documentElement = document.getDocumentElement();
+			boolean usingOldJavaEENS = documentElement.getNamespaceURI().equals(NS_JAVAEE_SUN);
+			boolean usingOldVdldocNS = false;
+
+			for (int i = 0; i < documentElement.getAttributes().getLength(); i++) {
+				Attr attr = (Attr) documentElement.getAttributes().item(i);
+
+				if (NS_VDLDOC_OLD.equals(attr.getNodeValue())) {
+					usingOldVdldocNS = true;
+					break;
+				}
+			}
 
 			// If this document still uses old java.sun.com XML namespace, change it to new xmlns.jcp.org one.
-			if (document.getDocumentElement().getNamespaceURI().equals(NS_JAVAEE_SUN)) {
-				print(String.format(WARNING_OLD_NS_JAVAEE, file.getName()));
+			if (usingOldJavaEENS || usingOldVdldocNS) {
+
+				if (usingOldJavaEENS) {
+					print(String.format(WARNING_OLD_NS_JAVAEE, file.getName()));
+				}
+
+				if (usingOldVdldocNS) {
+					print(String.format(WARNING_OLD_NS_VDLDOC, file.getName()));
+				}
+
 				Document documentWithNewNS = builder.newDocument();
 				changeNamespace(document, documentWithNewNS);
 				return documentWithNewNS;
@@ -745,7 +773,8 @@ public class VdldocGenerator {
 	}
 
 	/**
-	 * Change the XML namespace of the node from {@value #NS_JAVAEE_SUN} to {@value #NS_JAVAEE_JCP}.
+	 * Change the XML namespace of the node from {@value #NS_JAVAEE_SUN} to {@value #NS_JAVAEE_JCP} and change the old
+	 * VDLdoc namespace ({@value #NS_VDLDOC_OLD}) to the new one ({@value #NS_VDLDOC})
 	 * @param from The source node.
 	 * @param to The target node.
 	 */
@@ -760,7 +789,8 @@ public class VdldocGenerator {
 	}
 
 	/**
-	 * Clone the document node and change the XML namespace from {@value #NS_JAVAEE_SUN} to {@value #NS_JAVAEE_JCP}.
+	 * Clone the document node, change the XML namespace from {@value #NS_JAVAEE_SUN} to {@value #NS_JAVAEE_JCP}, and
+	 * change the old VDLdoc namespace ({@value #NS_VDLDOC_OLD}) to the new one ({@value #NS_VDLDOC}).
 	 * @param document The target document.
 	 * @param from The source node.
 	 * @param to The target node.
@@ -769,13 +799,33 @@ public class VdldocGenerator {
 	private static Node cloneAndChangeNamespace(Document document, Node from, Node to) {
 		if (from.getNodeType() == Node.ELEMENT_NODE) {
 			String oldNS = from.getNamespaceURI();
-			Element clone = document.createElementNS(NS_JAVAEE_SUN.equals(oldNS) ? NS_JAVAEE_JCP : oldNS, from.getNodeName());
+			Element clone;
+
+			if (NS_JAVAEE_SUN.equals(oldNS)) {
+				clone = document.createElementNS(NS_JAVAEE_JCP, from.getNodeName());
+			}
+			else if (NS_VDLDOC_OLD.equals(oldNS)) {
+				clone = document.createElementNS(NS_VDLDOC, from.getNodeName());
+			}
+			else {
+				clone = document.createElementNS(oldNS, from.getNodeName());
+			}
+
 			to.appendChild(clone);
 
 			for (int i = 0; i < from.getAttributes().getLength(); i++) {
 				Attr attr = (Attr) from.getAttributes().item(i);
 				String value = attr.getValue();
-				clone.setAttributeNS(attr.getNamespaceURI(), attr.getNodeName(), NS_JAVAEE_SUN.equals(value) ? NS_JAVAEE_JCP : value);
+
+				if (NS_JAVAEE_SUN.equals(value)) {
+					clone.setAttributeNS(attr.getNamespaceURI(), attr.getNodeName(), NS_JAVAEE_JCP);
+				}
+				else if (NS_VDLDOC_OLD.equals(value)) {
+					clone.setAttributeNS(attr.getNamespaceURI(), attr.getNodeName(), NS_VDLDOC);
+				}
+				else {
+					clone.setAttributeNS(attr.getNamespaceURI(), attr.getNodeName(), value);
+				}
 			}
 
 			return clone;

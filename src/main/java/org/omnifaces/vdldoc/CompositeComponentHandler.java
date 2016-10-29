@@ -73,7 +73,6 @@ public class CompositeComponentHandler extends DefaultHandler {
 	private static final String TYPE = "type";
 	private static final String VALUE = "value";
 	private static final String VALUE_HOLDER = "valueHolder";
-	private static final String VDLDOC_NAMESPACE = "http://vdldoc.omnifaces.org";
 
 	// Private Data Members
 	private String componentName;
@@ -227,7 +226,7 @@ public class CompositeComponentHandler extends DefaultHandler {
 				if (tagNode != null) {
 					tagExtensionNode = tagNode.appendChild(document.createElementNS(namespaceURI, TAG_EXTENSION));
 				}
-			} else if (uri.equals(VDLDOC_NAMESPACE) && localName.equals(SINCE)) {
+			} else if (isVdldocNamespace(uri) && localName.equals(SINCE)) {
 
 				if (tagExtensionNode != null) {
 
@@ -235,12 +234,12 @@ public class CompositeComponentHandler extends DefaultHandler {
 
 					if (since != null) {
 
-						Element sinceElement = document.createElementNS(VDLDOC_NAMESPACE, SINCE);
+						Element sinceElement = document.createElementNS(VdldocGenerator.NS_VDLDOC, SINCE);
 						sinceElement.setTextContent(since);
 						tagExtensionNode.appendChild(sinceElement);
 					}
 				}
-			} else if (uri.equals(VDLDOC_NAMESPACE) && localName.equals(EXAMPLE_URL)) {
+			} else if (isVdldocNamespace(uri) && localName.equals(EXAMPLE_URL)) {
 
 				if (tagExtensionNode != null) {
 
@@ -248,16 +247,16 @@ public class CompositeComponentHandler extends DefaultHandler {
 
 					if (exampleURL != null) {
 
-						Element exampleURLElement = document.createElementNS(VDLDOC_NAMESPACE, EXAMPLE_URL);
+						Element exampleURLElement = document.createElementNS(VdldocGenerator.NS_VDLDOC, EXAMPLE_URL);
 						exampleURLElement.setTextContent(exampleURL);
 						tagExtensionNode.appendChild(exampleURLElement);
 					}
 				}
-			} else if (uri.equals(VDLDOC_NAMESPACE) && localName.equals(DEPRECATED)) {
+			} else if (isVdldocNamespace(uri) && localName.equals(DEPRECATED)) {
 
 				if (tagExtensionNode != null) {
 
-					Element deprecatedElement = document.createElementNS(VDLDOC_NAMESPACE, DEPRECATED);
+					Element deprecatedElement = document.createElementNS(VdldocGenerator.NS_VDLDOC, DEPRECATED);
 					String deprecatedShortDescription = attributes.getValue(SHORT_DESCRIPTION);
 					String deprecatedValue = attributes.getValue(VALUE);
 
@@ -310,6 +309,10 @@ public class CompositeComponentHandler extends DefaultHandler {
 		Element typeElement = document.createElementNS(namespaceURI, TYPE);
 		typeElement.setTextContent(type);
 		attributeNode.appendChild(typeElement);
+	}
+
+	private boolean isVdldocNamespace(String uri) {
+		return uri.equals(VdldocGenerator.NS_VDLDOC) || uri.equals(VdldocGenerator.NS_VDLDOC_OLD);
 	}
 
 }
