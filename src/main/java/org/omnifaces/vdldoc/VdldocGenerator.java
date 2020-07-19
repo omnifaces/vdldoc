@@ -92,6 +92,9 @@ public class VdldocGenerator {
 	/** The jcp.org XML namespace for Java EE. @since 2.0 */
 	private static final String NS_JAVAEE_JCP = "http://xmlns.jcp.org/xml/ns/javaee";
 
+	/** The jakarta.ee XML namespace for Jakarta EE. @since 3.0 */
+	private static final String NS_JAKARTA_EE = "https://jakarta.ee/xml/ns/jakartaee";
+
 	/** The deprecated vdldoc XML namespace for vdldoc 2.0 and earlier. @since 2.2 */
 	public static final String NS_VDLDOC_OLD = "http://vdldoc.org/vdldoc";
 
@@ -110,16 +113,18 @@ public class VdldocGenerator {
 		"%s is not a faces-config.xml file.";
 	private static final String ERROR_INVALID_ATTRIBUTES_FILE =
 		"%s is not a valid attributes file.";
-	private static final String ERROR_NS_JAVAEE_MISSING =
-		"%s does not have xmlns=\"" + NS_JAVAEE_JCP + "\"";
+	private static final String ERROR_NS_JAKARTA_EE_MISSING =
+		"%s does not have xmlns=\"" + NS_JAKARTA_EE + "\"";
 	private static final String ERROR_TAGLIB_MISSING =
 		"%s does not have <facelet-taglib> as root.";
 	private static final String ERROR_INVALID_COMPOSITELIB =
 		"%s can not have more than one <composite-library-name>.";
 	private static final String WARNING_NO_TAGS =
 		"WARNING: %s does not have any <tag>s or <function>s. Skipping!";
-	private static final String WARNING_OLD_NS_JAVAEE =
-		"WARNING: %s uses old java.sun.com XML namespace. It's recommend to upgrade it to xmlns.jcp.org... ";
+	private static final String WARNING_OLD_NS_JAVAEE_SUN =
+		"WARNING: %s uses old java.sun.com XML namespace. It's recommend to upgrade it to jakarta.ee... ";
+	private static final String WARNING_OLD_NS_JAVAEE_JCP =
+		"WARNING: %s uses old xmlns.jcp.org XML namespace. It's recommend to upgrade it to jakarta.ee... ";
 	private static final String WARNING_OLD_NS_VDLDOC =
 		"WARNING: %s uses old vdldoc.org/vdldoc XML namespace. It's recommend to upgrade it to vdldoc.omnifaces.org... ";
 	private static final String WARNING_ID_MISSING =
@@ -395,11 +400,11 @@ public class VdldocGenerator {
 		summaryDocument = builder.newDocument();
 
 		// Create root <vdldoc> root element:
-		Element vdldocElement = summaryDocument.createElementNS(NS_JAVAEE_JCP, "vdldoc");
+		Element vdldocElement = summaryDocument.createElementNS(NS_JAKARTA_EE, "vdldoc");
 		summaryDocument.appendChild(vdldocElement);
 
 		// Create configuration element <config>:
-		Element configElement = summaryDocument.createElementNS(NS_JAVAEE_JCP, "config");
+		Element configElement = summaryDocument.createElementNS(NS_JAKARTA_EE, "config");
 		vdldocElement.appendChild(configElement);
 		configElement.setAttribute("hide-generated-by", String.valueOf(hideGeneratedBy));
 
@@ -408,11 +413,11 @@ public class VdldocGenerator {
 		configElement.setAttribute("css-location", rootCssLocation);
 		configElement.setAttribute("subfolder-css-location", subfolderCssLocation);
 
-		Element windowTitle = summaryDocument.createElementNS(NS_JAVAEE_JCP, "window-title");
+		Element windowTitle = summaryDocument.createElementNS(NS_JAKARTA_EE, "window-title");
 		windowTitle.appendChild(summaryDocument.createTextNode(this.windowTitle));
 		configElement.appendChild(windowTitle);
 
-		Element docTitle = summaryDocument.createElementNS(NS_JAVAEE_JCP, "doc-title");
+		Element docTitle = summaryDocument.createElementNS(NS_JAKARTA_EE, "doc-title");
 		docTitle.appendChild(summaryDocument.createTextNode(this.docTitle));
 		configElement.appendChild(docTitle);
 
@@ -444,8 +449,8 @@ public class VdldocGenerator {
 			if (numTags > 0) {
 				Element taglibNode = (Element) summaryDocument.importNode(element, true);
 
-				if (!taglibNode.getNamespaceURI().equals(NS_JAVAEE_JCP)) {
-					throw new IllegalArgumentException(String.format(ERROR_NS_JAVAEE_MISSING, taglib.getName()));
+				if (!taglibNode.getNamespaceURI().equals(NS_JAKARTA_EE)) {
+					throw new IllegalArgumentException(String.format(ERROR_NS_JAKARTA_EE_MISSING, taglib.getName()));
 				}
 
 				if (!taglibNode.getLocalName().equals("facelet-taglib")) {
@@ -486,7 +491,7 @@ public class VdldocGenerator {
 
 					if (compositeComponentFiles != null) {
 						for (File compositeComponentFile : compositeComponentFiles) {
-							parseCompositeComponentFile(NS_JAVAEE_JCP, taglibNode, compositeComponentFile);
+							parseCompositeComponentFile(NS_JAKARTA_EE, taglibNode, compositeComponentFile);
 							vdldocElement.appendChild(taglibNode);
 						}
 					}
@@ -736,7 +741,8 @@ public class VdldocGenerator {
 		try {
 			Document document = builder.parse(new InputSource(in));
 			Element documentElement = document.getDocumentElement();
-			boolean usingOldJavaEENS = documentElement.getNamespaceURI().equals(NS_JAVAEE_SUN);
+			boolean usingOldJavaEESunNS = documentElement.getNamespaceURI().equals(NS_JAVAEE_SUN);
+			boolean usingOldJavaEEJCPNS = documentElement.getNamespaceURI().equals(NS_JAVAEE_JCP);
 			boolean usingOldVdldocNS = false;
 
 			for (int i = 0; i < documentElement.getAttributes().getLength(); i++) {
@@ -748,11 +754,15 @@ public class VdldocGenerator {
 				}
 			}
 
-			// If this document still uses old java.sun.com XML namespace, change it to new xmlns.jcp.org one.
-			if (usingOldJavaEENS || usingOldVdldocNS) {
+			// If this document still uses old java.sun.com XML namespace, change it to new jakarta.ee one.
+			if (usingOldJavaEESunNS || usingOldJavaEEJCPNS || usingOldVdldocNS) {
 
-				if (usingOldJavaEENS) {
-					print(String.format(WARNING_OLD_NS_JAVAEE, file.getName()));
+				if (usingOldJavaEESunNS) {
+					print(String.format(WARNING_OLD_NS_JAVAEE_SUN, file.getName()));
+				}
+
+				if (usingOldJavaEEJCPNS) {
+					print(String.format(WARNING_OLD_NS_JAVAEE_JCP, file.getName()));
 				}
 
 				if (usingOldVdldocNS) {
@@ -773,7 +783,7 @@ public class VdldocGenerator {
 	}
 
 	/**
-	 * Change the XML namespace of the node from {@value #NS_JAVAEE_SUN} to {@value #NS_JAVAEE_JCP} and change the old
+	 * Change the XML namespace of the node from {@value #NS_JAVAEE_SUN} or {@value #NS_JAVAEE_JCP} to {@link #NS_JAKARTA_EE} and change the old
 	 * VDLdoc namespace ({@value #NS_VDLDOC_OLD}) to the new one ({@value #NS_VDLDOC})
 	 * @param from The source node.
 	 * @param to The target node.
@@ -789,7 +799,7 @@ public class VdldocGenerator {
 	}
 
 	/**
-	 * Clone the document node, change the XML namespace from {@value #NS_JAVAEE_SUN} to {@value #NS_JAVAEE_JCP}, and
+	 * Clone the document node, change the XML namespace from {@value #NS_JAVAEE_SUN} or {@value #NS_JAVAEE_JCP} to {@link #NS_JAKARTA_EE}, and
 	 * change the old VDLdoc namespace ({@value #NS_VDLDOC_OLD}) to the new one ({@value #NS_VDLDOC}).
 	 * @param document The target document.
 	 * @param from The source node.
@@ -801,8 +811,8 @@ public class VdldocGenerator {
 			String oldNS = from.getNamespaceURI();
 			Element clone;
 
-			if (NS_JAVAEE_SUN.equals(oldNS)) {
-				clone = document.createElementNS(NS_JAVAEE_JCP, from.getNodeName());
+			if (NS_JAVAEE_SUN.equals(oldNS) || NS_JAVAEE_JCP.equals(oldNS)) {
+				clone = document.createElementNS(NS_JAKARTA_EE, from.getNodeName());
 			}
 			else if (NS_VDLDOC_OLD.equals(oldNS)) {
 				clone = document.createElementNS(NS_VDLDOC, from.getNodeName());
@@ -817,8 +827,8 @@ public class VdldocGenerator {
 				Attr attr = (Attr) from.getAttributes().item(i);
 				String value = attr.getValue();
 
-				if (NS_JAVAEE_SUN.equals(value)) {
-					clone.setAttributeNS(attr.getNamespaceURI(), attr.getNodeName(), NS_JAVAEE_JCP);
+				if (NS_JAVAEE_SUN.equals(value) || NS_JAVAEE_JCP.equals(value)) {
+					clone.setAttributeNS(attr.getNamespaceURI(), attr.getNodeName(), NS_JAKARTA_EE);
 				}
 				else if (NS_VDLDOC_OLD.equals(value)) {
 					clone.setAttributeNS(attr.getNamespaceURI(), attr.getNodeName(), NS_VDLDOC);

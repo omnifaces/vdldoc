@@ -29,10 +29,10 @@
  - @author Bauke Scholtz
 -->
 <xsl:stylesheet
-	xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:jakartaee="https://jakarta.ee/xml/ns/jakartaee"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fo="http://www.w3.org/1999/XSL/Format"
-	version="2.0"
+	version="3.0"
 >
 	<xsl:output method="html" indent="yes"
 		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -42,7 +42,7 @@
 		<html lang="en">
 			<head>
 				<title>
-					<xsl:value-of select="/javaee:vdldoc/javaee:config/javaee:window-title" />
+					<xsl:value-of select="/jakartaee:vdldoc/jakartaee:config/jakartaee:window-title" />
 				</title>
 				<script type="text/javascript">
 					targetPage = "" + window.location.search;

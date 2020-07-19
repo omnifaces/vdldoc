@@ -29,11 +29,11 @@
  - @author Bauke Scholtz
 -->
 <xsl:stylesheet
-	xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:jakartaee="https://jakarta.ee/xml/ns/jakartaee"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fo="http://www.w3.org/1999/XSL/Format"
 	xmlns:vdldoc="http://vdldoc.omnifaces.org"
-	version="2.0"
+	version="3.0"
 >
 	<xsl:output method="html" indent="yes"
 		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -45,7 +45,7 @@
 				<title>All Tags / Functions</title>
 				<link rel="stylesheet" type="text/css" title="Style">
 					<xsl:attribute name="href">
-						<xsl:value-of select="/javaee:vdldoc/javaee:config/@css-location" />
+						<xsl:value-of select="/jakartaee:vdldoc/jakartaee:config/@css-location" />
 					</xsl:attribute>
 				</link>
 			</head>
@@ -53,10 +53,10 @@
 				<h1 class="bar">All Tags / Functions</h1>
 				<div class="indexContainer">
 					<ul>
-						<xsl:apply-templates select="javaee:vdldoc/javaee:facelet-taglib/javaee:tag|javaee:vdldoc/javaee:facelet-taglib/javaee:function|javaee:vdldoc/javaee:facelet-taglib/javaee:taglib-extension/vdldoc:el-variable">
+						<xsl:apply-templates select="jakartaee:vdldoc/jakartaee:facelet-taglib/jakartaee:tag|jakartaee:vdldoc/jakartaee:facelet-taglib/jakartaee:function|jakartaee:vdldoc/jakartaee:facelet-taglib/jakartaee:taglib-extension/vdldoc:el-variable">
 							<xsl:sort select="../@id" />
-							<xsl:sort select="javaee:tag-name" />
-							<xsl:sort select="javaee:function-name" />
+							<xsl:sort select="jakartaee:tag-name" />
+							<xsl:sort select="jakartaee:function-name" />
 							<xsl:sort select="vdldoc:el-variable-name" />
 						</xsl:apply-templates>
 					</ul>
@@ -65,30 +65,30 @@
 		</html>
 	</xsl:template>
 
-	<xsl:template match="javaee:tag">
+	<xsl:template match="jakartaee:tag">
 		<li>
 			<a>
-				<xsl:attribute name="href"><xsl:value-of select="../@id" />/<xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
+				<xsl:attribute name="href"><xsl:value-of select="../@id" />/<xsl:value-of select="jakartaee:tag-name" />.html</xsl:attribute>
 				<xsl:choose>
 					<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
-					<xsl:when test="javaee:tag-extension/vdldoc:deprecated or javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+					<xsl:when test="jakartaee:tag-extension/vdldoc:deprecated or jakartaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
 						<del>
-							<xsl:value-of select="../@id" />:<xsl:value-of select="javaee:tag-name" />
+							<xsl:value-of select="../@id" />:<xsl:value-of select="jakartaee:tag-name" />
 						</del>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="../@id" />:<xsl:value-of select="javaee:tag-name" />
+						<xsl:value-of select="../@id" />:<xsl:value-of select="jakartaee:tag-name" />
 					</xsl:otherwise>
 				</xsl:choose>
 			</a>
 		</li>
 	</xsl:template>
 
-	<xsl:template match="javaee:function">
+	<xsl:template match="jakartaee:function">
 		<li>
 			<a>
-				<xsl:attribute name="href"><xsl:value-of select="../@id" />/<xsl:value-of select="javaee:function-name" />.fn.html</xsl:attribute>
-				<i><xsl:value-of select="../@id" />:<xsl:value-of select="javaee:function-name" />()</i>
+				<xsl:attribute name="href"><xsl:value-of select="../@id" />/<xsl:value-of select="jakartaee:function-name" />.fn.html</xsl:attribute>
+				<i><xsl:value-of select="../@id" />:<xsl:value-of select="jakartaee:function-name" />()</i>
 			</a>
 		</li>
 	</xsl:template>

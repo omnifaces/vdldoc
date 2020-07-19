@@ -53,7 +53,8 @@ public class CompositeComponentHandler extends DefaultHandler {
 	private static final String COMPONENT_TYPE = "component-type";
 	private static final String COMPOSITE_NAMESPACE_SUN = "http://java.sun.com/jsf/composite";
 	private static final String COMPOSITE_NAMESPACE_JCP = "http://xmlns.jcp.org/jsf/composite";
-	private static final Set<String> COMPOSITE_NAMESPACES = unmodifiableSet(new HashSet<String>(asList(COMPOSITE_NAMESPACE_SUN, COMPOSITE_NAMESPACE_JCP)));
+	private static final String COMPOSITE_NAMESPACE_JEE = "https://jakarta.ee/xml/ns/jakartaee";
+	private static final Set<String> COMPOSITE_NAMESPACES = unmodifiableSet(new HashSet<String>(asList(COMPOSITE_NAMESPACE_SUN, COMPOSITE_NAMESPACE_JCP, COMPOSITE_NAMESPACE_JEE)));
 	private static final String DEPRECATED = "deprecated";
 	private static final String DEPRECATION ="deprecation";
 	private static final String DESCRIPTION = "description";

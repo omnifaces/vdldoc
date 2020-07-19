@@ -29,10 +29,10 @@
  - @author Bauke Scholtz
 -->
 <xsl:stylesheet
-	xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:jakartaee="https://jakarta.ee/xml/ns/jakartaee"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fo="http://www.w3.org/1999/XSL/Format"
-	version="2.0"
+	version="3.0"
 >
 	<xsl:output method="html" indent="yes"
 		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -46,19 +46,19 @@
 	</xsl:param>
 
 	<xsl:template match="/">
-		<xsl:apply-templates select="javaee:vdldoc/javaee:facelet-taglib" />
+		<xsl:apply-templates select="jakartaee:vdldoc/jakartaee:facelet-taglib" />
 	</xsl:template>
 
-	<xsl:template match="javaee:facelet-taglib">
+	<xsl:template match="jakartaee:facelet-taglib">
 		<xsl:if test="@id = $id">
-			<xsl:apply-templates select="javaee:function" />
+			<xsl:apply-templates select="jakartaee:function" />
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="javaee:function">
-		<xsl:if test="javaee:function-name = $functionName">
+	<xsl:template match="jakartaee:function">
+		<xsl:if test="jakartaee:function-name = $functionName">
 			<xsl:variable name="title">
-				<xsl:value-of select="javaee:function-name" /> (<xsl:value-of select="/javaee:vdldoc/javaee:config/javaee:window-title" />)
+				<xsl:value-of select="jakartaee:function-name" /> (<xsl:value-of select="/jakartaee:vdldoc/jakartaee:config/jakartaee:window-title" />)
 			</xsl:variable>
 
 			<html lang="en">
@@ -69,7 +69,7 @@
 					<meta name="keywords" content="$title" />
 					<link rel="stylesheet" type="text/css" title="Style">
 						<xsl:attribute name="href">
-							<xsl:value-of select="/javaee:vdldoc/javaee:config/@subfolder-css-location" />
+							<xsl:value-of select="/jakartaee:vdldoc/jakartaee:config/@subfolder-css-location" />
 						</xsl:attribute>
 					</link>
 				</head>
@@ -94,13 +94,13 @@
 						<ul class="navList">
 							<li>
 								<a href="_top">
-									<xsl:attribute name="href">../index.html?<xsl:value-of select="$id" />/<xsl:value-of select="javaee:function-name" />.fn.html</xsl:attribute>
+									<xsl:attribute name="href">../index.html?<xsl:value-of select="$id" />/<xsl:value-of select="jakartaee:function-name" />.fn.html</xsl:attribute>
 									Frames
 								</a>
 							</li>
 							<li>
 								<a href="_top">
-									<xsl:attribute name="href"><xsl:value-of select="javaee:function-name" />.fn.html</xsl:attribute>
+									<xsl:attribute name="href"><xsl:value-of select="jakartaee:function-name" />.fn.html</xsl:attribute>
 									No Frames
 								</a>
 							</li>
@@ -122,7 +122,7 @@
 							<xsl:value-of select="$id" />
 						</h1>
 						<h2 class="title">
-							Function <xsl:value-of select="javaee:function-name" />
+							Function <xsl:value-of select="jakartaee:function-name" />
 						</h2>
 					</div>
 
@@ -134,8 +134,8 @@
 										<dt>Signature:</dt>
 										<dd>
 											<code>
-												<xsl:value-of select='substring-before(normalize-space(javaee:function-signature)," ")' />
-												<b>&#160;<xsl:value-of select="javaee:function-name" /></b>(<xsl:value-of select='substring-after(normalize-space(javaee:function-signature),"(")' />
+												<xsl:value-of select='substring-before(normalize-space(jakartaee:function-signature)," ")' />
+												<b>&#160;<xsl:value-of select="jakartaee:function-name" /></b>(<xsl:value-of select='substring-after(normalize-space(jakartaee:function-signature),"(")' />
 											</code>
 										</dd>
 									</dl>
@@ -145,8 +145,8 @@
 										<dd>
 											<div class="block">
 												<xsl:choose>
-													<xsl:when test="normalize-space(javaee:description)">
-														<xsl:value-of select="javaee:description" disable-output-escaping="yes" />
+													<xsl:when test="normalize-space(jakartaee:description)">
+														<xsl:value-of select="jakartaee:description" disable-output-escaping="yes" />
 													</xsl:when>
 													<xsl:otherwise>
 														<i>No Description</i>
@@ -177,8 +177,8 @@
 										<td class="colFirst">Function Class</td>
 										<td class="colLast">
 											<xsl:choose>
-												<xsl:when test="normalize-space(javaee:function-class)">
-													<code><xsl:value-of select="javaee:function-class" /></code>
+												<xsl:when test="normalize-space(jakartaee:function-class)">
+													<code><xsl:value-of select="jakartaee:function-class" /></code>
 												</xsl:when>
 												<xsl:otherwise>
 													<i>None</i>
@@ -190,8 +190,8 @@
 										<td class="colFirst">Function Signature</td>
 										<td class="colLast">
 											<xsl:choose>
-												<xsl:when test="normalize-space(javaee:function-signature)">
-													<code><xsl:value-of select="javaee:function-signature" /></code>
+												<xsl:when test="normalize-space(jakartaee:function-signature)">
+													<code><xsl:value-of select="jakartaee:function-signature" /></code>
 												</xsl:when>
 												<xsl:otherwise>
 													<i>None</i>
@@ -203,8 +203,8 @@
 										<td class="colFirst">Display Name</td>
 										<td class="colLast">
 											<xsl:choose>
-												<xsl:when test="normalize-space(javaee:display-name)">
-													<xsl:value-of select="javaee:display-name" />
+												<xsl:when test="normalize-space(jakartaee:display-name)">
+													<xsl:value-of select="jakartaee:display-name" />
 												</xsl:when>
 												<xsl:otherwise>
 													<i>None</i>
@@ -233,13 +233,13 @@
 						<ul class="navList">
 							<li>
 								<a href="_top">
-									<xsl:attribute name="href">../index.html?<xsl:value-of select="$id" />/<xsl:value-of select="javaee:function-name" />.fn.html</xsl:attribute>
+									<xsl:attribute name="href">../index.html?<xsl:value-of select="$id" />/<xsl:value-of select="jakartaee:function-name" />.fn.html</xsl:attribute>
 									Frames
 								</a>
 							</li>
 							<li>
 								<a href="_top">
-									<xsl:attribute name="href"><xsl:value-of select="javaee:function-name" />.fn.html</xsl:attribute>
+									<xsl:attribute name="href"><xsl:value-of select="jakartaee:function-name" />.fn.html</xsl:attribute>
 									No Frames
 								</a>
 							</li>
@@ -254,7 +254,7 @@
 					</div>
 					<!-- ========= END OF BOTTOM NAVBAR ========= -->
 
-					<xsl:if test="/javaee:vdldoc/javaee:config/@hide-generated-by != 'true'">
+					<xsl:if test="/jakartaee:vdldoc/jakartaee:config/@hide-generated-by != 'true'">
 						<p class="about">Output generated by <a href="http://vdldoc.omnifaces.org" target="_blank">Vdldoc</a> View Declaration Language Documentation Generator.</p>
 					</xsl:if>
 				</body>

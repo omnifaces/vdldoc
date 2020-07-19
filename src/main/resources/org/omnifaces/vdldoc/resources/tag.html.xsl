@@ -29,11 +29,11 @@
  - @author Bauke Scholtz
 -->
 <xsl:stylesheet
-	xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:jakartaee="https://jakarta.ee/xml/ns/jakartaee"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fo="http://www.w3.org/1999/XSL/Format"
 	xmlns:vdldoc="http://vdldoc.omnifaces.org"
-	version="2.0"
+	version="3.0"
 >
 	<xsl:output method="html" indent="yes"
 		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -48,19 +48,19 @@
 
 	<!-- template rule matching source root element -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="javaee:vdldoc/javaee:facelet-taglib" />
+		<xsl:apply-templates select="jakartaee:vdldoc/jakartaee:facelet-taglib" />
 	</xsl:template>
 
-	<xsl:template match="javaee:facelet-taglib">
+	<xsl:template match="jakartaee:facelet-taglib">
 		<xsl:if test="@id = $id">
-			<xsl:apply-templates select="javaee:tag" />
+			<xsl:apply-templates select="jakartaee:tag" />
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="javaee:tag">
-		<xsl:if test="javaee:tag-name = $tagName">
+	<xsl:template match="jakartaee:tag">
+		<xsl:if test="jakartaee:tag-name = $tagName">
 			<xsl:variable name="title">
-				<xsl:value-of select="javaee:tag-name" /> (<xsl:value-of select="/javaee:vdldoc/javaee:config/javaee:window-title" />)
+				<xsl:value-of select="jakartaee:tag-name" /> (<xsl:value-of select="/jakartaee:vdldoc/jakartaee:config/jakartaee:window-title" />)
 			</xsl:variable>
 
 			<html lang="en">
@@ -71,7 +71,7 @@
 					<meta name="keywords" content="$title" />
 					<link rel="stylesheet" type="text/css" title="Style">
 						<xsl:attribute name="href">
-							<xsl:value-of select="/javaee:vdldoc/javaee:config/@subfolder-css-location" />
+							<xsl:value-of select="/jakartaee:vdldoc/jakartaee:config/@subfolder-css-location" />
 						</xsl:attribute>
 					</link>
 				</head>
@@ -96,13 +96,13 @@
 						<ul class="navList">
 							<li>
 								<a target="_top">
-									<xsl:attribute name="href">../index.html?<xsl:value-of select="$id" />/<xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
+									<xsl:attribute name="href">../index.html?<xsl:value-of select="$id" />/<xsl:value-of select="jakartaee:tag-name" />.html</xsl:attribute>
 									Frames
 								</a>
 							</li>
 							<li>
 								<a target="_top">
-									<xsl:attribute name="href"><xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
+									<xsl:attribute name="href"><xsl:value-of select="jakartaee:tag-name" />.html</xsl:attribute>
 									No Frames
 								</a>
 							</li>
@@ -127,13 +127,13 @@
 							Tag
 							<xsl:choose>
 								<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
-								<xsl:when test="javaee:tag-extension/vdldoc:deprecated or javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+								<xsl:when test="jakartaee:tag-extension/vdldoc:deprecated or jakartaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
 									<del>
-										<xsl:value-of select="javaee:tag-name" />
+										<xsl:value-of select="jakartaee:tag-name" />
 									</del>
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:value-of select="javaee:tag-name" />
+									<xsl:value-of select="jakartaee:tag-name" />
 								</xsl:otherwise>
 							</xsl:choose>
 						</h2>
@@ -150,22 +150,22 @@
 										<dd>
 											<div class="block">
 												<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
-												<xsl:if test="javaee:tag-extension/vdldoc:deprecated or javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+												<xsl:if test="jakartaee:tag-extension/vdldoc:deprecated or jakartaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
 													<b>Deprecated. </b>
 													<xsl:choose>
-														<xsl:when test="javaee:tag-extension/vdldoc:deprecated">
-															<xsl:value-of select="javaee:tag-extension/vdldoc:deprecated" />
+														<xsl:when test="jakartaee:tag-extension/vdldoc:deprecated">
+															<xsl:value-of select="jakartaee:tag-extension/vdldoc:deprecated" />
 														</xsl:when>
 														<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
-														<xsl:when test="javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
-															<xsl:value-of select="javaee:tag-extension/vdldoc:deprecation/vdldoc:description" />
+														<xsl:when test="jakartaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+															<xsl:value-of select="jakartaee:tag-extension/vdldoc:deprecation/vdldoc:description" />
 														</xsl:when>
 													</xsl:choose>
 													<xsl:text>&#160;</xsl:text>
 												</xsl:if>
 												<xsl:choose>
-													<xsl:when test="normalize-space(javaee:description)">
-														<xsl:value-of select="javaee:description" disable-output-escaping="yes" />
+													<xsl:when test="normalize-space(jakartaee:description)">
+														<xsl:value-of select="jakartaee:description" disable-output-escaping="yes" />
 													</xsl:when>
 													<xsl:otherwise>
 														<i>No Description</i>
@@ -178,14 +178,14 @@
 							</ul>
 						</div>
 
-						<xsl:if test="normalize-space(javaee:tag-extension/vdldoc:since)">
+						<xsl:if test="normalize-space(jakartaee:tag-extension/vdldoc:since)">
 							<div class="since">
 								<ul class="blockList">
 									<li class="blockList">
 										<dl>
 											<dt>Since:</dt>
 											<dd>
-												<xsl:value-of select="javaee:tag-extension/vdldoc:since" disable-output-escaping="yes" />
+												<xsl:value-of select="jakartaee:tag-extension/vdldoc:since" disable-output-escaping="yes" />
 											</dd>
 										</dl>
 									</li>
@@ -193,7 +193,7 @@
 							</div>
 						</xsl:if>
 
-						<xsl:if test="normalize-space(javaee:tag-extension/vdldoc:example-url)">
+						<xsl:if test="normalize-space(jakartaee:tag-extension/vdldoc:example-url)">
 							<div class="example-url">
 								<ul class="blockList">
 									<li class="blockList">
@@ -201,8 +201,8 @@
 											<dt>Example usage of this component can be found at:</dt>
 											<br />
 											<dd>
-												<a href="{javaee:tag-extension/vdldoc:example-url}" target="_blank">
-													<xsl:value-of select="javaee:tag-extension/vdldoc:example-url" disable-output-escaping="yes" />
+												<a href="{jakartaee:tag-extension/vdldoc:example-url}" target="_blank">
+													<xsl:value-of select="jakartaee:tag-extension/vdldoc:example-url" disable-output-escaping="yes" />
 												</a>
 											</dd>
 										</dl>
@@ -212,23 +212,23 @@
 						</xsl:if>
 
 						<!-- Component Information -->
-						<xsl:if test="normalize-space(javaee:component)">
-							<xsl:apply-templates select="javaee:component" />
+						<xsl:if test="normalize-space(jakartaee:component)">
+							<xsl:apply-templates select="jakartaee:component" />
 						</xsl:if>
 
 						<!-- Behavior Information -->
-						<xsl:if test="normalize-space(javaee:behavior)">
-							<xsl:apply-templates select="javaee:behavior" />
+						<xsl:if test="normalize-space(jakartaee:behavior)">
+							<xsl:apply-templates select="jakartaee:behavior" />
 						</xsl:if>
 
 						<!-- Converter Information -->
-						<xsl:if test="normalize-space(javaee:converter)">
-							<xsl:apply-templates select="javaee:converter" />
+						<xsl:if test="normalize-space(jakartaee:converter)">
+							<xsl:apply-templates select="jakartaee:converter" />
 						</xsl:if>
 
 						<!-- Validator Information -->
-						<xsl:if test="normalize-space(javaee:validator)">
-							<xsl:apply-templates select="javaee:validator" />
+						<xsl:if test="normalize-space(jakartaee:validator)">
+							<xsl:apply-templates select="jakartaee:validator" />
 						</xsl:if>
 
 						<!-- Attribute Information -->
@@ -248,8 +248,8 @@
 								</thead>
 								<tbody>
 									<xsl:choose>
-										<xsl:when test="count(javaee:attribute) > 0">
-											<xsl:apply-templates select="javaee:attribute" />
+										<xsl:when test="count(jakartaee:attribute) > 0">
+											<xsl:apply-templates select="jakartaee:attribute" />
 										</xsl:when>
 										<xsl:otherwise>
 											<td class="colOne" colspan="4">
@@ -278,13 +278,13 @@
 						<ul class="navList">
 							<li>
 								<a target="_bottom">
-									<xsl:attribute name="href">../index.html?<xsl:value-of select="$id" />/<xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
+									<xsl:attribute name="href">../index.html?<xsl:value-of select="$id" />/<xsl:value-of select="jakartaee:tag-name" />.html</xsl:attribute>
 									Frames
 								</a>
 							</li>
 							<li>
 								<a target="_bottom">
-									<xsl:attribute name="href"><xsl:value-of select="javaee:tag-name" />.html</xsl:attribute>
+									<xsl:attribute name="href"><xsl:value-of select="jakartaee:tag-name" />.html</xsl:attribute>
 									No Frames
 								</a>
 							</li>
@@ -299,7 +299,7 @@
 					</div>
 					<!-- ========= END OF BOTTOM NAVBAR ========= -->
 
-					<xsl:if test="/javaee:vdldoc/javaee:config/@hide-generated-by != 'true'">
+					<xsl:if test="/jakartaee:vdldoc/jakartaee:config/@hide-generated-by != 'true'">
 						<p class="about">Output generated by <a href="http://vdldoc.omnifaces.org" target="_blank">Vdldoc</a> View Declaration Language Documentation Generator.</p>
 					</xsl:if>
 				</body>
@@ -307,39 +307,39 @@
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="javaee:component">
+	<xsl:template match="jakartaee:component">
 		<xsl:call-template name="summary">
 			<xsl:with-param name="caption" select="'Component Information'" />
 			<xsl:with-param name="summary" select="'Component summary table, listing component information'" />
 			<xsl:with-param name="id-name" select="'Component Type'" />
-			<xsl:with-param name="id-value" select="javaee:component-type" />
+			<xsl:with-param name="id-value" select="jakartaee:component-type" />
 		</xsl:call-template>
 	</xsl:template>
 
-	<xsl:template match="javaee:behavior">
+	<xsl:template match="jakartaee:behavior">
 		<xsl:call-template name="summary">
 			<xsl:with-param name="caption" select="'Behavior Information'" />
 			<xsl:with-param name="summary" select="'Behavior summary table, listing behavior information'" />
 			<xsl:with-param name="id-name" select="'Behavior ID'" />
-			<xsl:with-param name="id-value" select="javaee:behavior-id" />
+			<xsl:with-param name="id-value" select="jakartaee:behavior-id" />
 		</xsl:call-template>
 	</xsl:template>
 
-	<xsl:template match="javaee:converter">
+	<xsl:template match="jakartaee:converter">
 		<xsl:call-template name="summary">
 			<xsl:with-param name="caption" select="'Converter Information'" />
 			<xsl:with-param name="summary" select="'Converter summary table, listing converter information'" />
 			<xsl:with-param name="id-name" select="'Converter ID'" />
-			<xsl:with-param name="id-value" select="javaee:converter-id" />
+			<xsl:with-param name="id-value" select="jakartaee:converter-id" />
 		</xsl:call-template>
 	</xsl:template>
 
-	<xsl:template match="javaee:validator">
+	<xsl:template match="jakartaee:validator">
 		<xsl:call-template name="summary">
 			<xsl:with-param name="caption" select="'Validator Information'" />
 			<xsl:with-param name="summary" select="'Validator summary table, listing validator information'" />
 			<xsl:with-param name="id-name" select="'Validator ID'" />
-			<xsl:with-param name="id-value" select="javaee:validator-id" />
+			<xsl:with-param name="id-value" select="jakartaee:validator-id" />
 		</xsl:call-template>
 	</xsl:template>
 
@@ -383,8 +383,8 @@
 						<td class="colFirst">Handler Class</td>
 						<td class="colLast">
 							<xsl:choose>
-								<xsl:when test="normalize-space(javaee:handler-class)">
-									<code><xsl:value-of select="javaee:handler-class" /></code>
+								<xsl:when test="normalize-space(jakartaee:handler-class)">
+									<code><xsl:value-of select="jakartaee:handler-class" /></code>
 								</xsl:when>
 								<xsl:otherwise>
 									<i>None</i>
@@ -392,13 +392,13 @@
 							</xsl:choose>
 						</td>
 					</tr>
-					<xsl:if test="normalize-space(javaee:component-type)">
+					<xsl:if test="normalize-space(jakartaee:component-type)">
 						<tr class="rowColor">
 							<td class="colFirst">Renderer Type</td>
 							<td class="colLast">
 								<xsl:choose>
-									<xsl:when test="normalize-space(javaee:renderer-type)">
-										<code><xsl:value-of select="javaee:renderer-type" /></code>
+									<xsl:when test="normalize-space(jakartaee:renderer-type)">
+										<code><xsl:value-of select="jakartaee:renderer-type" /></code>
 									</xsl:when>
 									<xsl:otherwise>
 										<i>None</i>
@@ -410,15 +410,15 @@
 					<tr>
 						<xsl:attribute name="class">
 							<xsl:choose>
-								<xsl:when test="normalize-space(javaee:component-type)">altColor</xsl:when>
+								<xsl:when test="normalize-space(jakartaee:component-type)">altColor</xsl:when>
 								<xsl:otherwise>rowColor</xsl:otherwise>
 							</xsl:choose>
 						</xsl:attribute>
 						<td class="colFirst">Description</td>
 						<td class="colLast">
 							<xsl:choose>
-								<xsl:when test="normalize-space(javaee:description)">
-									<xsl:value-of select="javaee:description" disable-output-escaping="yes" />
+								<xsl:when test="normalize-space(jakartaee:description)">
+									<xsl:value-of select="jakartaee:description" disable-output-escaping="yes" />
 								</xsl:when>
 								<xsl:otherwise>
 									<i>None</i>
@@ -431,10 +431,10 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="javaee:attribute">
+	<xsl:template match="jakartaee:attribute">
 		<tr>
 			<xsl:attribute name="id">
-				<xsl:value-of select="javaee:name" />
+				<xsl:value-of select="jakartaee:name" />
 			</xsl:attribute>
 			<xsl:attribute name="class">
 				<xsl:choose>
@@ -446,14 +446,14 @@
 			<td class="colFirst">
 				<xsl:choose>
 					<!-- vdldoc:deprecation is deprecated. It has been replaced by vdldoc:deprecated. -->
-					<xsl:when test="../javaee:tag-extension/vdldoc:deprecated or ../javaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
+					<xsl:when test="../jakartaee:tag-extension/vdldoc:deprecated or ../jakartaee:tag-extension/vdldoc:deprecation/vdldoc:deprecated = 'true'">
 						<a>
 							<xsl:attribute name="href">
-								<xsl:text>#</xsl:text><xsl:value-of select="javaee:name" />
+								<xsl:text>#</xsl:text><xsl:value-of select="jakartaee:name" />
 							</xsl:attribute>
 							<del>
 								<code>
-									<xsl:apply-templates select="javaee:name" />
+									<xsl:apply-templates select="jakartaee:name" />
 								</code>
 							</del>
 						</a>
@@ -461,10 +461,10 @@
 					<xsl:otherwise>
 						<a>
 							<xsl:attribute name="href">
-								<xsl:text>#</xsl:text><xsl:value-of select="javaee:name" />
+								<xsl:text>#</xsl:text><xsl:value-of select="jakartaee:name" />
 							</xsl:attribute>
 							<code>
-								<xsl:apply-templates select="javaee:name" />
+								<xsl:apply-templates select="jakartaee:name" />
 							</code>
 						</a>
 					</xsl:otherwise>
@@ -473,8 +473,8 @@
 			<td class="colOne">
 				<code>
 					<xsl:choose>
-						<xsl:when test="normalize-space(javaee:required)">
-							<xsl:value-of select="javaee:required" />
+						<xsl:when test="normalize-space(jakartaee:required)">
+							<xsl:value-of select="jakartaee:required" />
 						</xsl:when>
 						<xsl:otherwise>
 							false
@@ -484,13 +484,13 @@
 			</td>
 			<td class="colOne">
 				<xsl:choose>
-					<xsl:when test="normalize-space(javaee:type)">
+					<xsl:when test="normalize-space(jakartaee:type)">
 						<code>javax.el.ValueExpression</code>
-						<br />(<i>must evaluate to </i><code><xsl:value-of select="javaee:type" /></code>)
+						<br />(<i>must evaluate to </i><code><xsl:value-of select="jakartaee:type" /></code>)
 					</xsl:when>
-					<xsl:when test="normalize-space(javaee:method-signature)">
+					<xsl:when test="normalize-space(jakartaee:method-signature)">
 						<code>javax.el.MethodExpression</code>
-						<br />(<i>signature must match </i><code><xsl:value-of select="javaee:method-signature" /></code>)
+						<br />(<i>signature must match </i><code><xsl:value-of select="jakartaee:method-signature" /></code>)
 					</xsl:when>
 					<xsl:otherwise>
 						<code>java.lang.String</code>
@@ -499,8 +499,8 @@
 			</td>
 			<td class="colLast">
 				<xsl:choose>
-					<xsl:when test="normalize-space(javaee:description)">
-						<xsl:value-of select="javaee:description" disable-output-escaping="yes" />
+					<xsl:when test="normalize-space(jakartaee:description)">
+						<xsl:value-of select="jakartaee:description" disable-output-escaping="yes" />
 					</xsl:when>
 					<xsl:otherwise>
 						<i>No Description</i>
