@@ -485,11 +485,11 @@
 			<td class="colOne">
 				<xsl:choose>
 					<xsl:when test="normalize-space(jakartaee:type)">
-						<code>javax.el.ValueExpression</code>
+						<code>jakarta.el.ValueExpression</code>
 						<br />(<i>must evaluate to </i><code><xsl:value-of select="jakartaee:type" /></code>)
 					</xsl:when>
 					<xsl:when test="normalize-space(jakartaee:method-signature)">
-						<code>javax.el.MethodExpression</code>
+						<code>jakarta.el.MethodExpression</code>
 						<br />(<i>signature must match </i><code><xsl:value-of select="jakartaee:method-signature" /></code>)
 					</xsl:when>
 					<xsl:otherwise>
