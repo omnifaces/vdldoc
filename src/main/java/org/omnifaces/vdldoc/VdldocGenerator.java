@@ -119,8 +119,6 @@ public class VdldocGenerator {
 		"%s does not have <facelet-taglib> as root.";
 	private static final String ERROR_INVALID_COMPOSITELIB =
 		"%s can not have more than one <composite-library-name>.";
-	private static final String WARNING_NO_TAGS =
-		"WARNING: %s does not have any <tag>s or <function>s. Skipping!";
 	private static final String WARNING_OLD_NS_JAVAEE_SUN =
 		"WARNING: %s uses old java.sun.com XML namespace. It's recommend to upgrade it to jakarta.ee... ";
 	private static final String WARNING_OLD_NS_JAVAEE_JCP =
@@ -438,70 +436,58 @@ public class VdldocGenerator {
 
 			Document document = parse(builder, taglib);
 			Element element = document.getDocumentElement();
+			Element taglibNode = (Element) summaryDocument.importNode(element, true);
 
+			if (!taglibNode.getNamespaceURI().equals(NS_JAKARTA_EE)) {
+				throw new IllegalArgumentException(String.format(ERROR_NS_JAKARTA_EE_MISSING, taglib.getName()));
+			}
+
+			if (!taglibNode.getLocalName().equals("facelet-taglib")) {
+				throw new IllegalArgumentException(String.format(ERROR_TAGLIB_MISSING, taglib.getName()));
+			}
+
+			NodeList shortNames = taglibNode.getElementsByTagNameNS("*", "short-name");
+			String id = shortNames.getLength() > 0 ? shortNames.item(0).getTextContent() : taglibNode.getAttribute("id");
+
+			if (id == null || id.trim().isEmpty()) {
+				id = taglib.getName().substring(0, taglib.getName().indexOf('.'));
+				print(String.format(WARNING_ID_MISSING, taglib.getName(), id));
+			}
+
+			taglibNode.setAttribute("id", id);
+			vdldocElement.appendChild(taglibNode);
 			NodeList compositeNodes = element.getElementsByTagNameNS("*", "composite-library-name");
-			NodeList tagNodes = element.getElementsByTagNameNS("*", "tag");
-			NodeList functionNodes = element.getElementsByTagNameNS("*", "function");
-			NodeList taglibExtensionNodes = element.getElementsByTagNameNS("*", "el-variable");
-			int numTags = compositeNodes.getLength() + functionNodes.getLength() + tagNodes.getLength() + taglibExtensionNodes.getLength();
 
-			// If this tag library has no composite libraries, tags or functions, skip it.
-			if (numTags > 0) {
-				Element taglibNode = (Element) summaryDocument.importNode(element, true);
-
-				if (!taglibNode.getNamespaceURI().equals(NS_JAKARTA_EE)) {
-					throw new IllegalArgumentException(String.format(ERROR_NS_JAKARTA_EE_MISSING, taglib.getName()));
+			if (compositeNodes.getLength() > 0) {
+				if (compositeNodes.getLength() > 1) {
+					throw new IllegalArgumentException(String.format(ERROR_INVALID_COMPOSITELIB, taglib.getName()));
 				}
 
-				if (!taglibNode.getLocalName().equals("facelet-taglib")) {
-					throw new IllegalArgumentException(String.format(ERROR_TAGLIB_MISSING, taglib.getName()));
+				String compositeLibraryName = compositeNodes.item(0).getTextContent();
+				File parentFolder = taglib.getParentFile(); // This is WEB-INF in WAR and META-INF in JAR.
+
+				if (parentFolder.getName().equals("WEB-INF")) {
+					parentFolder = parentFolder.getParentFile();
 				}
 
-				NodeList shortNames = taglibNode.getElementsByTagNameNS("*", "short-name");
-				String id = shortNames.getLength() > 0 ? shortNames.item(0).getTextContent() : taglibNode.getAttribute("id");
-
-				if (id == null || id.trim().isEmpty()) {
-					id = taglib.getName().substring(0, taglib.getName().indexOf('.'));
-					print(String.format(WARNING_ID_MISSING, taglib.getName(), id));
-				}
-
-				taglibNode.setAttribute("id", id);
-				vdldocElement.appendChild(taglibNode);
-
-				if (compositeNodes.getLength() > 0) {
-					if (compositeNodes.getLength() > 1) {
-						throw new IllegalArgumentException(String.format(ERROR_INVALID_COMPOSITELIB, taglib.getName()));
+				File resourcesFolder = new File(parentFolder, "resources");
+				File compositeLibraryFolder = new File(resourcesFolder, compositeLibraryName);
+				File[] compositeComponentFiles = compositeLibraryFolder.listFiles(new FileFilter() {
+					@Override
+					public boolean accept(File pathname) {
+						return (pathname != null) && (pathname.getName().endsWith(".xhtml"));
 					}
+				});
 
-					String compositeLibraryName = compositeNodes.item(0).getTextContent();
-					File parentFolder = taglib.getParentFile(); // This is WEB-INF in WAR and META-INF in JAR.
-
-					if (parentFolder.getName().equals("WEB-INF")) {
-						parentFolder = parentFolder.getParentFile();
-					}
-
-					File resourcesFolder = new File(parentFolder, "resources");
-					File compositeLibraryFolder = new File(resourcesFolder, compositeLibraryName);
-					File[] compositeComponentFiles = compositeLibraryFolder.listFiles(new FileFilter() {
-						@Override
-						public boolean accept(File pathname) {
-							return (pathname != null) && (pathname.getName().endsWith(".xhtml"));
-						}
-					});
-
-					if (compositeComponentFiles != null) {
-						for (File compositeComponentFile : compositeComponentFiles) {
-							parseCompositeComponentFile(NS_JAKARTA_EE, taglibNode, compositeComponentFile);
-							vdldocElement.appendChild(taglibNode);
-						}
+				if (compositeComponentFiles != null) {
+					for (File compositeComponentFile : compositeComponentFiles) {
+						parseCompositeComponentFile(NS_JAKARTA_EE, taglibNode, compositeComponentFile);
+						vdldocElement.appendChild(taglibNode);
 					}
 				}
-
-				println("OK!");
 			}
-			else {
-				println(String.format(WARNING_NO_TAGS, taglib.getName()));
-			}
+
+			println("OK!");
 		}
 
 		// If debug enabled, output the resulting document, as a test:
