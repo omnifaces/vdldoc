@@ -29,49 +29,49 @@
  - @author Bauke Scholtz
 -->
 <xsl:stylesheet
-	xmlns:jakartaee="https://jakarta.ee/xml/ns/jakartaee"
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:fo="http://www.w3.org/1999/XSL/Format"
-	version="3.0"
+    xmlns:jakartaee="https://jakarta.ee/xml/ns/jakartaee"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    version="3.0"
 >
-	<xsl:output method="html" indent="yes"
-		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
-		doctype-system="http://www.w3.org/TR/html4/loose.dtd" />
+    <xsl:output method="html" indent="yes"
+        doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
+        doctype-system="http://www.w3.org/TR/html4/loose.dtd" />
 
-	<xsl:template match="/">
-		<html lang="en">
-			<head>
-				<title>
-					Overview (<xsl:value-of select="/jakartaee:vdldoc/jakartaee:config/jakartaee:window-title" />)
-				</title>
-				<link rel="stylesheet" type="text/css" title="Style">
-					<xsl:attribute name="href">
-						<xsl:value-of select="/jakartaee:vdldoc/jakartaee:config/@css-location" />
-					</xsl:attribute>
-				</link>
-			</head>
-			<body>
-				<div class="indexHeader">
-					<a href="alltags-frame.html" target="tldFrame">All Tags / Functions</a>
-				</div>
-				<div class="indexContainer">
-					<h2 title="Tag Libraries">Tag Libraries</h2>
-					<ul title="Tag Libraries">
-						<xsl:apply-templates select="jakartaee:vdldoc/jakartaee:facelet-taglib" />
-					</ul>
-				</div>
-				<p>&#160;</p>
-			</body>
-		</html>
-	</xsl:template>
+    <xsl:template match="/">
+        <html lang="en">
+            <head>
+                <title>
+                    Overview (<xsl:value-of select="/jakartaee:vdldoc/jakartaee:config/jakartaee:window-title" />)
+                </title>
+                <link rel="stylesheet" type="text/css" title="Style">
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="/jakartaee:vdldoc/jakartaee:config/@css-location" />
+                    </xsl:attribute>
+                </link>
+            </head>
+            <body>
+                <div class="indexHeader">
+                    <a href="alltags-frame.html" target="tldFrame">All Tags / Functions</a>
+                </div>
+                <div class="indexContainer">
+                    <h2 title="Tag Libraries">Tag Libraries</h2>
+                    <ul title="Tag Libraries">
+                        <xsl:apply-templates select="jakartaee:vdldoc/jakartaee:facelet-taglib" />
+                    </ul>
+                </div>
+                <p>&#160;</p>
+            </body>
+        </html>
+    </xsl:template>
 
-	<xsl:template match="jakartaee:facelet-taglib">
-		<li>
-			<a>
-				<xsl:attribute name="href"><xsl:value-of select="@id" />/tld-frame.html</xsl:attribute>
-				<xsl:attribute name="target">tldFrame</xsl:attribute>
-				<xsl:value-of select="@id" />
-			</a>
-		</li>
-	</xsl:template>
+    <xsl:template match="jakartaee:facelet-taglib">
+        <li>
+            <a>
+                <xsl:attribute name="href"><xsl:value-of select="@id" />/tld-frame.html</xsl:attribute>
+                <xsl:attribute name="target">tldFrame</xsl:attribute>
+                <xsl:value-of select="@id" />
+            </a>
+        </li>
+    </xsl:template>
 </xsl:stylesheet>

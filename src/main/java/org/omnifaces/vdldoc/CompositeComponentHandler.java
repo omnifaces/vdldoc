@@ -47,273 +47,273 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class CompositeComponentHandler extends DefaultHandler {
 
-	// Private Constants
-	private static final String ATTRIBUTE = "attribute";
-	private static final String COMPONENT = "component";
-	private static final String COMPONENT_TYPE = "component-type";
-	private static final String COMPOSITE_NAMESPACE_SUN = "http://java.sun.com/jsf/composite";
-	private static final String COMPOSITE_NAMESPACE_JCP = "http://xmlns.jcp.org/jsf/composite";
-	private static final String COMPOSITE_NAMESPACE_JEE = "https://jakarta.ee/xml/ns/jakartaee";
-	private static final Set<String> COMPOSITE_NAMESPACES = unmodifiableSet(new HashSet<String>(asList(COMPOSITE_NAMESPACE_SUN, COMPOSITE_NAMESPACE_JCP, COMPOSITE_NAMESPACE_JEE)));
-	private static final String DEPRECATED = "deprecated";
-	private static final String DEPRECATION ="deprecation";
-	private static final String DESCRIPTION = "description";
-	private static final String DISPLAY_NAME = "displayName";
-	private static final String EDITABLE_VALUE_HOLDER = "editableValueHolder";
-	private static final String EXAMPLE_URL = "example-url";
-	private static final String EXTENSION = "extension";
-	private static final String FACELET_COMPOSITE_COMPONENT = "Facelet Composite Component";
-	private static final String INTERFACE = "interface";
-	private static final String NAME = "name";
-	private static final String REQUIRED = "required";
-	private static final String SHORT_DESCRIPTION = "shortDescription";
-	private static final String SINCE = "since";
-	private static final String TAG = "tag";
-	private static final String TAG_EXTENSION = "tag-extension";
-	private static final String TAG_NAME = "tag-name";
-	private static final String TYPE = "type";
-	private static final String VALUE = "value";
-	private static final String VALUE_HOLDER = "valueHolder";
+    // Private Constants
+    private static final String ATTRIBUTE = "attribute";
+    private static final String COMPONENT = "component";
+    private static final String COMPONENT_TYPE = "component-type";
+    private static final String COMPOSITE_NAMESPACE_SUN = "http://java.sun.com/jsf/composite";
+    private static final String COMPOSITE_NAMESPACE_JCP = "http://xmlns.jcp.org/jsf/composite";
+    private static final String COMPOSITE_NAMESPACE_JEE = "https://jakarta.ee/xml/ns/jakartaee";
+    private static final Set<String> COMPOSITE_NAMESPACES = unmodifiableSet(new HashSet<String>(asList(COMPOSITE_NAMESPACE_SUN, COMPOSITE_NAMESPACE_JCP, COMPOSITE_NAMESPACE_JEE)));
+    private static final String DEPRECATED = "deprecated";
+    private static final String DEPRECATION ="deprecation";
+    private static final String DESCRIPTION = "description";
+    private static final String DISPLAY_NAME = "displayName";
+    private static final String EDITABLE_VALUE_HOLDER = "editableValueHolder";
+    private static final String EXAMPLE_URL = "example-url";
+    private static final String EXTENSION = "extension";
+    private static final String FACELET_COMPOSITE_COMPONENT = "Facelet Composite Component";
+    private static final String INTERFACE = "interface";
+    private static final String NAME = "name";
+    private static final String REQUIRED = "required";
+    private static final String SHORT_DESCRIPTION = "shortDescription";
+    private static final String SINCE = "since";
+    private static final String TAG = "tag";
+    private static final String TAG_EXTENSION = "tag-extension";
+    private static final String TAG_NAME = "tag-name";
+    private static final String TYPE = "type";
+    private static final String VALUE = "value";
+    private static final String VALUE_HOLDER = "valueHolder";
 
-	// Private Data Members
-	private String componentName;
-	private Document document;
-	private String namespaceURI;
-	private boolean valueGiven;
-	private boolean valueHolder;
-	private Node tagNode;
-	private Node taglibNode;
-	private Node tagExtensionNode;
+    // Private Data Members
+    private String componentName;
+    private Document document;
+    private String namespaceURI;
+    private boolean valueGiven;
+    private boolean valueHolder;
+    private Node tagNode;
+    private Node taglibNode;
+    private Node tagExtensionNode;
 
-	private HashMap<String,ImpliedAttribute> attributeMap;
+    private HashMap<String,ImpliedAttribute> attributeMap;
 
-	public CompositeComponentHandler(String componentName, Document document, String namespaceURI, Node taglibNode, HashMap<String,ImpliedAttribute> properties) {
-		this.componentName = componentName;
-		this.document = document;
-		this.namespaceURI = namespaceURI;
-		this.taglibNode = taglibNode;
-		attributeMap = properties;
-	}
+    public CompositeComponentHandler(String componentName, Document document, String namespaceURI, Node taglibNode, HashMap<String,ImpliedAttribute> properties) {
+        this.componentName = componentName;
+        this.document = document;
+        this.namespaceURI = namespaceURI;
+        this.taglibNode = taglibNode;
+        attributeMap = properties;
+    }
 
-	@Override
-	public void endElement(String uri, String localName, String qName) throws SAXException {
+    @Override
+    public void endElement(String uri, String localName, String qName) throws SAXException {
 
-		if (uri != null && localName != null) {
+        if (uri != null && localName != null) {
 
-			if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(INTERFACE)) {
-				if (valueHolder) {
-					if (valueGiven) {
-						System.out.println("INFO: valueHolder = " + valueHolder + ", but valueGiven = " + valueGiven +
-							". Since the xhtml declares a value attribute, we are not adding the implied value attribute for this composite component to the Vdldoc."
-						);
-					} else {
-						addImpliedAttribute(tagNode, "value", "value", "The current value of this component.", "false", "java.lang.Object");
-					}
-				}
+            if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(INTERFACE)) {
+                if (valueHolder) {
+                    if (valueGiven) {
+                        System.out.println("INFO: valueHolder = " + valueHolder + ", but valueGiven = " + valueGiven +
+                            ". Since the xhtml declares a value attribute, we are not adding the implied value attribute for this composite component to the Vdldoc."
+                        );
+                    } else {
+                        addImpliedAttribute(tagNode, "value", "value", "The current value of this component.", "false", "java.lang.Object");
+                    }
+                }
 
-				tagNode = null;
+                tagNode = null;
 
-			} else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(EXTENSION)) {
-				tagExtensionNode = null;
-			}
-		}
-	}
+            } else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(EXTENSION)) {
+                tagExtensionNode = null;
+            }
+        }
+    }
 
-	@Override
-	public InputSource resolveEntity(String publicId, String systemId) throws IOException, SAXException {
-		return new InputSource(new StringReader(""));
-	}
+    @Override
+    public InputSource resolveEntity(String publicId, String systemId) throws IOException, SAXException {
+        return new InputSource(new StringReader(""));
+    }
 
-	@Override
-	public void startElement(String uri, String localName, String elementName, Attributes attributes)
-		throws SAXException {
+    @Override
+    public void startElement(String uri, String localName, String elementName, Attributes attributes)
+        throws SAXException {
 
-		if (uri != null && localName != null) {
+        if (uri != null && localName != null) {
 
-			if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(INTERFACE)) {
-				valueGiven = false;
-				Element tagElement = document.createElementNS(namespaceURI, TAG);
-				tagNode = taglibNode.appendChild(tagElement);
+            if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(INTERFACE)) {
+                valueGiven = false;
+                Element tagElement = document.createElementNS(namespaceURI, TAG);
+                tagNode = taglibNode.appendChild(tagElement);
 
-				String shortDescription = attributes.getValue(SHORT_DESCRIPTION);
-				if (shortDescription != null) {
-					Element shortDescriptionElement = document.createElementNS(namespaceURI, DESCRIPTION);
-					shortDescriptionElement.setTextContent(shortDescription);
-					tagNode.appendChild(shortDescriptionElement);
-				}
+                String shortDescription = attributes.getValue(SHORT_DESCRIPTION);
+                if (shortDescription != null) {
+                    Element shortDescriptionElement = document.createElementNS(namespaceURI, DESCRIPTION);
+                    shortDescriptionElement.setTextContent(shortDescription);
+                    tagNode.appendChild(shortDescriptionElement);
+                }
 
-				Element tagNameElement = document.createElementNS(namespaceURI, TAG_NAME);
-				tagNameElement.setTextContent(componentName);
-				tagNode.appendChild(tagNameElement);
+                Element tagNameElement = document.createElementNS(namespaceURI, TAG_NAME);
+                tagNameElement.setTextContent(componentName);
+                tagNode.appendChild(tagNameElement);
 
-				Element componentElement = document.createElementNS(namespaceURI, COMPONENT);
-				Element componentTypeElement = document.createElementNS(namespaceURI, COMPONENT_TYPE);
-				componentTypeElement.setTextContent(FACELET_COMPOSITE_COMPONENT);
-				componentElement.appendChild(componentTypeElement);
-				tagNode.appendChild(componentElement);
+                Element componentElement = document.createElementNS(namespaceURI, COMPONENT);
+                Element componentTypeElement = document.createElementNS(namespaceURI, COMPONENT_TYPE);
+                componentTypeElement.setTextContent(FACELET_COMPOSITE_COMPONENT);
+                componentElement.appendChild(componentTypeElement);
+                tagNode.appendChild(componentElement);
 
-				for (Map.Entry<String, ImpliedAttribute> entry : attributeMap.entrySet()) {
-				    String name = entry.getKey();
-				    ImpliedAttribute attribute = entry.getValue();
-				    addImpliedAttribute(
-				    	tagNode,
-				    	name,
-				    	attribute.getDisplayName(),
-				    	attribute.getDescription(),
-				    	attribute.getRequired(),
-				    	attribute.getType()
-				    );
-				}
+                for (Map.Entry<String, ImpliedAttribute> entry : attributeMap.entrySet()) {
+                    String name = entry.getKey();
+                    ImpliedAttribute attribute = entry.getValue();
+                    addImpliedAttribute(
+                        tagNode,
+                        name,
+                        attribute.getDisplayName(),
+                        attribute.getDescription(),
+                        attribute.getRequired(),
+                        attribute.getType()
+                    );
+                }
 
-			}
-			else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(ATTRIBUTE)) {
+            }
+            else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(ATTRIBUTE)) {
 
-				if (tagNode != null) {
+                if (tagNode != null) {
 
-					Node attributeNode = tagNode.appendChild(document.createElementNS(namespaceURI, ATTRIBUTE));
+                    Node attributeNode = tagNode.appendChild(document.createElementNS(namespaceURI, ATTRIBUTE));
 
-					// description
-					String description = attributes.getValue(SHORT_DESCRIPTION);
+                    // description
+                    String description = attributes.getValue(SHORT_DESCRIPTION);
 
-					if (description != null) {
-						Element descriptionElement = document.createElementNS(namespaceURI, DESCRIPTION);
-						descriptionElement.setTextContent(description);
-						attributeNode.appendChild(descriptionElement);
-					}
+                    if (description != null) {
+                        Element descriptionElement = document.createElementNS(namespaceURI, DESCRIPTION);
+                        descriptionElement.setTextContent(description);
+                        attributeNode.appendChild(descriptionElement);
+                    }
 
-					// displayName
-					String displayName = attributes.getValue(DISPLAY_NAME);
+                    // displayName
+                    String displayName = attributes.getValue(DISPLAY_NAME);
 
-					if (displayName != null) {
-						Element displayNameElement = document.createElementNS(namespaceURI, DISPLAY_NAME);
-						displayNameElement.setTextContent(displayName);
-						attributeNode.appendChild(displayNameElement);
-					}
+                    if (displayName != null) {
+                        Element displayNameElement = document.createElementNS(namespaceURI, DISPLAY_NAME);
+                        displayNameElement.setTextContent(displayName);
+                        attributeNode.appendChild(displayNameElement);
+                    }
 
-					// name
-					Element nameElement = document.createElementNS(namespaceURI, NAME);
-					String name = attributes.getValue(NAME);
-					nameElement.setTextContent(name);
-					attributeNode.appendChild(nameElement);
+                    // name
+                    Element nameElement = document.createElementNS(namespaceURI, NAME);
+                    String name = attributes.getValue(NAME);
+                    nameElement.setTextContent(name);
+                    attributeNode.appendChild(nameElement);
 
-					if ("value".equals(name)) {
-						valueGiven = true;
-					}
+                    if ("value".equals(name)) {
+                        valueGiven = true;
+                    }
 
-					// required
-					String required = attributes.getValue(REQUIRED);
+                    // required
+                    String required = attributes.getValue(REQUIRED);
 
-					if (required == null) {
-						required = Boolean.FALSE.toString();
-					}
+                    if (required == null) {
+                        required = Boolean.FALSE.toString();
+                    }
 
-					Element requiredElement = document.createElementNS(namespaceURI, REQUIRED);
-					requiredElement.setTextContent(required);
-					attributeNode.appendChild(requiredElement);
+                    Element requiredElement = document.createElementNS(namespaceURI, REQUIRED);
+                    requiredElement.setTextContent(required);
+                    attributeNode.appendChild(requiredElement);
 
-					// type
-					String type = attributes.getValue(TYPE);
+                    // type
+                    String type = attributes.getValue(TYPE);
 
-					if (type == null) {
-						type = String.class.getName();
-					}
+                    if (type == null) {
+                        type = String.class.getName();
+                    }
 
-					Element typeElement = document.createElementNS(namespaceURI, TYPE);
-					typeElement.setTextContent(type);
-					attributeNode.appendChild(typeElement);
+                    Element typeElement = document.createElementNS(namespaceURI, TYPE);
+                    typeElement.setTextContent(type);
+                    attributeNode.appendChild(typeElement);
 
-				}
-			} else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(EXTENSION)) {
-				if (tagNode != null) {
-					tagExtensionNode = tagNode.appendChild(document.createElementNS(namespaceURI, TAG_EXTENSION));
-				}
-			} else if (isVdldocNamespace(uri) && localName.equals(SINCE)) {
+                }
+            } else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(EXTENSION)) {
+                if (tagNode != null) {
+                    tagExtensionNode = tagNode.appendChild(document.createElementNS(namespaceURI, TAG_EXTENSION));
+                }
+            } else if (isVdldocNamespace(uri) && localName.equals(SINCE)) {
 
-				if (tagExtensionNode != null) {
+                if (tagExtensionNode != null) {
 
-					String since = attributes.getValue(VALUE);
+                    String since = attributes.getValue(VALUE);
 
-					if (since != null) {
+                    if (since != null) {
 
-						Element sinceElement = document.createElementNS(VdldocGenerator.NS_VDLDOC, SINCE);
-						sinceElement.setTextContent(since);
-						tagExtensionNode.appendChild(sinceElement);
-					}
-				}
-			} else if (isVdldocNamespace(uri) && localName.equals(EXAMPLE_URL)) {
+                        Element sinceElement = document.createElementNS(VdldocGenerator.NS_VDLDOC, SINCE);
+                        sinceElement.setTextContent(since);
+                        tagExtensionNode.appendChild(sinceElement);
+                    }
+                }
+            } else if (isVdldocNamespace(uri) && localName.equals(EXAMPLE_URL)) {
 
-				if (tagExtensionNode != null) {
+                if (tagExtensionNode != null) {
 
-					String exampleURL = attributes.getValue(VALUE);
+                    String exampleURL = attributes.getValue(VALUE);
 
-					if (exampleURL != null) {
+                    if (exampleURL != null) {
 
-						Element exampleURLElement = document.createElementNS(VdldocGenerator.NS_VDLDOC, EXAMPLE_URL);
-						exampleURLElement.setTextContent(exampleURL);
-						tagExtensionNode.appendChild(exampleURLElement);
-					}
-				}
-			} else if (isVdldocNamespace(uri) && localName.equals(DEPRECATED)) {
+                        Element exampleURLElement = document.createElementNS(VdldocGenerator.NS_VDLDOC, EXAMPLE_URL);
+                        exampleURLElement.setTextContent(exampleURL);
+                        tagExtensionNode.appendChild(exampleURLElement);
+                    }
+                }
+            } else if (isVdldocNamespace(uri) && localName.equals(DEPRECATED)) {
 
-				if (tagExtensionNode != null) {
+                if (tagExtensionNode != null) {
 
-					Element deprecatedElement = document.createElementNS(VdldocGenerator.NS_VDLDOC, DEPRECATED);
-					String deprecatedShortDescription = attributes.getValue(SHORT_DESCRIPTION);
-					String deprecatedValue = attributes.getValue(VALUE);
+                    Element deprecatedElement = document.createElementNS(VdldocGenerator.NS_VDLDOC, DEPRECATED);
+                    String deprecatedShortDescription = attributes.getValue(SHORT_DESCRIPTION);
+                    String deprecatedValue = attributes.getValue(VALUE);
 
-					if (deprecatedShortDescription != null) {
-						deprecatedElement.setTextContent(deprecatedShortDescription);
-					}
-					else if (deprecatedValue != null) {
-						deprecatedElement.setTextContent(deprecatedValue);
-					}
+                    if (deprecatedShortDescription != null) {
+                        deprecatedElement.setTextContent(deprecatedShortDescription);
+                    }
+                    else if (deprecatedValue != null) {
+                        deprecatedElement.setTextContent(deprecatedValue);
+                    }
 
-					tagExtensionNode.appendChild(deprecatedElement);
-				}
-			} else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(VALUE_HOLDER)) {
-				if (tagNode != null) {
-					valueHolder = true;
-				}
-			} else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(EDITABLE_VALUE_HOLDER)) {
-				if (tagNode != null) {
-					valueHolder = true;
-				}
-			}
-		}
-	}
+                    tagExtensionNode.appendChild(deprecatedElement);
+                }
+            } else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(VALUE_HOLDER)) {
+                if (tagNode != null) {
+                    valueHolder = true;
+                }
+            } else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(EDITABLE_VALUE_HOLDER)) {
+                if (tagNode != null) {
+                    valueHolder = true;
+                }
+            }
+        }
+    }
 
-	public void addImpliedAttribute(Node node, String name, String displayName, String description, String required, String type) {
-		// append default attributes
-		Node attributeNode = node.appendChild(document.createElementNS(namespaceURI, ATTRIBUTE));
+    public void addImpliedAttribute(Node node, String name, String displayName, String description, String required, String type) {
+        // append default attributes
+        Node attributeNode = node.appendChild(document.createElementNS(namespaceURI, ATTRIBUTE));
 
-		// name
-		Element nameElement = document.createElementNS(namespaceURI, NAME);
-		nameElement.setTextContent(name);
-		attributeNode.appendChild(nameElement);
+        // name
+        Element nameElement = document.createElementNS(namespaceURI, NAME);
+        nameElement.setTextContent(name);
+        attributeNode.appendChild(nameElement);
 
-		// display name
-		Element displayNameElement = document.createElementNS(namespaceURI, DISPLAY_NAME);
-		displayNameElement.setTextContent(displayName);
-		attributeNode.appendChild(displayNameElement);
+        // display name
+        Element displayNameElement = document.createElementNS(namespaceURI, DISPLAY_NAME);
+        displayNameElement.setTextContent(displayName);
+        attributeNode.appendChild(displayNameElement);
 
-		// description
-		Element descriptionElement = document.createElementNS(namespaceURI, DESCRIPTION);
-		descriptionElement.setTextContent(description);
-		attributeNode.appendChild(descriptionElement);
+        // description
+        Element descriptionElement = document.createElementNS(namespaceURI, DESCRIPTION);
+        descriptionElement.setTextContent(description);
+        attributeNode.appendChild(descriptionElement);
 
-		// required
-		Element requiredElement = document.createElementNS(namespaceURI, REQUIRED);
-		requiredElement.setTextContent(required);
-		attributeNode.appendChild(requiredElement);
+        // required
+        Element requiredElement = document.createElementNS(namespaceURI, REQUIRED);
+        requiredElement.setTextContent(required);
+        attributeNode.appendChild(requiredElement);
 
-		// type
-		Element typeElement = document.createElementNS(namespaceURI, TYPE);
-		typeElement.setTextContent(type);
-		attributeNode.appendChild(typeElement);
-	}
+        // type
+        Element typeElement = document.createElementNS(namespaceURI, TYPE);
+        typeElement.setTextContent(type);
+        attributeNode.appendChild(typeElement);
+    }
 
-	private boolean isVdldocNamespace(String uri) {
-		return uri.equals(VdldocGenerator.NS_VDLDOC) || uri.equals(VdldocGenerator.NS_VDLDOC_OLD);
-	}
+    private boolean isVdldocNamespace(String uri) {
+        return uri.equals(VdldocGenerator.NS_VDLDOC) || uri.equals(VdldocGenerator.NS_VDLDOC_OLD);
+    }
 
 }

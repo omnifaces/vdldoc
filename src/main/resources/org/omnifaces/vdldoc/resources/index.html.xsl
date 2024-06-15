@@ -29,47 +29,47 @@
  - @author Bauke Scholtz
 -->
 <xsl:stylesheet
-	xmlns:jakartaee="https://jakarta.ee/xml/ns/jakartaee"
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:fo="http://www.w3.org/1999/XSL/Format"
-	version="3.0"
+    xmlns:jakartaee="https://jakarta.ee/xml/ns/jakartaee"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    version="3.0"
 >
-	<xsl:output method="html" indent="yes"
-		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
-		doctype-system="http://www.w3.org/TR/html4/loose.dtd" />
+    <xsl:output method="html" indent="yes"
+        doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
+        doctype-system="http://www.w3.org/TR/html4/loose.dtd" />
 
-	<xsl:template match="/">
-		<html lang="en">
-			<head>
-				<title>
-					<xsl:value-of select="/jakartaee:vdldoc/jakartaee:config/jakartaee:window-title" />
-				</title>
-				<script type="text/javascript">
-					targetPage = "" + window.location.search;
-					if (targetPage != "" &amp;&amp; targetPage != "undefined") targetPage = targetPage.substring(1);
-					if (targetPage.indexOf(":") != -1) targetPage = "undefined";
-					function loadFrames() {
-						if (targetPage != "" &amp;&amp; targetPage != "undefined") top.tagFrame.location = top.targetPage;
-					}
-				</script>
-			</head>
-			<frameset cols="20%,80%" title="Documentation frame" onload="top.loadFrames()">
-				<frameset rows="30%,70%" title="Left frames" onload="top.loadFrames()">
-					<frame src="overview-frame.html" name="tldListFrame" title="All Tag Libraries" />
-					<frame src="alltags-frame.html" name="tldFrame" title="All Tags / Functions" />
-				</frameset>
-				<frame src="overview-summary.html" name="tagFrame" title="Library and tag descriptions" scrolling="yes" />
-			</frameset>
-			<noframes>
-				<noscript>
-					<div>JavaScript is disabled on your browser.</div>
-				</noscript>
-				<h2>Frame Alert</h2>
-				<p>
-					This document is designed to be viewed using the frames feature. If you see this message, you are using
-					a non-frame-capable web client. Link to <a href="overview-summary.html">Non-frame version</a>.
-				</p>
-			</noframes>
-		</html>
-	</xsl:template>
+    <xsl:template match="/">
+        <html lang="en">
+            <head>
+                <title>
+                    <xsl:value-of select="/jakartaee:vdldoc/jakartaee:config/jakartaee:window-title" />
+                </title>
+                <script type="text/javascript">
+                    targetPage = "" + window.location.search;
+                    if (targetPage != "" &amp;&amp; targetPage != "undefined") targetPage = targetPage.substring(1);
+                    if (targetPage.indexOf(":") != -1) targetPage = "undefined";
+                    function loadFrames() {
+                        if (targetPage != "" &amp;&amp; targetPage != "undefined") top.tagFrame.location = top.targetPage;
+                    }
+                </script>
+            </head>
+            <frameset cols="20%,80%" title="Documentation frame" onload="top.loadFrames()">
+                <frameset rows="30%,70%" title="Left frames" onload="top.loadFrames()">
+                    <frame src="overview-frame.html" name="tldListFrame" title="All Tag Libraries" />
+                    <frame src="alltags-frame.html" name="tldFrame" title="All Tags / Functions" />
+                </frameset>
+                <frame src="overview-summary.html" name="tagFrame" title="Library and tag descriptions" scrolling="yes" />
+            </frameset>
+            <noframes>
+                <noscript>
+                    <div>JavaScript is disabled on your browser.</div>
+                </noscript>
+                <h2>Frame Alert</h2>
+                <p>
+                    This document is designed to be viewed using the frames feature. If you see this message, you are using
+                    a non-frame-capable web client. Link to <a href="overview-summary.html">Non-frame version</a>.
+                </p>
+            </noframes>
+        </html>
+    </xsl:template>
 </xsl:stylesheet>
