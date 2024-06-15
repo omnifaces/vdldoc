@@ -249,7 +249,9 @@
                                 <tbody>
                                     <xsl:choose>
                                         <xsl:when test="count(jakartaee:attribute) > 0">
-                                            <xsl:apply-templates select="jakartaee:attribute" />
+                                            <xsl:apply-templates select="jakartaee:attribute">
+                                                <xsl:sort select="jakartaee:name" />
+                                            </xsl:apply-templates>
                                         </xsl:when>
                                         <xsl:otherwise>
                                             <td class="colOne" colspan="4">
