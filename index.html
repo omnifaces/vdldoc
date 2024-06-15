@@ -48,7 +48,7 @@ for Facelets <code>*.taglib.xml</code> files. The generated documentation has Ja
 <p>As a preview, you can check the following online examples:</p>
 
 <ul>
-<li><a href="https://omnifaces.org">OmniFaces</a> <a href="http://omnifaces.org/docs/vdldoc/4.0/">4.0 VDL documentation</a></li>
+<li><a href="https://omnifaces.org">OmniFaces</a> <a href="https://omnifaces.org/docs/vdldoc/4.0/">4.0 VDL documentation</a></li>
 <li><a href="https://eclipse-ee4j.github.io/mojarra/">Mojarra</a> <a href="https://jakarta.ee/specifications/faces/4.1/vdldoc/">4.1 VDL documentation</a></li>
 <li><a href="https://primefaces.org">PrimeFaces</a> <a href="https://primefaces.github.io/primefaces/vdldoc/">latest VDL documentation</a></li>
 </ul>
@@ -56,14 +56,14 @@ for Facelets <code>*.taglib.xml</code> files. The generated documentation has Ja
 <h2>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
 
-<p>Just drop the <a href="https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.0/">Vdldoc 3.0 JAR file</a> file
+<p>Just drop the <a href="https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.1/">Vdldoc 3.1 JAR file</a> file
 into the classpath. If you are using Maven, you can include the following
 dependency in your <code>pom.xml</code>:</p>
 
 <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
     &lt;<span class="pl-ent">groupId</span>&gt;org.omnifaces&lt;/<span class="pl-ent">groupId</span>&gt;
     &lt;<span class="pl-ent">artifactId</span>&gt;vdldoc&lt;/<span class="pl-ent">artifactId</span>&gt;
-    &lt;<span class="pl-ent">version</span>&gt;3.0&lt;/<span class="pl-ent">version</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;3.1&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <p>There are so far two Maven plugins (maintained by others) available in order to automate Vdldoc during a Maven build:</p>
@@ -77,6 +77,9 @@ dependency in your <code>pom.xml</code>:</p>
 <a id="download" class="anchor" href="#download" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Download</h2>
 
 <ul>
+<li>
+<strong>3.1</strong> (6 Dec 2020) - <a href="https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.1/vdldoc-3.1.jar">library</a> - <a href="https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.1/vdldoc-3.1-sources.jar">sources</a> - <a href="https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.1/vdldoc-3.1-javadoc.jar">javadoc</a><br>
+The "type" <code>javax.el.ValueExpression</code> will now show up as <code>jakarta.el.ValueExpression</code>.</li>
 <li>
 <strong>3.0</strong> (19 Jul 2020) - <a href="https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.0/vdldoc-3.0.jar">library</a> - <a href="https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.0/vdldoc-3.0-sources.jar">sources</a> - <a href="https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.0/vdldoc-3.0-javadoc.jar">javadoc</a><br>
 Added support for new Jakarta EE 9's <code>https://jakarta.ee/xml/ns/*</code> XML namespace in addition to old <code>http://xmlns.jcp.org/*</code> XML namespace.</li>
