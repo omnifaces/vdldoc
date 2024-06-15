@@ -193,7 +193,9 @@
 										</tr>
 									</thead>
 									<tbody>
-										<xsl:apply-templates select="jakartaee:tag" />
+										<xsl:apply-templates select="jakartaee:tag">
+                                            <xsl:sort select="jakartaee:tag-name" />
+                                        </xsl:apply-templates>
 									</tbody>
 								</table>
 							</xsl:if>
@@ -214,7 +216,9 @@
 										</tr>
 									</thead>
 									<tbody>
-										<xsl:apply-templates select="jakartaee:function" />
+										<xsl:apply-templates select="jakartaee:function">
+                                            <xsl:sort select="jakartaee:function-name" />
+                                        </xsl:apply-templates>
 									</tbody>
 								</table>
 							</xsl:if>
