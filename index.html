@@ -57,14 +57,14 @@ for Facelets <code>*.taglib.xml</code> files. The generated documentation has Ja
 <h2>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
 
-<p>Just drop the <a href="https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.1/">Vdldoc 3.1 JAR file</a> file
+<p>Just drop the <a href="https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.2/">Vdldoc 3.2 JAR file</a> file
 into the classpath. If you are using Maven, you can include the following
 dependency in your <code>pom.xml</code>:</p>
 
 <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
     &lt;<span class="pl-ent">groupId</span>&gt;org.omnifaces&lt;/<span class="pl-ent">groupId</span>&gt;
     &lt;<span class="pl-ent">artifactId</span>&gt;vdldoc&lt;/<span class="pl-ent">artifactId</span>&gt;
-    &lt;<span class="pl-ent">version</span>&gt;3.1&lt;/<span class="pl-ent">version</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;3.2&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <p>There are so far two Maven plugins (maintained by others) available in order to automate Vdldoc during a Maven build:</p>
@@ -78,6 +78,9 @@ dependency in your <code>pom.xml</code>:</p>
 <a id="download" class="anchor" href="#download" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Download</h2>
 
 <ul>
+<li>
+<strong>3.2</strong> (21 Jun 2024) - <a href="https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.2/vdldoc-3.2.jar">library</a> - <a href="https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.2/vdldoc-3.2-sources.jar">sources</a> - <a href="https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.2/vdldoc-3.2-javadoc.jar">javadoc</a><br>
+Empty taglibs (e.g. Jakarta Faces Passthrough) are now allowed. Tag summaries and attributes are now ordered by name.</li>
 <li>
 <strong>3.1</strong> (6 Dec 2020) - <a href="https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.1/vdldoc-3.1.jar">library</a> - <a href="https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.1/vdldoc-3.1-sources.jar">sources</a> - <a href="https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.1/vdldoc-3.1-javadoc.jar">javadoc</a><br>
 The "type" <code>javax.el.ValueExpression</code> will now show up as <code>jakarta.el.ValueExpression</code>.</li>
