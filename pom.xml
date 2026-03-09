@@ -86,6 +86,32 @@
                 </executions>
             </plugin>
 
+            <!-- Add missing license headers to source files. -->
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>5.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                        <configuration>
+                            <licenseSets>
+                                <licenseSet>
+                                    <header>license.txt</header>
+                                    <excludes>
+                                       <exclude>*.*</exclude> <!-- excludes files in root folder -->
+                                       <exclude>src/test/resources/*.*</exclude>
+                                    </excludes>
+                                </licenseSet>
+                            </licenseSets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Configure the jar with the binaries -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
