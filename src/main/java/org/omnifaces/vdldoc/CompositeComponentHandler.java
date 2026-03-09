@@ -87,6 +87,14 @@ public class CompositeComponentHandler extends DefaultHandler {
 
     private HashMap<String,ImpliedAttribute> attributeMap;
 
+    /**
+     * Creates a new handler for parsing a composite component XHTML file.
+     * @param componentName The name of the composite component (derived from the filename).
+     * @param document The summary DOM document to append elements to.
+     * @param namespaceURI The target XML namespace URI.
+     * @param taglibNode The parent taglib node to append the tag element to.
+     * @param properties The map of implied attributes to add to composite components.
+     */
     public CompositeComponentHandler(String componentName, Document document, String namespaceURI, Node taglibNode, HashMap<String,ImpliedAttribute> properties) {
         this.componentName = componentName;
         this.document = document;
@@ -282,6 +290,15 @@ public class CompositeComponentHandler extends DefaultHandler {
         }
     }
 
+    /**
+     * Adds an implied attribute element to the given parent node.
+     * @param node The parent node to append the attribute to.
+     * @param name The attribute name.
+     * @param displayName The display name.
+     * @param description The description.
+     * @param required Whether the attribute is required.
+     * @param type The fully qualified Java type.
+     */
     public void addImpliedAttribute(Node node, String name, String displayName, String description, String required, String type) {
         // append default attributes
         Node attributeNode = node.appendChild(document.createElementNS(namespaceURI, ATTRIBUTE));

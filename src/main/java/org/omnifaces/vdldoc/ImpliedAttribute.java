@@ -27,35 +27,54 @@ package org.omnifaces.vdldoc;
  */
 public class ImpliedAttribute {
 
+    /** The display name of the attribute. */
     protected String displayName;
+
+    /** The description of the attribute. */
     protected String description;
+
+    /** Whether the attribute is required. */
     protected String required;
+
+    /** The fully qualified Java type of the attribute. */
     protected String type;
 
+    /** @return The display name. */
     public String getDisplayName() {
         return displayName;
     }
+
+    /** @param displayName The display name. */
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
+    /** @return The description. */
     public String getDescription() {
         return description;
     }
+
+    /** @param description The description. */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /** @return Whether the attribute is required. */
     public String getRequired() {
         return required;
     }
+
+    /** @param required Whether the attribute is required. */
     public void setRequired(String required) {
         this.required = required;
     }
 
+    /** @return The fully qualified Java type. */
     public String getType() {
         return type;
     }
+
+    /** @param type The fully qualified Java type. */
     public void setType(String type) {
         this.type = type;
     }

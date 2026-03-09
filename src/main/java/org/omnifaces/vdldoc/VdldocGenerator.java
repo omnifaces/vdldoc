@@ -184,7 +184,7 @@ public class VdldocGenerator {
      * Adds the given individual taglib file.
      * @param taglib The taglib file to add.
      * @throws IllegalArgumentException When the file does not exist, or is not a file, or does not have the extension
-     * <tt>.taglib.xml</tt>.
+     * {@code .taglib.xml}.
      */
     public void addTaglib(File taglib) {
         if (!taglib.exists() || !taglib.isFile() || !taglib.getName().toLowerCase().endsWith(".taglib.xml")) {
@@ -199,7 +199,7 @@ public class VdldocGenerator {
      * @param facesConfig The faces config file to set.
      * @throws IllegalStateException When the faces config file is already been set.
      * @throws IllegalArgumentException When the file does not exist, or is not a file, or does not have the name
-     * <tt>faces-config.xml</tt>.
+     * {@code faces-config.xml}.
      */
     public void setFacesConfig(File facesConfig) {
         if (!facesConfig.exists() || !facesConfig.isFile() || !facesConfig.getName().equals("faces-config.xml")) {
