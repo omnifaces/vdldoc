@@ -1,50 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 >
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.omnifaces</groupId>
     <artifactId>vdldoc</artifactId>
-    <version>3.2</version>
+    <version>4.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Vdldoc</name>
     <description>Facelets .taglib.xml documentation generator</description>
-
     <url>http://vdldoc.omnifaces.org</url>
     <organization>
         <name>OmniFaces</name>
         <url>http://omnifaces.org</url>
     </organization>
     <inceptionYear>2012</inceptionYear>
-
-    <licenses>
-        <license>
-            <name>New BSD License</name>
-            <url>http://opensource.org/licenses/BSD-3-Clause</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-
-    <scm>
-        <url>https://github.com/omnifaces/vdldoc</url>
-        <connection>scm:git:git://github.com/omnifaces/vdldoc.git</connection>
-        <developerConnection>scm:git:git@github.com:omnifaces/vdldoc.git</developerConnection>
-    </scm>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <javase.version>1.6</javase.version>
-    </properties>
 
     <developers>
         <developer>
@@ -59,25 +33,64 @@
         </developer>
     </developers>
 
+    <licenses>
+        <license>
+            <name>New BSD License</name>
+            <url>http://opensource.org/licenses/BSD-3-Clause</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
+    <scm>
+        <url>https://github.com/omnifaces/vdldoc</url>
+        <connection>scm:git:git://github.com/omnifaces/vdldoc.git</connection>
+        <developerConnection>scm:git:git@github.com:omnifaces/vdldoc.git</developerConnection>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>central</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <properties>
+        <javase.version>17</javase.version>
+        <maven.compiler.release>${javase.version}</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
     <build>
         <plugins>
         
-            <!-- Set the Java compiler versions -->
+            <!-- Prevent wrong JDK from being used to build the project. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.2</version>
-                <configuration>
-                    <source>${javase.version}</source>
-                    <target>${javase.version}</target>
-                </configuration>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.6.1</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[${javase.version},)</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
-            
+
             <!-- Configure the jar with the binaries -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.5</version>
+                <version>3.4.2</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -94,11 +107,11 @@
                 </configuration>
             </plugin>
 
-            <!-- Configure the jar with the sources (or rather, convince Maven that we want sources at all) -->
+            <!-- Configure the jar with the sources. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.4</version>
+                <version>3.4.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -109,13 +122,12 @@
                 </executions>
             </plugin>
 
-            <!-- Configure the jar with the javadoc (or rather, convince Maven that we want javadoc at all) -->
+            <!-- Configure the jar with the javadoc. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.1</version>
+                <version>3.12.0</version>
                 <configuration>
-                    <javadocVersion>1.8</javadocVersion>
                     <notimestamp>true</notimestamp>
                     <splitindex>true</splitindex>
                     <doctitle>Vdldoc API documentation</doctitle>
@@ -130,36 +142,40 @@
                 </executions>
             </plugin>
             
-            <!-- Deploying is done via sonatype's Nexus  
-            
-                 Snapshot deploy: mvn clean deploy
-                 Release deploy: mvn clean deploy -P release
-            -->
+            <!-- Configure snapshot deployment (release deployment is done via 'release' profile). -->
             <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.5</version>
-                <extensions>true</extensions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.4</version>
                 <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <skip>false</skip>
                 </configuration>
             </plugin>
-            
         </plugins>
     </build>
 
     <profiles>
+
+        <!-- Release deploy: mvn clean deploy -P release -->
         <profile>
             <id>release</id>
             <build>
                 <plugins>
-                    <!-- Signing with GPG is a requirement for a release deployment (to Maven central) -->
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.7.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <autoPublish>true</autoPublish>
+                        </configuration>
+                    </plugin>
+
+                    <!-- Signing with GPG is a requirement for a release deployment to Maven central. -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
+                        <version>3.2.7</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
