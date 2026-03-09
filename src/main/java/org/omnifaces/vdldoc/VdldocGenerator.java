@@ -43,9 +43,7 @@ import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -56,8 +54,6 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -137,7 +133,7 @@ public class VdldocGenerator {
     // Properties -----------------------------------------------------------------------------------------------------
 
     /** The set of tag library files we are parsing. */
-    private Set<File> taglibs = new LinkedHashSet<File>();
+    private Set<File> taglibs = new LinkedHashSet<>();
 
     /** The faces config file we are parsing. */
     private File facesConfig;
@@ -202,7 +198,7 @@ public class VdldocGenerator {
      * {@code faces-config.xml}.
      */
     public void setFacesConfig(File facesConfig) {
-        if (!facesConfig.exists() || !facesConfig.isFile() || !facesConfig.getName().equals("faces-config.xml")) {
+        if (!facesConfig.exists() || !facesConfig.isFile() || !"faces-config.xml".equals(facesConfig.getName())) {
             throw new IllegalArgumentException(String.format(ERROR_INVALID_FACES_CONFIG, facesConfig.getAbsolutePath()));
         }
 
@@ -288,16 +284,7 @@ public class VdldocGenerator {
             generateTaglibDetail();
             println("VDL documentation generation is finished!");
         }
-        catch (IOException e) {
-            throw new IllegalArgumentException(e);
-        }
-        catch (SAXException e) {
-            throw new IllegalArgumentException(e);
-        }
-        catch (ParserConfigurationException e) {
-            throw new IllegalArgumentException(e);
-        }
-        catch (TransformerException e) {
+        catch (IOException | SAXException | ParserConfigurationException | TransformerException e) {
             throw new IllegalArgumentException(e);
         }
     }
@@ -308,21 +295,17 @@ public class VdldocGenerator {
      * Loads the composite component attribute map.
      */
     private void loadCompositeAttributeMap() throws IOException {
-        compositeAttributeMap = new HashMap<String, ImpliedAttribute>();
-        Properties properties = new Properties();
+        compositeAttributeMap = new HashMap<>();
+        var properties = new Properties();
 
         if (attributesFile == null) { // use the default
             properties.load(getResourceAsStream("cc-attributes.properties"));
         }
         else { // use the specified file
             print(String.format("Parsing %s file... ", attributesFile.getName()));
-            FileInputStream input = new FileInputStream(attributesFile);
 
-            try {
+            try (var input = new FileInputStream(attributesFile)) {
                 properties.load(input);
-            }
-            finally {
-                try { input.close(); } catch (IOException ignore) { /**/ }
             }
         }
 
@@ -333,18 +316,18 @@ public class VdldocGenerator {
      * Parses the composite component attribute properties file.
      */
     private void parseCompositeAttributeMap(Properties properties, boolean log) {
-        boolean warned = false;
+        var warned = false;
 
         for (String key : properties.stringPropertyNames()) {
-            String value = properties.getProperty(key);
-            String name = "";
-            String attributeName = "";
-            String[] tokens = key.split("\\.");
+            var value = properties.getProperty(key);
+            var name = "";
+            var attributeName = "";
+            var tokens = key.split("\\.");
 
             if (tokens.length == 2) {
                 name = tokens[0];
                 attributeName = tokens[1];
-                ImpliedAttribute attribute = compositeAttributeMap.get(name);
+                var attribute = compositeAttributeMap.get(name);
 
                 if (attribute == null) { // create a new one
                     attribute = new ImpliedAttribute();
@@ -394,28 +377,28 @@ public class VdldocGenerator {
     private void createSummaryDoc()
         throws IOException, SAXException, ParserConfigurationException, TransformerException
     {
-        DocumentBuilder builder = createDocumentBuilder();
+        var builder = createDocumentBuilder();
         summaryDocument = builder.newDocument();
 
         // Create root <vdldoc> root element:
-        Element vdldocElement = summaryDocument.createElementNS(NS_JAKARTA_EE, "vdldoc");
+        var vdldocElement = summaryDocument.createElementNS(NS_JAKARTA_EE, "vdldoc");
         summaryDocument.appendChild(vdldocElement);
 
         // Create configuration element <config>:
-        Element configElement = summaryDocument.createElementNS(NS_JAKARTA_EE, "config");
+        var configElement = summaryDocument.createElementNS(NS_JAKARTA_EE, "config");
         vdldocElement.appendChild(configElement);
         configElement.setAttribute("hide-generated-by", String.valueOf(hideGeneratedBy));
 
-        String rootCssLocation = (cssLocation != null) ? cssLocation : DEFAULT_CSS_LOCATION;
-        String subfolderCssLocation = (rootCssLocation.matches("^(https?://|/).+") ? "" : "../") + rootCssLocation;
+        var rootCssLocation = (cssLocation != null) ? cssLocation : DEFAULT_CSS_LOCATION;
+        var subfolderCssLocation = (rootCssLocation.matches("^(https?://|/).+") ? "" : "../") + rootCssLocation;
         configElement.setAttribute("css-location", rootCssLocation);
         configElement.setAttribute("subfolder-css-location", subfolderCssLocation);
 
-        Element windowTitle = summaryDocument.createElementNS(NS_JAKARTA_EE, "window-title");
+        var windowTitle = summaryDocument.createElementNS(NS_JAKARTA_EE, "window-title");
         windowTitle.appendChild(summaryDocument.createTextNode(this.windowTitle));
         configElement.appendChild(windowTitle);
 
-        Element docTitle = summaryDocument.createElementNS(NS_JAKARTA_EE, "doc-title");
+        var docTitle = summaryDocument.createElementNS(NS_JAKARTA_EE, "doc-title");
         docTitle.appendChild(summaryDocument.createTextNode(this.docTitle));
         configElement.appendChild(docTitle);
 
@@ -423,8 +406,8 @@ public class VdldocGenerator {
         if (facesConfig != null) {
             print("Parsing faces-config.xml file... ");
 
-            Document doc = parse(builder, facesConfig);
-            Node facesConfigNode = summaryDocument.importNode(doc.getDocumentElement(), true);
+            var doc = parse(builder, facesConfig);
+            var facesConfigNode = summaryDocument.importNode(doc.getDocumentElement(), true);
             vdldocElement.appendChild(facesConfigNode);
 
             println("OK!");
@@ -434,50 +417,45 @@ public class VdldocGenerator {
         for (File taglib : taglibs) {
             print("Parsing " + taglib.getName() + " file... ");
 
-            Document document = parse(builder, taglib);
-            Element element = document.getDocumentElement();
-            Element taglibNode = (Element) summaryDocument.importNode(element, true);
+            var document = parse(builder, taglib);
+            var element = document.getDocumentElement();
+            var taglibNode = (Element) summaryDocument.importNode(element, true);
 
-            if (!taglibNode.getNamespaceURI().equals(NS_JAKARTA_EE)) {
+            if (!NS_JAKARTA_EE.equals(taglibNode.getNamespaceURI())) {
                 throw new IllegalArgumentException(String.format(ERROR_NS_JAKARTA_EE_MISSING, taglib.getName()));
             }
 
-            if (!taglibNode.getLocalName().equals("facelet-taglib")) {
+            if (!"facelet-taglib".equals(taglibNode.getLocalName())) {
                 throw new IllegalArgumentException(String.format(ERROR_TAGLIB_MISSING, taglib.getName()));
             }
 
-            NodeList shortNames = taglibNode.getElementsByTagNameNS("*", "short-name");
-            String id = shortNames.getLength() > 0 ? shortNames.item(0).getTextContent() : taglibNode.getAttribute("id");
+            var shortNames = taglibNode.getElementsByTagNameNS("*", "short-name");
+            var id = shortNames.getLength() > 0 ? shortNames.item(0).getTextContent() : taglibNode.getAttribute("id");
 
-            if (id == null || id.trim().isEmpty()) {
+            if ((id == null) || id.trim().isEmpty()) {
                 id = taglib.getName().substring(0, taglib.getName().indexOf('.'));
                 print(String.format(WARNING_ID_MISSING, taglib.getName(), id));
             }
 
             taglibNode.setAttribute("id", id);
             vdldocElement.appendChild(taglibNode);
-            NodeList compositeNodes = element.getElementsByTagNameNS("*", "composite-library-name");
+            var compositeNodes = element.getElementsByTagNameNS("*", "composite-library-name");
 
             if (compositeNodes.getLength() > 0) {
                 if (compositeNodes.getLength() > 1) {
                     throw new IllegalArgumentException(String.format(ERROR_INVALID_COMPOSITELIB, taglib.getName()));
                 }
 
-                String compositeLibraryName = compositeNodes.item(0).getTextContent();
-                File parentFolder = taglib.getParentFile(); // This is WEB-INF in WAR and META-INF in JAR.
+                var compositeLibraryName = compositeNodes.item(0).getTextContent();
+                var parentFolder = taglib.getParentFile(); // This is WEB-INF in WAR and META-INF in JAR.
 
-                if (parentFolder.getName().equals("WEB-INF")) {
+                if ("WEB-INF".equals(parentFolder.getName())) {
                     parentFolder = parentFolder.getParentFile();
                 }
 
-                File resourcesFolder = new File(parentFolder, "resources");
-                File compositeLibraryFolder = new File(resourcesFolder, compositeLibraryName);
-                File[] compositeComponentFiles = compositeLibraryFolder.listFiles(new FileFilter() {
-                    @Override
-                    public boolean accept(File pathname) {
-                        return (pathname != null) && (pathname.getName().endsWith(".xhtml"));
-                    }
-                });
+                var resourcesFolder = new File(parentFolder, "resources");
+                var compositeLibraryFolder = new File(resourcesFolder, compositeLibraryName);
+                var compositeComponentFiles = compositeLibraryFolder.listFiles((FileFilter) pathname -> (pathname != null) && (pathname.getName().endsWith(".xhtml")));
 
                 if (compositeComponentFiles != null) {
                     for (File compositeComponentFile : compositeComponentFiles) {
@@ -492,7 +470,7 @@ public class VdldocGenerator {
 
         // If debug enabled, output the resulting document, as a test:
         if (DEBUG_INPUT_DOCUMENT) {
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            var transformer = TransformerFactory.newInstance().newTransformer();
             transformer.transform(new DOMSource(summaryDocument), new StreamResult(System.out));
         }
     }
@@ -503,13 +481,13 @@ public class VdldocGenerator {
     private void parseCompositeComponentFile(String namespaceURI, Node taglibNode, File inputFile)
         throws ParserConfigurationException, SAXException, IOException
     {
-        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+        var saxParserFactory = SAXParserFactory.newInstance();
         saxParserFactory.setValidating(false);
         saxParserFactory.setNamespaceAware(true);
-        SAXParser saxParser = saxParserFactory.newSAXParser();
+        var saxParser = saxParserFactory.newSAXParser();
 
-        String inputFileName = inputFile.getName();
-        String componentName = inputFileName.substring(0, inputFileName.lastIndexOf(".xhtml"));
+        var inputFileName = inputFile.getName();
+        var componentName = inputFileName.substring(0, inputFileName.lastIndexOf(".xhtml"));
         saxParser.parse(inputFile, new CompositeComponentHandler(
             componentName, summaryDocument, namespaceURI, taglibNode, compositeAttributeMap));
     }
@@ -526,7 +504,7 @@ public class VdldocGenerator {
             copyResourceToFile("stylesheet.css", outputDirectory);
         }
 
-        File outputResourceDirectory = new File(outputDirectory, "resources");
+        var outputResourceDirectory = new File(outputDirectory, "resources");
         outputResourceDirectory.mkdirs();
 
         println("OK!");
@@ -552,52 +530,52 @@ public class VdldocGenerator {
      * Generates all the detail folders for each taglib.
      */
     private void generateTaglibDetail() throws IllegalArgumentException, TransformerException {
-        Set<String> ids = new HashSet<String>();
-        Element root = summaryDocument.getDocumentElement();
-        NodeList taglibs = root.getElementsByTagNameNS("*", "facelet-taglib");
-        int size = taglibs.getLength();
+        Set<String> ids = new HashSet<>();
+        var root = summaryDocument.getDocumentElement();
+        var taglibs = root.getElementsByTagNameNS("*", "facelet-taglib");
+        var size = taglibs.getLength();
 
-        for (int i = 0; i < size; i++) {
-            Element taglib = (Element) taglibs.item(i);
-            String id = taglib.getAttribute("id");
+        for (var i = 0; i < size; i++) {
+            var taglib = (Element) taglibs.item(i);
+            var id = taglib.getAttribute("id");
 
             if (!ids.add(id)) {
                 throw new IllegalArgumentException(String.format(ERROR_DUPLICATE_ID, id));
             }
 
             print("Generating docs for taglib '" + id + "'... ");
-            File outputDirectory = new File(this.outputDirectory, id);
+            var outputDirectory = new File(this.outputDirectory, id);
             outputDirectory.mkdir();
 
             // Generate information for each TLD:
             generateTaglibDetail(outputDirectory, id);
 
             // Generate information for each tag:
-            NodeList tags = taglib.getElementsByTagNameNS("*", "tag");
-            int numTags = tags.getLength();
+            var tags = taglib.getElementsByTagNameNS("*", "tag");
+            var numTags = tags.getLength();
 
-            for (int j = 0; j < numTags; j++) {
-                Element tag = (Element) tags.item(j);
-                String tagName = findElementValue(tag, "tag-name");
+            for (var j = 0; j < numTags; j++) {
+                var tag = (Element) tags.item(j);
+                var tagName = findElementValue(tag, "tag-name");
                 generateTagDetail(outputDirectory, id, tagName);
             }
 
             // Generate information for each function:
-            NodeList functions = taglib.getElementsByTagNameNS("*", "function");
-            int numFunctions = functions.getLength();
+            var functions = taglib.getElementsByTagNameNS("*", "function");
+            var numFunctions = functions.getLength();
 
-            for (int j = 0; j < numFunctions; j++) {
-                Element function = (Element) functions.item(j);
-                String functionName = findElementValue(function, "function-name");
+            for (var j = 0; j < numFunctions; j++) {
+                var function = (Element) functions.item(j);
+                var functionName = findElementValue(function, "function-name");
                 generateFunctionDetail(outputDirectory, id, functionName);
             }
 
-            NodeList elVariables = taglib.getElementsByTagNameNS("*", "el-variable");
-            int numELVariables = elVariables.getLength();
+            var elVariables = taglib.getElementsByTagNameNS("*", "el-variable");
+            var numELVariables = elVariables.getLength();
 
-            for (int j = 0; j < numELVariables; j++) {
-                Element elVariable = (Element) elVariables.item(j);
-                String elVariableName = findElementValue(elVariable, "el-variable-name");
+            for (var j = 0; j < numELVariables; j++) {
+                var elVariable = (Element) elVariables.item(j);
+                var elVariableName = findElementValue(elVariable, "el-variable-name");
                 generateELVariableDetail(outputDirectory, id, elVariableName);
             }
 
@@ -612,7 +590,7 @@ public class VdldocGenerator {
      * @param id The ID of the tag library.
      */
     private void generateTaglibDetail(File outputDirectory, String id) throws TransformerException {
-        Map<String, String> parameters = new HashMap<String, String>();
+        var parameters = new HashMap<String, String>();
         parameters.put("id", id);
 
         generatePage(new File(outputDirectory, "tld-frame.html"), "tld-frame.html.xsl", parameters);
@@ -629,7 +607,7 @@ public class VdldocGenerator {
     private void generateTagDetail(File outputDirectory, String id, String tagName)
         throws TransformerException
     {
-        Map<String, String> parameters = new HashMap<String, String>();
+        Map<String, String> parameters = new HashMap<>();
         parameters.put("id", id);
         parameters.put("tagName", tagName);
 
@@ -646,7 +624,7 @@ public class VdldocGenerator {
     private void generateFunctionDetail(File outputDirectory, String id, String functionName)
         throws TransformerException
     {
-        Map<String, String> parameters = new HashMap<String, String>();
+        Map<String, String> parameters = new HashMap<>();
         parameters.put("id", id);
         parameters.put("functionName", functionName);
 
@@ -656,7 +634,7 @@ public class VdldocGenerator {
     private void generateELVariableDetail(File outputDirectory, String id, String elVariableName)
             throws TransformerException
     {
-        Map<String, String> parameters = new HashMap<String, String>();
+        Map<String, String> parameters = new HashMap<>();
         parameters.put("id", id);
         parameters.put("elVariableName", elVariableName);
 
@@ -682,8 +660,8 @@ public class VdldocGenerator {
     private void generatePage(File outputFile, String inputXSL, Map<String, String> params)
         throws TransformerException
     {
-        InputStream xsl = getResourceAsStream(inputXSL);
-        Transformer transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(xsl));
+        var xsl = getResourceAsStream(inputXSL);
+        var transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(xsl));
 
         for (Map.Entry<String, String> entry : params.entrySet()) {
             transformer.setParameter(entry.getKey(), entry.getValue());
@@ -700,17 +678,12 @@ public class VdldocGenerator {
      * @throws ParserConfigurationException
      */
     private static DocumentBuilder createDocumentBuilder() throws ParserConfigurationException {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        var factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(false);
         factory.setNamespaceAware(true);
         factory.setExpandEntityReferences(false);
-        DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-        documentBuilder.setEntityResolver(new EntityResolver() {
-            @Override
-            public InputSource resolveEntity(String publicId, String systemId) {
-                return new InputSource(new CharArrayReader(new char[0]));
-            }
-        });
+        var documentBuilder = factory.newDocumentBuilder();
+        documentBuilder.setEntityResolver((publicId, systemId) -> new InputSource(new CharArrayReader(new char[0])));
 
         return documentBuilder;
     }
@@ -722,17 +695,15 @@ public class VdldocGenerator {
      * @return The document.
      */
     private Document parse(DocumentBuilder builder, File file) throws SAXException, IOException {
-        FileInputStream in = new FileInputStream(file);
+        try (var in = new FileInputStream(file)) {
+            var document = builder.parse(new InputSource(in));
+            var documentElement = document.getDocumentElement();
+            var usingOldJavaEESunNS = NS_JAVAEE_SUN.equals(documentElement.getNamespaceURI());
+            var usingOldJavaEEJCPNS = NS_JAVAEE_JCP.equals(documentElement.getNamespaceURI());
+            var usingOldVdldocNS = false;
 
-        try {
-            Document document = builder.parse(new InputSource(in));
-            Element documentElement = document.getDocumentElement();
-            boolean usingOldJavaEESunNS = documentElement.getNamespaceURI().equals(NS_JAVAEE_SUN);
-            boolean usingOldJavaEEJCPNS = documentElement.getNamespaceURI().equals(NS_JAVAEE_JCP);
-            boolean usingOldVdldocNS = false;
-
-            for (int i = 0; i < documentElement.getAttributes().getLength(); i++) {
-                Attr attr = (Attr) documentElement.getAttributes().item(i);
+            for (var i = 0; i < documentElement.getAttributes().getLength(); i++) {
+                var attr = (Attr) documentElement.getAttributes().item(i);
 
                 if (NS_VDLDOC_OLD.equals(attr.getNodeValue())) {
                     usingOldVdldocNS = true;
@@ -755,16 +726,13 @@ public class VdldocGenerator {
                     print(String.format(WARNING_OLD_NS_VDLDOC, file.getName()));
                 }
 
-                Document documentWithNewNS = builder.newDocument();
+                var documentWithNewNS = builder.newDocument();
                 changeNamespace(document, documentWithNewNS);
                 return documentWithNewNS;
             }
             else {
                 return document;
             }
-        }
-        finally {
-            try { in.close(); } catch (IOException ignore) { /**/ }
         }
     }
 
@@ -775,11 +743,11 @@ public class VdldocGenerator {
      * @param to The target node.
      */
     private static void changeNamespace(Node from, Node to) {
-        NodeList children = from.getChildNodes();
-        Document document = (to.getNodeType() == Node.DOCUMENT_NODE) ? (Document) to : to.getOwnerDocument();
+        var children = from.getChildNodes();
+        var document = (to.getNodeType() == Node.DOCUMENT_NODE) ? (Document) to : to.getOwnerDocument();
 
-        for (int i = 0; i < children.getLength(); i++) {
-            Node node = children.item(i);
+        for (var i = 0; i < children.getLength(); i++) {
+            var node = children.item(i);
             changeNamespace(node, cloneAndChangeNamespace(document, node, to));
         }
     }
@@ -794,7 +762,7 @@ public class VdldocGenerator {
      */
     private static Node cloneAndChangeNamespace(Document document, Node from, Node to) {
         if (from.getNodeType() == Node.ELEMENT_NODE) {
-            String oldNS = from.getNamespaceURI();
+            var oldNS = from.getNamespaceURI();
             Element clone;
 
             if (NS_JAVAEE_SUN.equals(oldNS) || NS_JAVAEE_JCP.equals(oldNS)) {
@@ -809,9 +777,9 @@ public class VdldocGenerator {
 
             to.appendChild(clone);
 
-            for (int i = 0; i < from.getAttributes().getLength(); i++) {
-                Attr attr = (Attr) from.getAttributes().item(i);
-                String value = attr.getValue();
+            for (var i = 0; i < from.getAttributes().getLength(); i++) {
+                var attr = (Attr) from.getAttributes().item(i);
+                var value = attr.getValue();
 
                 if (NS_JAVAEE_SUN.equals(value) || NS_JAVAEE_JCP.equals(value)) {
                     clone.setAttributeNS(attr.getNamespaceURI(), attr.getNodeName(), NS_JAKARTA_EE);
@@ -827,7 +795,7 @@ public class VdldocGenerator {
             return clone;
         }
         else {
-            Node clone = from.cloneNode(false);
+            var clone = from.cloneNode(false);
             document.adoptNode(clone);
             to.appendChild(clone);
             return clone;
@@ -842,11 +810,11 @@ public class VdldocGenerator {
      */
     private static String findElementValue(Element parent, String tagName) {
         String result = null;
-        NodeList elements = parent.getElementsByTagNameNS("*", tagName);
+        var elements = parent.getElementsByTagNameNS("*", tagName);
 
         if (elements.getLength() >= 1) {
-            Element child = (Element) elements.item(0);
-            Node body = child.getFirstChild();
+            var child = (Element) elements.item(0);
+            var body = child.getFirstChild();
 
             if (body.getNodeType() == Node.TEXT_NODE) {
                 result = body.getNodeValue();
@@ -863,24 +831,14 @@ public class VdldocGenerator {
      * @param outputDirectory The output directory.
      */
     private static void copyResourceToFile(String resourceName, File outputDirectory) throws IOException {
-        InputStream in = null;
-        OutputStream out = null;
+        try (
+            var in = getResourceAsStream(resourceName);
+            OutputStream out = new FileOutputStream(new File(outputDirectory, resourceName));
+        ) {
+            var buffer = new byte[1024];
 
-        try {
-            in = getResourceAsStream(resourceName);
-            out = new FileOutputStream(new File(outputDirectory, resourceName));
-            byte[] buffer = new byte[1024];
-
-            for (int length = 0; (length = in.read(buffer)) != -1;) {
+            for (var length = 0; (length = in.read(buffer)) != -1;) {
                 out.write(buffer, 0, length);
-            }
-        }
-        finally {
-            if (out != null) {
-                try { out.close(); } catch (IOException ignore) { /**/ }
-            }
-            if (in != null ) {
-                try { in.close(); } catch (IOException ignore) { /**/ }
             }
         }
     }

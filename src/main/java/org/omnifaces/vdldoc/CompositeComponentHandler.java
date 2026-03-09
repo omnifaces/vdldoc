@@ -33,7 +33,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -54,9 +53,8 @@ public class CompositeComponentHandler extends DefaultHandler {
     private static final String COMPOSITE_NAMESPACE_SUN = "http://java.sun.com/jsf/composite";
     private static final String COMPOSITE_NAMESPACE_JCP = "http://xmlns.jcp.org/jsf/composite";
     private static final String COMPOSITE_NAMESPACE_JEE = "https://jakarta.ee/xml/ns/jakartaee";
-    private static final Set<String> COMPOSITE_NAMESPACES = unmodifiableSet(new HashSet<String>(asList(COMPOSITE_NAMESPACE_SUN, COMPOSITE_NAMESPACE_JCP, COMPOSITE_NAMESPACE_JEE)));
+    private static final Set<String> COMPOSITE_NAMESPACES = unmodifiableSet(new HashSet<>(asList(COMPOSITE_NAMESPACE_SUN, COMPOSITE_NAMESPACE_JCP, COMPOSITE_NAMESPACE_JEE)));
     private static final String DEPRECATED = "deprecated";
-    private static final String DEPRECATION ="deprecation";
     private static final String DESCRIPTION = "description";
     private static final String DISPLAY_NAME = "displayName";
     private static final String EDITABLE_VALUE_HOLDER = "editableValueHolder";
@@ -106,9 +104,9 @@ public class CompositeComponentHandler extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
 
-        if (uri != null && localName != null) {
+        if ((uri != null) && (localName != null)) {
 
-            if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(INTERFACE)) {
+            if (COMPOSITE_NAMESPACES.contains(uri) && INTERFACE.equals(localName)) {
                 if (valueHolder) {
                     if (valueGiven) {
                         System.out.println("INFO: valueHolder = " + valueHolder + ", but valueGiven = " + valueGiven +
@@ -121,7 +119,7 @@ public class CompositeComponentHandler extends DefaultHandler {
 
                 tagNode = null;
 
-            } else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(EXTENSION)) {
+            } else if (COMPOSITE_NAMESPACES.contains(uri) && EXTENSION.equals(localName)) {
                 tagExtensionNode = null;
             }
         }
@@ -136,33 +134,33 @@ public class CompositeComponentHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String elementName, Attributes attributes)
         throws SAXException {
 
-        if (uri != null && localName != null) {
+        if ((uri != null) && (localName != null)) {
 
-            if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(INTERFACE)) {
+            if (COMPOSITE_NAMESPACES.contains(uri) && INTERFACE.equals(localName)) {
                 valueGiven = false;
-                Element tagElement = document.createElementNS(namespaceURI, TAG);
+                var tagElement = document.createElementNS(namespaceURI, TAG);
                 tagNode = taglibNode.appendChild(tagElement);
 
-                String shortDescription = attributes.getValue(SHORT_DESCRIPTION);
+                var shortDescription = attributes.getValue(SHORT_DESCRIPTION);
                 if (shortDescription != null) {
-                    Element shortDescriptionElement = document.createElementNS(namespaceURI, DESCRIPTION);
+                    var shortDescriptionElement = document.createElementNS(namespaceURI, DESCRIPTION);
                     shortDescriptionElement.setTextContent(shortDescription);
                     tagNode.appendChild(shortDescriptionElement);
                 }
 
-                Element tagNameElement = document.createElementNS(namespaceURI, TAG_NAME);
+                var tagNameElement = document.createElementNS(namespaceURI, TAG_NAME);
                 tagNameElement.setTextContent(componentName);
                 tagNode.appendChild(tagNameElement);
 
-                Element componentElement = document.createElementNS(namespaceURI, COMPONENT);
-                Element componentTypeElement = document.createElementNS(namespaceURI, COMPONENT_TYPE);
+                var componentElement = document.createElementNS(namespaceURI, COMPONENT);
+                var componentTypeElement = document.createElementNS(namespaceURI, COMPONENT_TYPE);
                 componentTypeElement.setTextContent(FACELET_COMPOSITE_COMPONENT);
                 componentElement.appendChild(componentTypeElement);
                 tagNode.appendChild(componentElement);
 
                 for (Map.Entry<String, ImpliedAttribute> entry : attributeMap.entrySet()) {
-                    String name = entry.getKey();
-                    ImpliedAttribute attribute = entry.getValue();
+                    var name = entry.getKey();
+                    var attribute = entry.getValue();
                     addImpliedAttribute(
                         tagNode,
                         name,
@@ -174,33 +172,33 @@ public class CompositeComponentHandler extends DefaultHandler {
                 }
 
             }
-            else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(ATTRIBUTE)) {
+            else if (COMPOSITE_NAMESPACES.contains(uri) && ATTRIBUTE.equals(localName)) {
 
                 if (tagNode != null) {
 
-                    Node attributeNode = tagNode.appendChild(document.createElementNS(namespaceURI, ATTRIBUTE));
+                    var attributeNode = tagNode.appendChild(document.createElementNS(namespaceURI, ATTRIBUTE));
 
                     // description
-                    String description = attributes.getValue(SHORT_DESCRIPTION);
+                    var description = attributes.getValue(SHORT_DESCRIPTION);
 
                     if (description != null) {
-                        Element descriptionElement = document.createElementNS(namespaceURI, DESCRIPTION);
+                        var descriptionElement = document.createElementNS(namespaceURI, DESCRIPTION);
                         descriptionElement.setTextContent(description);
                         attributeNode.appendChild(descriptionElement);
                     }
 
                     // displayName
-                    String displayName = attributes.getValue(DISPLAY_NAME);
+                    var displayName = attributes.getValue(DISPLAY_NAME);
 
                     if (displayName != null) {
-                        Element displayNameElement = document.createElementNS(namespaceURI, DISPLAY_NAME);
+                        var displayNameElement = document.createElementNS(namespaceURI, DISPLAY_NAME);
                         displayNameElement.setTextContent(displayName);
                         attributeNode.appendChild(displayNameElement);
                     }
 
                     // name
-                    Element nameElement = document.createElementNS(namespaceURI, NAME);
-                    String name = attributes.getValue(NAME);
+                    var nameElement = document.createElementNS(namespaceURI, NAME);
+                    var name = attributes.getValue(NAME);
                     nameElement.setTextContent(name);
                     attributeNode.appendChild(nameElement);
 
@@ -209,65 +207,65 @@ public class CompositeComponentHandler extends DefaultHandler {
                     }
 
                     // required
-                    String required = attributes.getValue(REQUIRED);
+                    var required = attributes.getValue(REQUIRED);
 
                     if (required == null) {
                         required = Boolean.FALSE.toString();
                     }
 
-                    Element requiredElement = document.createElementNS(namespaceURI, REQUIRED);
+                    var requiredElement = document.createElementNS(namespaceURI, REQUIRED);
                     requiredElement.setTextContent(required);
                     attributeNode.appendChild(requiredElement);
 
                     // type
-                    String type = attributes.getValue(TYPE);
+                    var type = attributes.getValue(TYPE);
 
                     if (type == null) {
                         type = String.class.getName();
                     }
 
-                    Element typeElement = document.createElementNS(namespaceURI, TYPE);
+                    var typeElement = document.createElementNS(namespaceURI, TYPE);
                     typeElement.setTextContent(type);
                     attributeNode.appendChild(typeElement);
 
                 }
-            } else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(EXTENSION)) {
+            } else if (COMPOSITE_NAMESPACES.contains(uri) && EXTENSION.equals(localName)) {
                 if (tagNode != null) {
                     tagExtensionNode = tagNode.appendChild(document.createElementNS(namespaceURI, TAG_EXTENSION));
                 }
-            } else if (isVdldocNamespace(uri) && localName.equals(SINCE)) {
+            } else if (isVdldocNamespace(uri) && SINCE.equals(localName)) {
 
                 if (tagExtensionNode != null) {
 
-                    String since = attributes.getValue(VALUE);
+                    var since = attributes.getValue(VALUE);
 
                     if (since != null) {
 
-                        Element sinceElement = document.createElementNS(VdldocGenerator.NS_VDLDOC, SINCE);
+                        var sinceElement = document.createElementNS(VdldocGenerator.NS_VDLDOC, SINCE);
                         sinceElement.setTextContent(since);
                         tagExtensionNode.appendChild(sinceElement);
                     }
                 }
-            } else if (isVdldocNamespace(uri) && localName.equals(EXAMPLE_URL)) {
+            } else if (isVdldocNamespace(uri) && EXAMPLE_URL.equals(localName)) {
 
                 if (tagExtensionNode != null) {
 
-                    String exampleURL = attributes.getValue(VALUE);
+                    var exampleURL = attributes.getValue(VALUE);
 
                     if (exampleURL != null) {
 
-                        Element exampleURLElement = document.createElementNS(VdldocGenerator.NS_VDLDOC, EXAMPLE_URL);
+                        var exampleURLElement = document.createElementNS(VdldocGenerator.NS_VDLDOC, EXAMPLE_URL);
                         exampleURLElement.setTextContent(exampleURL);
                         tagExtensionNode.appendChild(exampleURLElement);
                     }
                 }
-            } else if (isVdldocNamespace(uri) && localName.equals(DEPRECATED)) {
+            } else if (isVdldocNamespace(uri) && DEPRECATED.equals(localName)) {
 
                 if (tagExtensionNode != null) {
 
-                    Element deprecatedElement = document.createElementNS(VdldocGenerator.NS_VDLDOC, DEPRECATED);
-                    String deprecatedShortDescription = attributes.getValue(SHORT_DESCRIPTION);
-                    String deprecatedValue = attributes.getValue(VALUE);
+                    var deprecatedElement = document.createElementNS(VdldocGenerator.NS_VDLDOC, DEPRECATED);
+                    var deprecatedShortDescription = attributes.getValue(SHORT_DESCRIPTION);
+                    var deprecatedValue = attributes.getValue(VALUE);
 
                     if (deprecatedShortDescription != null) {
                         deprecatedElement.setTextContent(deprecatedShortDescription);
@@ -278,14 +276,12 @@ public class CompositeComponentHandler extends DefaultHandler {
 
                     tagExtensionNode.appendChild(deprecatedElement);
                 }
-            } else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(VALUE_HOLDER)) {
+            } else if (COMPOSITE_NAMESPACES.contains(uri) && VALUE_HOLDER.equals(localName)) {
                 if (tagNode != null) {
                     valueHolder = true;
                 }
-            } else if (COMPOSITE_NAMESPACES.contains(uri) && localName.equals(EDITABLE_VALUE_HOLDER)) {
-                if (tagNode != null) {
-                    valueHolder = true;
-                }
+            } else if ((COMPOSITE_NAMESPACES.contains(uri) && EDITABLE_VALUE_HOLDER.equals(localName)) && (tagNode != null)) {
+                valueHolder = true;
             }
         }
     }
@@ -301,36 +297,36 @@ public class CompositeComponentHandler extends DefaultHandler {
      */
     public void addImpliedAttribute(Node node, String name, String displayName, String description, String required, String type) {
         // append default attributes
-        Node attributeNode = node.appendChild(document.createElementNS(namespaceURI, ATTRIBUTE));
+        var attributeNode = node.appendChild(document.createElementNS(namespaceURI, ATTRIBUTE));
 
         // name
-        Element nameElement = document.createElementNS(namespaceURI, NAME);
+        var nameElement = document.createElementNS(namespaceURI, NAME);
         nameElement.setTextContent(name);
         attributeNode.appendChild(nameElement);
 
         // display name
-        Element displayNameElement = document.createElementNS(namespaceURI, DISPLAY_NAME);
+        var displayNameElement = document.createElementNS(namespaceURI, DISPLAY_NAME);
         displayNameElement.setTextContent(displayName);
         attributeNode.appendChild(displayNameElement);
 
         // description
-        Element descriptionElement = document.createElementNS(namespaceURI, DESCRIPTION);
+        var descriptionElement = document.createElementNS(namespaceURI, DESCRIPTION);
         descriptionElement.setTextContent(description);
         attributeNode.appendChild(descriptionElement);
 
         // required
-        Element requiredElement = document.createElementNS(namespaceURI, REQUIRED);
+        var requiredElement = document.createElementNS(namespaceURI, REQUIRED);
         requiredElement.setTextContent(required);
         attributeNode.appendChild(requiredElement);
 
         // type
-        Element typeElement = document.createElementNS(namespaceURI, TYPE);
+        var typeElement = document.createElementNS(namespaceURI, TYPE);
         typeElement.setTextContent(type);
         attributeNode.appendChild(typeElement);
     }
 
-    private boolean isVdldocNamespace(String uri) {
-        return uri.equals(VdldocGenerator.NS_VDLDOC) || uri.equals(VdldocGenerator.NS_VDLDOC_OLD);
+    private static boolean isVdldocNamespace(String uri) {
+        return VdldocGenerator.NS_VDLDOC.equals(uri) || VdldocGenerator.NS_VDLDOC_OLD.equals(uri);
     }
 
 }
