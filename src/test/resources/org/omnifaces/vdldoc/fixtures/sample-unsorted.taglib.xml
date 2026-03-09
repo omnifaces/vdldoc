@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) OmniFaces
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+    following conditions are met:
+
+        * Redistributions of source code must retain the above copyright notice, this list of conditions and the
+          following disclaimer.
+        * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+          following disclaimer in the documentation and/or other materials provided with the distribution.
+        * Neither the name of OmniFaces nor the names of its contributors may be used to endorse or promote products
+          derived from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+    INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+    OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+    STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+    EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+-->
+<facelet-taglib xmlns="https://jakarta.ee/xml/ns/jakartaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facelettaglibrary_4_0.xsd"
+    version="4.0">
+    <short-name>unsorted</short-name>
+    <namespace>http://example.com/unsorted</namespace>
+    <tag>
+        <tag-name>zebra</tag-name>
+        <component>
+            <component-type>com.example.Zebra</component-type>
+        </component>
+        <attribute>
+            <name>charlie</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>alpha</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>bravo</name>
+            <required>false</required>
+            <type>java.lang.Integer</type>
+        </attribute>
+    </tag>
+    <tag>
+        <tag-name>apple</tag-name>
+        <component>
+            <component-type>com.example.Apple</component-type>
+        </component>
+    </tag>
+    <tag>
+        <tag-name>mango</tag-name>
+        <component>
+            <component-type>com.example.Mango</component-type>
+        </component>
+    </tag>
+    <function>
+        <function-name>zoo</function-name>
+        <function-class>com.example.Functions</function-class>
+        <function-signature>java.lang.String zoo()</function-signature>
+    </function>
+    <function>
+        <function-name>bar</function-name>
+        <function-class>com.example.Functions</function-class>
+        <function-signature>java.lang.String bar()</function-signature>
+    </function>
+    <function>
+        <function-name>foo</function-name>
+        <function-class>com.example.Functions</function-class>
+        <function-signature>java.lang.String foo()</function-signature>
+    </function>
+</facelet-taglib>
