@@ -83,7 +83,7 @@ The `<facelet-taglib><short-name>` (introduced in JSF 2.2) will be used as the t
 ```xml
 <facelet-taglib>
     <description>OmniFaces UI components.</description>
-    <namespace>http://omnifaces.org/ui</namespace>
+    <namespace>omnifaces</namespace>
     <short-name>o</short-name>
     ...
 </facelet-taglib>
