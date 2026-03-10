@@ -67,7 +67,7 @@ Much like old TLDdoc usage, once the jar is in runtime classpath, run it as foll
 ```java
 VdldocGenerator generator = new VdldocGenerator();
 generator.setWindowTitle("Browser window title"); // Else default will be used.
-generator.setDocTitle("Documentation title"); // Else default will be used.
+generator.setDocTitle("Documentation title"); // Else window title will be used.
 generator.setOutputDirectory(new File("/path/to/vdldoc")); // Else ./vdldoc will be used.
 generator.setCssLocation("/uri/to/style.css"); // Optional (overrides default CSS).
 generator.setFacesConfig(new File("/path/to/faces-config.xml")); // Optional.
