@@ -7,7 +7,6 @@
     <meta name="description" content="Vdldoc : Facelets .taglib.xml documentation generator">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" media="(prefers-color-scheme: light)">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
 
@@ -36,7 +35,7 @@
 
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner markdown-body">
+      <section id="main_content" class="inner">
         <p id="status">Loading README...</p>
       </section>
     </div>
@@ -56,9 +55,6 @@
         highlight: function(code, language) {
           if (language && hljs.getLanguage(language)) {
             return hljs.highlight(code, { language: language }).value;
-          }
-          else {
-            return hljs.highlightAuto(code).value;
           }
         }
       });

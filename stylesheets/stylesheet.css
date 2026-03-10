@@ -171,10 +171,8 @@ pre, code {
 }
 
 pre {
-  width: 100%;
-  padding: 10px;
+  width: calc(100% - 10px);
   box-shadow: 0 0 10px rgba(0,0,0,.1);
-  overflow: auto;
 }
 
 code {
@@ -186,6 +184,11 @@ code {
 pre code {
   display: block;
   box-shadow: none;
+}
+
+pre code.hljs {
+  padding: 3px 5px;
+  margin: 0;
 }
 
 blockquote {
