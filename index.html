@@ -53,7 +53,7 @@
     <script>
       marked.setOptions({
         highlight: function(code, language) {
-          if (language && hljs.getLanguage(language)) {
+          if (language === "xml" || language === "java") {
             return hljs.highlight(code, { language: language }).value;
           }
         }

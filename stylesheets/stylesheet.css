@@ -184,11 +184,9 @@ code {
 pre code {
   display: block;
   box-shadow: none;
-}
-
-pre code.hljs {
-  padding: 3px 5px;
-  margin: 0;
+  padding: 3px 5px !important;
+  margin: 0 !important;
+  overflow-x: auto !important;
 }
 
 blockquote {
