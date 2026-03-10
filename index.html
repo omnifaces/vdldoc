@@ -51,14 +51,6 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
     <script>
-      marked.setOptions({
-        highlight: function(code, language) {
-          if (language === "xml" || language === "java") {
-            return hljs.highlight(code, { language: language }).value;
-          }
-        }
-      });
-
       const readmeUrl = 'https://raw.githubusercontent.com/omnifaces/vdldoc/main/README.md';
 
       fetch(readmeUrl).then(response => {
@@ -68,7 +60,7 @@
         return response.text();
       }).then(text => {
         document.getElementById('main_content').innerHTML = marked.parse(text.substring(text.indexOf("##")));
-        document.querySelectorAll('#main_content pre code').forEach(block => hljs.highlightElement(block));
+        document.querySelectorAll('#main_content pre code[class=language-java], #main_content pre code[class=language-xml]').forEach(block => hljs.highlightElement(block));
       }).catch(error => {
         document.getElementById('status').innerHTML = `<span style="color:#c00;">Error loading README: ${error.message}</span>`;
       });
