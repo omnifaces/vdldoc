@@ -420,6 +420,26 @@ class CompositeComponentHandlerTest {
             var attributes = tag.getElementsByTagNameNS("*", "attribute");
             assertThat(attributes.getLength()).isEqualTo(1);
         }
+
+        @Test
+        void parsesWithJakartaFacesCompositeNamespace() throws Exception {
+            attributeMap.clear();
+
+            var xhtml = """
+                <html xmlns:cc="jakarta.faces.composite">
+                <cc:interface>
+                    <cc:attribute name="facesAttr"/>
+                </cc:interface>
+                </html>
+                """;
+            parseXhtml(xhtml);
+
+            var tag = (Element) getTagElements().item(0);
+            assertThat(getElementText(tag, "tag-name")).isEqualTo("testComponent");
+
+            var attributes = tag.getElementsByTagNameNS("*", "attribute");
+            assertThat(attributes.getLength()).isEqualTo(1);
+        }
     }
 
     @Nested

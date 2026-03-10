@@ -22,12 +22,8 @@
  */
 package org.omnifaces.vdldoc;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.unmodifiableSet;
-
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -52,7 +48,8 @@ public class CompositeComponentHandler extends DefaultHandler {
     private static final String COMPOSITE_NAMESPACE_SUN = "http://java.sun.com/jsf/composite";
     private static final String COMPOSITE_NAMESPACE_JCP = "http://xmlns.jcp.org/jsf/composite";
     private static final String COMPOSITE_NAMESPACE_JEE = "https://jakarta.ee/xml/ns/jakartaee";
-    private static final Set<String> COMPOSITE_NAMESPACES = unmodifiableSet(new HashSet<>(asList(COMPOSITE_NAMESPACE_SUN, COMPOSITE_NAMESPACE_JCP, COMPOSITE_NAMESPACE_JEE)));
+    private static final String COMPOSITE_NAMESPACE_FACES = "jakarta.faces.composite";
+    private static final Set<String> COMPOSITE_NAMESPACES = Set.of(COMPOSITE_NAMESPACE_SUN, COMPOSITE_NAMESPACE_JCP, COMPOSITE_NAMESPACE_JEE, COMPOSITE_NAMESPACE_FACES);
     private static final String DEPRECATED = "deprecated";
     private static final String DESCRIPTION = "description";
     private static final String DISPLAY_NAME = "displayName";
