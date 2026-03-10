@@ -37,7 +37,8 @@ It's also used by OmniFaces and PrimeFaces.
 
 - **4.0** (?? ??? 2026) - [library](https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/4.0/vdldoc-4.0.jar) - [sources](https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/4.0/vdldoc-4.0-sources.jar) - [javadoc](https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/4.0/vdldoc-4.0-javadoc.jar)
     - Minimum Java SE runtime requirement is now Java 17 instead of Java 1.6 (!!).
-    - Added support for new Jakarta EE 10's `jakarta.faces.composite` composite XML namespace in addition to old `http://xmlns.jcp.org/jsf/composite`.
+    - Added support for new Jakarta EE 10's `jakarta.faces.composite` XML namespace in addition to old `http://xmlns.jcp.org/jsf/composite` XML namespace.
+    - The `-doctitle` defaults now to the final value of `-windowtitle` instead of to its default.
 - **3.2** (21 Jun 2024) - [library](https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.2/vdldoc-3.2.jar) - [sources](https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.2/vdldoc-3.2-sources.jar) - [javadoc](https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/3.2/vdldoc-3.2-javadoc.jar)
     - Empty taglibs (e.g. Jakarta Faces Passthrough) are now allowed.
     - Tag summaries and attributes are now ordered by name.
