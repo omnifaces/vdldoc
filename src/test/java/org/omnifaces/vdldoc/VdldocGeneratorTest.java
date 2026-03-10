@@ -24,6 +24,9 @@ package org.omnifaces.vdldoc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.omnifaces.vdldoc.VdldocGenerator.DEFAULT_CSS_LOCATION;
+import static org.omnifaces.vdldoc.VdldocGenerator.DEFAULT_OUTPUT_DIRECTORY;
+import static org.omnifaces.vdldoc.VdldocGenerator.DEFAULT_WINDOW_TITLE;
 
 import java.io.File;
 import java.io.IOException;
@@ -214,7 +217,7 @@ class VdldocGeneratorTest {
             generator.generate();
 
             var output = tempDir.resolve("output").toFile();
-            assertThat(new File(output, "stylesheet.css")).exists();
+            assertThat(new File(output, DEFAULT_CSS_LOCATION)).exists();
         }
 
         @Test
@@ -224,7 +227,7 @@ class VdldocGeneratorTest {
             generator.generate();
 
             var output = tempDir.resolve("output").toFile();
-            assertThat(new File(output, "stylesheet.css")).doesNotExist();
+            assertThat(new File(output, DEFAULT_CSS_LOCATION)).doesNotExist();
         }
 
         @Test
@@ -501,14 +504,14 @@ class VdldocGeneratorTest {
     @Nested
     class TitleConfiguration {
 
+
         @Test
         void windowTitleAppearsInOutput() throws IOException {
             generator.addTaglib(fixture("sample-jakarta.taglib.xml"));
             generator.setWindowTitle("Custom Window Title");
             generator.generate();
 
-            var indexFile = tempDir.resolve("output/index.html").toFile();
-            var content = Files.readString(indexFile.toPath());
+            var content = Files.readString(tempDir.resolve("output/index.html"));
             assertThat(content).contains("Custom Window Title");
         }
 
@@ -518,9 +521,112 @@ class VdldocGeneratorTest {
             generator.setDocTitle("Custom Doc Title");
             generator.generate();
 
-            var overviewFile = tempDir.resolve("output/overview-summary.html").toFile();
-            var content = Files.readString(overviewFile.toPath());
+            var content = Files.readString(tempDir.resolve("output/overview-summary.html"));
             assertThat(content).contains("Custom Doc Title");
+        }
+
+        @Test
+        void docTitleDefaultsToWindowTitle() throws IOException {
+            generator.addTaglib(fixture("sample-jakarta.taglib.xml"));
+            generator.setWindowTitle("My Window Title");
+            generator.generate();
+
+            var content = Files.readString(tempDir.resolve("output/overview-summary.html"));
+            assertThat(content).contains("My Window Title");
+        }
+
+        @Test
+        void docTitleDefaultsToWindowTitleWhenSetToNull() throws IOException {
+            generator.addTaglib(fixture("sample-jakarta.taglib.xml"));
+            generator.setWindowTitle("My Window Title");
+            generator.setDocTitle(null);
+            generator.generate();
+
+            var content = Files.readString(tempDir.resolve("output/overview-summary.html"));
+            assertThat(content).contains("My Window Title");
+        }
+
+        @Test
+        void docTitleDefaultsToWindowTitleWhenSetToBlank() throws IOException {
+            generator.addTaglib(fixture("sample-jakarta.taglib.xml"));
+            generator.setWindowTitle("My Window Title");
+            generator.setDocTitle("   ");
+            generator.generate();
+
+            var content = Files.readString(tempDir.resolve("output/overview-summary.html"));
+            assertThat(content).contains("My Window Title");
+        }
+
+        @Test
+        void windowTitleDefaultsWhenSetToNull() throws IOException {
+            generator.addTaglib(fixture("sample-jakarta.taglib.xml"));
+            generator.setWindowTitle(null);
+            generator.generate();
+
+            var content = Files.readString(tempDir.resolve("output/index.html"));
+            assertThat(content).contains(DEFAULT_WINDOW_TITLE);
+        }
+
+        @Test
+        void windowTitleDefaultsWhenSetToBlank() throws IOException {
+            generator.addTaglib(fixture("sample-jakarta.taglib.xml"));
+            generator.setWindowTitle("  ");
+            generator.generate();
+
+            var content = Files.readString(tempDir.resolve("output/index.html"));
+            assertThat(content).contains(DEFAULT_WINDOW_TITLE);
+        }
+
+        @Test
+        void bothNullDefaultToStandardTitle() throws IOException {
+            generator.addTaglib(fixture("sample-jakarta.taglib.xml"));
+            generator.setWindowTitle(null);
+            generator.setDocTitle(null);
+            generator.generate();
+
+            var indexContent = Files.readString(tempDir.resolve("output/index.html"));
+            var overviewContent = Files.readString(tempDir.resolve("output/overview-summary.html"));
+            assertThat(indexContent).contains(DEFAULT_WINDOW_TITLE);
+            assertThat(overviewContent).contains(DEFAULT_WINDOW_TITLE);
+        }
+
+        @Test
+        void explicitDocTitleOverridesWindowTitle() throws IOException {
+            generator.addTaglib(fixture("sample-jakarta.taglib.xml"));
+            generator.setWindowTitle("Window Title");
+            generator.setDocTitle("Different Doc Title");
+            generator.generate();
+
+            var overviewContent = Files.readString(tempDir.resolve("output/overview-summary.html"));
+            assertThat(overviewContent).contains("Different Doc Title");
+
+            // Window title appears in the index page, not overridden by doc title
+            var indexContent = Files.readString(tempDir.resolve("output/index.html"));
+            assertThat(indexContent).contains("Window Title");
+        }
+
+        @Test
+        void defaultOutputDirectory() {
+            var gen = new VdldocGenerator();
+            gen.addTaglib(fixture("sample-jakarta.taglib.xml"));
+            gen.setQuiet(true);
+            gen.generate();
+
+            var defaultDir = new File(DEFAULT_OUTPUT_DIRECTORY);
+            assertThat(defaultDir).isDirectory();
+            assertThat(new File(defaultDir, "index.html")).exists();
+
+            // Clean up
+            deleteRecursively(defaultDir);
+        }
+
+        private void deleteRecursively(File file) {
+            if (file.isDirectory()) {
+                for (var child : file.listFiles()) {
+                    deleteRecursively(child);
+                }
+            }
+            file.delete();
         }
     }
 

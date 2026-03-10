@@ -27,7 +27,6 @@ import static java.util.Collections.unmodifiableSet;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -83,7 +82,7 @@ public class CompositeComponentHandler extends DefaultHandler {
     private Node taglibNode;
     private Node tagExtensionNode;
 
-    private HashMap<String,ImpliedAttribute> attributeMap;
+    private Map<String,ImpliedAttribute> attributeMap;
 
     /**
      * Creates a new handler for parsing a composite component XHTML file.
@@ -93,7 +92,7 @@ public class CompositeComponentHandler extends DefaultHandler {
      * @param taglibNode The parent taglib node to append the tag element to.
      * @param properties The map of implied attributes to add to composite components.
      */
-    public CompositeComponentHandler(String componentName, Document document, String namespaceURI, Node taglibNode, HashMap<String,ImpliedAttribute> properties) {
+    public CompositeComponentHandler(String componentName, Document document, String namespaceURI, Node taglibNode, Map<String,ImpliedAttribute> properties) {
         this.componentName = componentName;
         this.document = document;
         this.namespaceURI = namespaceURI;

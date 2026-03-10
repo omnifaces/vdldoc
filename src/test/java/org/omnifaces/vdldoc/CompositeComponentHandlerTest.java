@@ -23,6 +23,8 @@
 package org.omnifaces.vdldoc;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.omnifaces.vdldoc.VdldocGenerator.NS_JAKARTA_EE;
+import static org.omnifaces.vdldoc.VdldocGenerator.NS_VDLDOC;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
@@ -40,9 +42,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 class CompositeComponentHandlerTest {
-
-    private static final String NS_JAKARTA_EE = "https://jakarta.ee/xml/ns/jakartaee";
-    private static final String NS_VDLDOC = "http://vdldoc.omnifaces.org";
 
     private Document document;
     private Element taglibNode;

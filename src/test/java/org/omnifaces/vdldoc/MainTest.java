@@ -23,6 +23,7 @@
 package org.omnifaces.vdldoc;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.omnifaces.vdldoc.VdldocGenerator.DEFAULT_CSS_LOCATION;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -213,7 +214,7 @@ class MainTest {
             var exitCode = process.waitFor();
 
             assertThat(exitCode).isEqualTo(0);
-            assertThat(new File(outputDir, "stylesheet.css")).doesNotExist();
+            assertThat(new File(outputDir, DEFAULT_CSS_LOCATION)).doesNotExist();
         }
 
         @Test

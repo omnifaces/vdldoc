@@ -74,28 +74,28 @@ public class VdldocGenerator {
     private static final String RESOURCE_PATH = "/org/omnifaces/vdldoc/resources";
 
     /** The default browser window title for the VDL documentation. */
-    private static final String DEFAULT_WINDOW_TITLE = "VDL Documentation Generator - Generated Documentation";
+    static final String DEFAULT_WINDOW_TITLE = "VDL Documentation Generator - Generated Documentation";
 
-    /** The default title for the VDL documentation index page. */
-    private static final String DEFAULT_DOC_TITLE = DEFAULT_WINDOW_TITLE;
+    /** The default output directory. */
+    static final String DEFAULT_OUTPUT_DIRECTORY = "vdldoc";
 
     /** The default CSS location. @since 2.1 */
-    private static final String DEFAULT_CSS_LOCATION = "stylesheet.css";
+    static final String DEFAULT_CSS_LOCATION = "stylesheet.css";
 
     /** The sun.com XML namespace for Java EE. */
-    private static final String NS_JAVAEE_SUN = "http://java.sun.com/xml/ns/javaee";
+    static final String NS_JAVAEE_SUN = "http://java.sun.com/xml/ns/javaee";
 
     /** The jcp.org XML namespace for Java EE. @since 2.0 */
-    private static final String NS_JAVAEE_JCP = "http://xmlns.jcp.org/xml/ns/javaee";
+    static final String NS_JAVAEE_JCP = "http://xmlns.jcp.org/xml/ns/javaee";
 
     /** The jakarta.ee XML namespace for Jakarta EE. @since 3.0 */
-    private static final String NS_JAKARTA_EE = "https://jakarta.ee/xml/ns/jakartaee";
+    static final String NS_JAKARTA_EE = "https://jakarta.ee/xml/ns/jakartaee";
 
     /** The deprecated vdldoc XML namespace for vdldoc 2.0 and earlier. @since 2.2 */
-    public static final String NS_VDLDOC_OLD = "http://vdldoc.org/vdldoc";
+    static final String NS_VDLDOC_OLD = "http://vdldoc.org/vdldoc";
 
     /** The vdldoc XML namespace. @since 2.2 */
-    public static final String NS_VDLDOC = "http://vdldoc.omnifaces.org";
+    static final String NS_VDLDOC = "http://vdldoc.omnifaces.org";
 
     /** If true, outputs the input to the transform before generation. For internal use only. */
     private static final boolean DEBUG_INPUT_DOCUMENT = false;
@@ -139,13 +139,13 @@ public class VdldocGenerator {
     private File facesConfig;
 
     /** The output directory for generated files. */
-    private File outputDirectory = new File("vdldoc");
+    private File outputDirectory;
 
     /** The browser window title for the VDL documentation. */
-    private String windowTitle = DEFAULT_WINDOW_TITLE;
+    private String windowTitle;
 
     /** The title for the VDL index page. */
-    private String docTitle = DEFAULT_DOC_TITLE;
+    private String docTitle;
 
     /** The location of the CSS file. @since 2.1 */
     private String cssLocation;
@@ -163,7 +163,7 @@ public class VdldocGenerator {
     private Document summaryDocument;
 
     /** The mapping of implied attributes of composite components. */
-    private HashMap<String, ImpliedAttribute> compositeAttributeMap;
+    private Map<String, ImpliedAttribute> compositeAttributeMap;
 
     // Constructors ---------------------------------------------------------------------------------------------------
 
@@ -277,6 +277,18 @@ public class VdldocGenerator {
      */
     public void generate() throws IllegalArgumentException {
         try {
+            if (outputDirectory == null) {
+                outputDirectory = new File(DEFAULT_OUTPUT_DIRECTORY);
+            }
+
+            if ((windowTitle == null) || windowTitle.isBlank()) {
+                windowTitle = DEFAULT_WINDOW_TITLE;
+            }
+
+            if ((docTitle == null) || docTitle.isBlank()) {
+                docTitle = windowTitle;
+            }
+
             loadCompositeAttributeMap();
             createSummaryDoc();
             copyStaticFiles();
@@ -604,10 +616,8 @@ public class VdldocGenerator {
      * @param id The ID of the tag library.
      * @param tagName The name of the tag.
      */
-    private void generateTagDetail(File outputDirectory, String id, String tagName)
-        throws TransformerException
-    {
-        Map<String, String> parameters = new HashMap<>();
+    private void generateTagDetail(File outputDirectory, String id, String tagName) throws TransformerException {
+        var parameters = new HashMap<String, String>();
         parameters.put("id", id);
         parameters.put("tagName", tagName);
 
@@ -624,7 +634,7 @@ public class VdldocGenerator {
     private void generateFunctionDetail(File outputDirectory, String id, String functionName)
         throws TransformerException
     {
-        Map<String, String> parameters = new HashMap<>();
+        var parameters = new HashMap<String, String>();
         parameters.put("id", id);
         parameters.put("functionName", functionName);
 
@@ -634,7 +644,7 @@ public class VdldocGenerator {
     private void generateELVariableDetail(File outputDirectory, String id, String elVariableName)
             throws TransformerException
     {
-        Map<String, String> parameters = new HashMap<>();
+        var parameters = new HashMap<String, String>();
         parameters.put("id", id);
         parameters.put("elVariableName", elVariableName);
 
