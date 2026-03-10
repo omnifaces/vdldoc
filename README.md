@@ -35,7 +35,7 @@ It's also used by OmniFaces and PrimeFaces.
 
 ## Download
 
-- **4.0** (?? ??? 2026) - [library](https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/4.0/vdldoc-4.0.jar) - [sources](https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/4.0/vdldoc-4.0-sources.jar) - [javadoc](https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/4.0/vdldoc-4.0-javadoc.jar)
+- **4.0** (10 Mar 2026) - [library](https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/4.0/vdldoc-4.0.jar) - [sources](https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/4.0/vdldoc-4.0-sources.jar) - [javadoc](https://repo.maven.apache.org/maven2/org/omnifaces/vdldoc/4.0/vdldoc-4.0-javadoc.jar)
     - Minimum Java SE runtime requirement is now Java 17 instead of Java 1.6 (!!).
     - Added support for new Jakarta EE 10's `jakarta.faces.composite` XML namespace in addition to old `http://xmlns.jcp.org/jsf/composite` XML namespace.
     - The `-doctitle` defaults now to the final value of `-windowtitle` instead of to its default.
