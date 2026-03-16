@@ -801,6 +801,57 @@ class VdldocGeneratorTest {
         }
 
         @Test
+        void tldFrameListsTagsInAlphabeticalOrder() throws IOException {
+            generator.addTaglib(fixture("sample-unsorted.taglib.xml"));
+            generator.generate();
+
+            var content = Files.readString(tempDir.resolve("output/unsorted/tld-frame.html"));
+            var appleIndex = content.indexOf("unsorted:apple");
+            var mangoIndex = content.indexOf("unsorted:mango");
+            var zebraIndex = content.indexOf("unsorted:zebra");
+
+            assertThat(appleIndex).isGreaterThan(-1);
+            assertThat(mangoIndex).isGreaterThan(-1);
+            assertThat(zebraIndex).isGreaterThan(-1);
+            assertThat(appleIndex).isLessThan(mangoIndex);
+            assertThat(mangoIndex).isLessThan(zebraIndex);
+        }
+
+        @Test
+        void tldFrameListsFunctionsInAlphabeticalOrder() throws IOException {
+            generator.addTaglib(fixture("sample-unsorted.taglib.xml"));
+            generator.generate();
+
+            var content = Files.readString(tempDir.resolve("output/unsorted/tld-frame.html"));
+            var barIndex = content.indexOf("unsorted:bar");
+            var fooIndex = content.indexOf("unsorted:foo");
+            var zooIndex = content.indexOf("unsorted:zoo");
+
+            assertThat(barIndex).isGreaterThan(-1);
+            assertThat(fooIndex).isGreaterThan(-1);
+            assertThat(zooIndex).isGreaterThan(-1);
+            assertThat(barIndex).isLessThan(fooIndex);
+            assertThat(fooIndex).isLessThan(zooIndex);
+        }
+
+        @Test
+        void tldFrameListsElVariablesInAlphabeticalOrder() throws IOException {
+            generator.addTaglib(fixture("sample-unsorted.taglib.xml"));
+            generator.generate();
+
+            var content = Files.readString(tempDir.resolve("output/unsorted/tld-frame.html"));
+            var alphaIndex = content.indexOf(">alpha<");
+            var mikeIndex = content.indexOf(">mike<");
+            var zuluIndex = content.indexOf(">zulu<");
+
+            assertThat(alphaIndex).isGreaterThan(-1);
+            assertThat(mikeIndex).isGreaterThan(-1);
+            assertThat(zuluIndex).isGreaterThan(-1);
+            assertThat(alphaIndex).isLessThan(mikeIndex);
+            assertThat(mikeIndex).isLessThan(zuluIndex);
+        }
+
+        @Test
         void multipleTaglibsWithTagsSortByIdThenTagName() throws IOException {
             generator.addTaglib(fixture("sample-unsorted.taglib.xml"));
             generator.addTaglib(fixture("sample-jakarta.taglib.xml"));

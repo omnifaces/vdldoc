@@ -24,6 +24,7 @@
 
 -->
 <facelet-taglib xmlns="https://jakarta.ee/xml/ns/jakartaee"
+    xmlns:vdldoc="http://vdldoc.omnifaces.org"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facelettaglibrary_4_0.xsd"
     version="4.0">
@@ -77,4 +78,18 @@
         <function-class>com.example.Functions</function-class>
         <function-signature>java.lang.String foo()</function-signature>
     </function>
+    <taglib-extension>
+        <vdldoc:el-variable>
+            <vdldoc:el-variable-name>zulu</vdldoc:el-variable-name>
+            <vdldoc:el-variable-type>java.lang.String</vdldoc:el-variable-type>
+        </vdldoc:el-variable>
+        <vdldoc:el-variable>
+            <vdldoc:el-variable-name>alpha</vdldoc:el-variable-name>
+            <vdldoc:el-variable-type>java.lang.Object</vdldoc:el-variable-type>
+        </vdldoc:el-variable>
+        <vdldoc:el-variable>
+            <vdldoc:el-variable-name>mike</vdldoc:el-variable-name>
+            <vdldoc:el-variable-type>java.lang.Integer</vdldoc:el-variable-type>
+        </vdldoc:el-variable>
+    </taglib-extension>
 </facelet-taglib>
