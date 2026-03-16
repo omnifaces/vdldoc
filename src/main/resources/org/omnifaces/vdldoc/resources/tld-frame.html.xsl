@@ -80,19 +80,25 @@
                         <xsl:if test="count(jakartaee:tag) > 0">
                             <h2 title="Tags">Tags</h2>
                             <ul title="Tags">
-                                <xsl:apply-templates select="jakartaee:tag" />
+                                <xsl:apply-templates select="jakartaee:tag">
+                                    <xsl:sort select="jakartaee:tag-name" />
+                                </xsl:apply-templates>
                             </ul>
                         </xsl:if>
                         <xsl:if test="count(jakartaee:function) > 0">
                             <h2 title="Functions">Functions</h2>
                             <ul title="Functions">
-                                <xsl:apply-templates select="jakartaee:function" />
+                                <xsl:apply-templates select="jakartaee:function">
+                                    <xsl:sort select="jakartaee:function-name" />
+                                </xsl:apply-templates>
                             </ul>
                         </xsl:if>
                         <xsl:if test="count(jakartaee:taglib-extension/vdldoc:el-variable) > 0">
                             <h2 title="EL Variable">EL Variable</h2>
                             <ul title="EL Variable">
-                                <xsl:apply-templates select="jakartaee:taglib-extension/vdldoc:el-variable" />
+                                <xsl:apply-templates select="jakartaee:taglib-extension/vdldoc:el-variable">
+                                    <xsl:sort select="vdldoc:el-variable-name" />
+                                </xsl:apply-templates>
                             </ul>
                         </xsl:if>
                     </div>
