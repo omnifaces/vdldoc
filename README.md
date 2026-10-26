@@ -10,7 +10,7 @@ The generated documentation has Java 8 javadoc look'n'feel.
 
 As a preview, you can check the following online examples:
 
-- [OmniFaces](https://omnifaces.org): [5.1 VDL documentation](https://omnifaces.org/docs/vdldoc/5.1/)
+- [OmniFaces](https://omnifaces.org): [latest VDL documentation](https://omnifaces.org/docs/vdldoc/current/)
 - [Mojarra](https://eclipse-ee4j.github.io/mojarra/): [4.1 VDL documentation](https://jakarta.ee/specifications/faces/4.1/vdldoc/)
 - [PrimeFaces](https://primefaces.org): [latest VDL documentation](https://primefaces.github.io/primefaces/vdldoc/)
 - [PrimeFaces Extensions](https://primefaces-extensions.github.io): [latest VDL documentation](https://primefaces-extensions.github.io/vdldoc/)
